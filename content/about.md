@@ -41,6 +41,4 @@ If you love using the `tidyverse` and want to teach it to others, consider
 [becoming a certified instructor](https://education.rstudio.com/trainers#info) 
 through RStudio's `tidyverse` train-the-trainer course.
 
-See you next time!
-
 > *find me on Twitter @mjfrigaard*
