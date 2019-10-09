@@ -28,9 +28,8 @@ tidyverse::tidyverse_packages() ## [1] &amp;quot;broom&amp;quot; &amp;quot;cli&a
       <pubDate>Tue, 08 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description> Hi there My name is Martin and I&amp;rsquo;m a data scientist, R programmer, and author. I created this site to store various tidyverse packages, blog posts, books, and other tricks.
-The packages in the tidyverse can loaded into R using:
-install.packages(&amp;quot;tidyverse&amp;quot;) library(tidyverse)  </description>
+      <description>Hi there My name is Martin. I&amp;rsquo;m a data scientist, R programmer, and author. I created this site to catalog the various packages, blog posts, books, and other tricks in the tidyverse, along with any peripheral packages that work well with tidy tools.
+The tidyverse is a collection of packages collection of open source R packages introduced by Hadley Wickham and the RStudio team that &amp;ldquo;share an underlying design philosophy, grammar, and data structures&amp;rdquo; of tidy data.</description>
     </item>
     
     <item>
