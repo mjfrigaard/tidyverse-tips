@@ -9,15 +9,15 @@ paginate = 5
 [params]
   contentTypeName = "post"
   # ["orange", "blue", "red", "green", "pink"]
-  themeColor = "red"
+  themeColor = "green"
   showMenuItems = 2
-  fullWidthTheme = true
+  fullWidthTheme = false
   centerTheme = false
 
 [languages]
   [languages.en]
     title = "tidyverse tips"
-    subtitle = "A simple, retro theme for Hugo"
+    subtitle = "functions, packages & tricks from #rstats and the tidyverse"
     keywords = ""
     copyright = ""
     menuMore = "Show more"

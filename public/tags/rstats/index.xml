@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tidyverse tips</title>
-    <link>/</link>
-    <description>Recent content on tidyverse tips</description>
+    <title>rstats on tidyverse tips</title>
+    <link>/tags/rstats/</link>
+    <description>Recent content in rstats on tidyverse tips</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 09 Oct 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/rstats/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -20,26 +20,6 @@
       <description>Check out the packages! The image below shows the core tidyverse packages, and what part of the data science process each of them fits into.
 For a full list of all the packages, check out the code chunk below.
 tidyverse::tidyverse_packages() ## [1] &amp;quot;broom&amp;quot; &amp;quot;cli&amp;quot; &amp;quot;crayon&amp;quot; &amp;quot;dplyr&amp;quot; &amp;quot;dbplyr&amp;quot; ## [6] &amp;quot;forcats&amp;quot; &amp;quot;ggplot2&amp;quot; &amp;quot;haven&amp;quot; &amp;quot;hms&amp;quot; &amp;quot;httr&amp;quot; ## [11] &amp;quot;jsonlite&amp;quot; &amp;quot;lubridate&amp;quot; &amp;quot;magrittr&amp;quot; &amp;quot;modelr&amp;quot; &amp;quot;purrr&amp;quot; ## [16] &amp;quot;readr&amp;quot; &amp;quot;readxl\n(&amp;gt;=&amp;quot; &amp;quot;reprex&amp;quot; &amp;quot;rlang&amp;quot; &amp;quot;rstudioapi&amp;quot; ## [21] &amp;quot;rvest&amp;quot; &amp;quot;stringr&amp;quot; &amp;quot;tibble&amp;quot; &amp;quot;tidyr&amp;quot; &amp;quot;xml2&amp;quot; ## [26] &amp;quot;tidyverse&amp;quot; Want to see something else cool?</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>/about/</link>
-      <pubDate>Tue, 08 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/about/</guid>
-      <description> Hi there My name is Martin and I&amp;rsquo;m a data scientist, R programmer, and author. I created this site to store various tidyverse packages, blog posts, books, and other tricks.
-The packages in the tidyverse can loaded into R using:
-install.packages(&amp;quot;tidyverse&amp;quot;) library(tidyverse)  </description>
-    </item>
-    
-    <item>
-      <title>Showcase</title>
-      <link>/showcase/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/showcase/</guid>
-      <description>Project 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec interdum metus. Aenean rutrum ligula sodales ex auctor, sed tempus dui mollis. Curabitur ipsum dui, aliquet nec commodo at, tristique eget ante. Donec quis dolor nec nunc mollis interdum vel in purus. Sed vitae leo scelerisque, sollicitudin elit sed, congue ante. In augue nisl, vestibulum commodo est a, tristique porttitor est. Proin laoreet iaculis ornare. Nullam ut neque quam.</description>
     </item>
     
   </channel>
