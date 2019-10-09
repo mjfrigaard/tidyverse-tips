@@ -1,0 +1,39 @@
+baseurl = "/"
+# Warning: You should change the "baseurl" option in config.toml from 
+# https://example.com/ to your actual domain; if you do not have a domain, 
+# set "baseurl" to "/"
+languageCode = "en-us"
+theme = "hugo-theme-terminal"
+paginate = 5
+
+[params]
+  contentTypeName = "post"
+  # ["orange", "blue", "red", "green", "pink"]
+  themeColor = "red"
+  showMenuItems = 2
+  fullWidthTheme = true
+  centerTheme = false
+
+[languages]
+  [languages.en]
+    title = "tidyverse tips"
+    subtitle = "A simple, retro theme for Hugo"
+    keywords = ""
+    copyright = ""
+    menuMore = "Show more"
+    readMore = "Read more"
+    readOtherPosts = "Read other posts"
+
+    [languages.en.params.logo]
+      logoText = "tidyverse tips"
+      logoHomeLink = "/"
+
+    [languages.en.menu]
+      [[languages.en.menu.main]]
+        identifier = "about"
+        name = "About"
+        url = "/about"
+      [[languages.en.menu.main]]
+        identifier = "showcase"
+        name = "Showcase"
+        url = "/showcase"
