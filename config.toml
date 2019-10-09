@@ -11,8 +11,8 @@ paginate = 5
   # ["orange", "blue", "red", "green", "pink"]
   themeColor = "green"
   showMenuItems = 2
-  fullWidthTheme = false
-  centerTheme = false
+  fullWidthTheme = true
+  centerTheme = true
 
 [languages]
   [languages.en]
