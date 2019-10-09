@@ -38,7 +38,7 @@ The tidyverse is a collection of packages collection of open source R packages i
       <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/showcase/</guid>
-      <description>Shiny app for checking blood glucose monitors  The error grids clinicians use to check the accuracy of blood glucose monitors are out-of-date. Regulatory agencies don’t use error grids for approving monitors, but these tools could be useful for testing the performance of recommended products. The Diabetes Technology Society partnered with representatives from the Food and Drug Administration, the American Diabetes Association, the Endocrine Society, and the Association for the Advancement of Medical Instrumentation, and representatives from academia, industry, and government developed the surveillance error grid (SEG) as a tool to assess the degree of clinical risk from inaccurate blood glucose monitors (BGM).</description>
+      <description>shiny app for checking blood glucose monitors  The error grids clinicians use to check the accuracy of blood glucose monitors are out-of-date. Regulatory agencies don’t use error grids for approving monitors, but these tools could be useful for testing the performance of recommended products. The Diabetes Technology Society partnered with representatives from the Food and Drug Administration, the American Diabetes Association, the Endocrine Society, and the Association for the Advancement of Medical Instrumentation, and representatives from academia, industry, and government developed the surveillance error grid (SEG) as a tool to assess the degree of clinical risk from inaccurate blood glucose monitors (BGM).</description>
     </item>
     
   </channel>
