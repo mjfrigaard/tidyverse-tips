@@ -28,8 +28,8 @@ tidyverse::tidyverse_packages() ## [1] &amp;quot;broom&amp;quot; &amp;quot;cli&a
       <pubDate>Tue, 08 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>What is the tidyverse? The tidyverse is a collection of open source R packages introduced by Hadley Wickham and the RStudio team that &amp;ldquo;share an underlying design philosophy, grammar, and data structures.&amp;rdquo; That philosophy is oulined in the tidy data paper and the tidy tools manifesto.
-Who am I? My name is Martin Frigaard. I&amp;rsquo;m a data scientist and writer. I&amp;rsquo;ve been programming in R since 2009 and I regularly conrtibute to Storybench&amp;rsquo;s Data Journalism with R).</description>
+      <description>What is the tidyverse? The tidyverse is a collection of open source R packages introduced by Hadley Wickham and the RStudio team that &amp;ldquo;share an underlying design philosophy, grammar, and data structures.&amp;rdquo; That philosophy is outlined in the tidy data paper and the tidy tools manifesto.
+Who am I? My name is Martin Frigaard. I&amp;rsquo;m a data scientist and writer. I&amp;rsquo;ve been programming in R since 2009 and I regularly contribute to Storybench&amp;rsquo;s Data Journalism with R).</description>
     </item>
     
     <item>

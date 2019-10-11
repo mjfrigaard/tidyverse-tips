@@ -6,13 +6,13 @@ title: About this site
 
 # What is the `tidyverse`?
 
-The [`tidyverse`](https://en.wikipedia.org/wiki/Tidyverse) is a collection of open source R packages introduced by [Hadley Wickham](http://hadley.nz/) and the RStudio team that "*share an underlying design philosophy, grammar, and data structures*." That philosophy is oulined in the [tidy data](https://vita.had.co.nz/papers/tidy-data.pdf) paper and the [tidy tools manifesto](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html).
+The [`tidyverse`](https://en.wikipedia.org/wiki/Tidyverse) is a collection of open source R packages introduced by [Hadley Wickham](http://hadley.nz/) and the RStudio team that "*share an underlying design philosophy, grammar, and data structures*." That philosophy is outlined in the [tidy data](https://vita.had.co.nz/papers/tidy-data.pdf) paper and the [tidy tools manifesto](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html).
 
 ![](/./about_files/tidyverse-tips-logo.jpg)
 
 ## Who am I?
 
-My name is Martin Frigaard. I'm a data scientist and writer. I've been programming in R since 2009 and I regularly conrtibute to [Storybench's Data Journalism with R](http://www.storybench.org/category/data-journalism-in-r/)). I created this site specifically to catalog the growing list of `tidyverse` [packages](https://www.tidyverse.org/packages/), blog posts, books, tweets, and tips. 
+My name is Martin Frigaard. I'm a data scientist and writer. I've been programming in R since 2009 and I regularly contribute to [Storybench's Data Journalism with R](http://www.storybench.org/category/data-journalism-in-r/)). I created this site specifically to catalog the growing list of `tidyverse` [packages](https://www.tidyverse.org/packages/), blog posts, books, tweets, and tips. 
 
 ## Installing the `tidyverse`
 
