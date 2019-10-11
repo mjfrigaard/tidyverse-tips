@@ -16,7 +16,7 @@ My name is Martin Frigaard. I'm a data scientist and writer. I've been programmi
 
 ## Installing the `tidyverse`
 
-The packages in the `tidyverse` can loaded into [R](https://cran.r-project.org/) or [RStudio](https://rstudio.com/) by typing the following commands into the console: 
+The packages in the `tidyverse` can be loaded into [R](https://cran.r-project.org/) or [RStudio](https://rstudio.com/) by typing the following commands into the console: 
 
 ```r
 install.packages("tidyverse")
