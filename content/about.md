@@ -10,10 +10,6 @@ The [`tidyverse`](https://en.wikipedia.org/wiki/Tidyverse) is a collection of op
 
 ![](/./about_files/tidyverse-tips-logo.jpg)
 
-## Who am I?
-
-My name is Martin Frigaard. I'm a data scientist and writer. I've been programming in R since 2009 and I regularly contribute to [Storybench's Data Journalism with R](http://www.storybench.org/category/data-journalism-in-r/). I created this site specifically to catalog the growing list of `tidyverse` [packages](https://www.tidyverse.org/packages/), blog posts, books, tweets, and tips. 
-
 ## Installing the `tidyverse`
 
 The packages in the `tidyverse` can be loaded into [R](https://cran.r-project.org/) or [RStudio](https://rstudio.com/) by typing the following commands into the console: 
@@ -31,6 +27,11 @@ The best place to learn about the `tidyverse` is in [R for Data Science](https:/
 
 If you love using all the tools in the `tidyverse`, and want to teach it to others, consider [becoming a certified instructor](https://education.rstudio.com/trainers#info) 
 through RStudio's `tidyverse` train-the-trainer course.
+
+## Who am I?
+
+My name is Martin Frigaard. I'm a data scientist and writer. I've been using R since 2009, and started using tidy tools back when it was still the "Hadley-verse". I write longer-form tutorials for [Storybench's Data Journalism with R](http://www.storybench.org/category/data-journalism-in-r/). I created this site specifically to catalog the growing list of `tidyverse` [packages](https://www.tidyverse.org/packages/), blog posts, books, tweets, and tips. 
+
 
 
 > *find me on Twitter @mjfrigaard*
