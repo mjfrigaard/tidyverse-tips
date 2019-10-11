@@ -12,7 +12,7 @@ The [`tidyverse`](https://en.wikipedia.org/wiki/Tidyverse) is a collection of op
 
 ## Who am I?
 
-My name is Martin Frigaard. I'm a data scientist and writer. I've been programming in R since 2009 and I regularly contribute to [Storybench's Data Journalism with R](http://www.storybench.org/category/data-journalism-in-r/)). I created this site specifically to catalog the growing list of `tidyverse` [packages](https://www.tidyverse.org/packages/), blog posts, books, tweets, and tips. 
+My name is Martin Frigaard. I'm a data scientist and writer. I've been programming in R since 2009 and I regularly contribute to [Storybench's Data Journalism with R](http://www.storybench.org/category/data-journalism-in-r/). I created this site specifically to catalog the growing list of `tidyverse` [packages](https://www.tidyverse.org/packages/), blog posts, books, tweets, and tips. 
 
 ## Installing the `tidyverse`
 
