@@ -1,0 +1,491 @@
+---
+title: tidy file management
+author: Martin Frigaard
+date: '2019-10-11'
+slug: tidy-file-management
+categories:
+  - tidyverse
+tags:
+  - rstats
+description: Knowing where your files are is essential to being productive. This post covers tools for managing files in a tidy way.
+---
+
+```{r setup, include=FALSE}
+# packages
+require(tidyverse)
+require(janitor)
+require(skimr)
+library(mosaic)
+# knitr chunk options
+knitr::opts_chunk$set(echo = TRUE,  
+                      cache = FALSE,
+                      eval = FALSE,
+                      prompt = FALSE,
+                      tidy = FALSE,
+                      fig.width = 9,
+                      fig.height = 6,
+                      comment = "#> ",
+                      message = FALSE,
+                      warning = FALSE)
+# knit knit settings
+knitr::opts_knit$set(
+  width = 78)
+# base options
+base::options(
+  tibble.print_max = 25,
+  tibble.width = 78,
+  scipen = 100000000,
+  max.print = 999999)
+# custom functions
+```
+
+
+> "*The organization of information actually creates new information.*" - Richard Saul Wurman
+
+Keeping files organized is an essential part of any data project, and if you're just starting a career in data science, it's important to build good habits early. There are plenty of general resources on the internet for setting up a data science project. I like these: 
+
+- [Good Enough Practices for Scientific Computing](https://swcarpentry.github.io/good-enough-practices-in-scientific-computing/)  
+
+- [Best Practices for Scientific Computing](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1001745)  
+
+- [Cookiecutter Data Science](https://drivendata.github.io/cookiecutter-data-science/)
+
+In this post I'll cover [`fs`](https://fs.r-lib.org/), a package with tools for tidy file management.
+
+## Using the `fs` package
+
+The [`fs` package](https://fs.r-lib.org/) was somewhat inspired by [Rust](https://en.wikipedia.org/wiki/Rust_(programming_language))'s [fs module](https://doc.rust-lang.org/std/fs/index.html). The `fs` stands for 'file system.' 
+
+### So you have a new project
+
+Assume you have a data project you've downloaded from Github like this one from [Plotly](https://github.com/plotly/datasets). 
+
+![](/post/2019-10-11-tidy-file-management_files/plotly-data-project.jpg){width=70% height=70%}
+
+Download this repository into your RStudio session using the following commands in the Terminal or in a bash code chunk.
+
+```sh
+git clone https://github.com/plotly/datasets.git
+```
+
+Now that we have a new folder full of data files, we want to know some basics about the folder contents. The `fs` package allows us to view the contents of a project in a hierarchical display. This is accomplished using the `fs::dir_tree()` function. 
+
+```{r tree}
+fs::dir_tree(path = ".")
+```
+
+```r
+├── README.Rmd
+├── datasets
+│   ├── 1962_2006_walmart_store_openings.csv
+│   ├── 2010_alcohol_consumption_by_country.csv
+│   ├── 2011_february_aa_flight_paths.csv
+│   ├── 2011_february_us_airport_traffic.csv
+│   ├── 2011_us_ag_exports.csv
+│   ├── 2014_apple_stock.csv
+│   ├── 2014_ebola.csv
+│   ├── 2014_us_cities.csv
+│   ├── 2014_usa_states.csv
+│   ├── 2014_world_gdp_with_codes.csv
+│   ├── 2015_06_30_precipitation.csv
+│   ├── 2015_Instant_Noodle_Consumption_Around_the_World.csv
+│   ├── 2016-weather-data-seattle.csv
+│   ├── 26k-consumer-complaints.csv
+│   ├── 3d-line1.csv
+│   ├── 3d-mesh-helicopter.csv
+│   ├── 3d-ribbon.json
+│   ├── 3d-scatter.csv
+│   ├── Aids Data.csv
+│   ├── Antibiotics.csv
+│   ├── BulletData.json
+│   ├── Canada Immigration.csv
+│   ├── Consumer Complaints.csv
+│   ├── Emissions Data.csv
+│   ├── GanttChart-updated.csv
+│   ├── GanttChart.csv
+│   ├── Key Macroeconomic Indicators.csv
+│   ├── LICENSE
+│   ├── Mining-BTC-180.csv
+│   ├── Monitory Policy Transmission.csv
+│   ├── Move to Canada.csv
+│   ├── Nominal and Real Fed Funds Rate.csv
+│   ├── Nuclear Waste Sites on American Campuses.csv
+│   ├── PK_subban_shots.json
+│   ├── README.md
+│   ├── _3d-line-plot.csv
+│   ├── alpha_shape.csv
+│   ├── api_docs
+│   │   ├── 3d_line_sample_data.csv
+│   │   ├── README.md
+│   │   ├── method_of_steepest_descent_contour.csv
+│   │   └── mt_bruno_elevation.csv
+│   ├── auto-mpg.csv
+│   ├── bar-charts-with-excel.csv
+│   ├── beers.csv
+│   ├── bubble_chart_tutorial.csv
+│   ├── candlestick_dataset_2007_2009.csv
+│   ├── carshare.csv
+│   ├── clebsch-cubic.csv
+│   ├── clustergram_GDS5373.soft
+│   ├── coffee-flavors.csv
+│   ├── contour_data.json
+│   ├── cost_output_defective.csv
+│   ├── custom_heatmap_colorscale.json
+│   ├── dash-stock-ticker-demo.csv
+│   ├── data-matlab-excel-example.xlsx
+│   ├── data.csv
+│   ├── data.csv.zip
+│   ├── data_dictionary.csv
+│   ├── diabetes.csv
+│   ├── district_density.csv
+│   ├── dot-plot-with-excel.csv
+│   ├── earthquake.csv
+│   ├── earthquakes-23k.csv
+│   ├── english_french.csv
+│   ├── european_leaders.csv
+│   ├── european_turnout.csv
+│   ├── finance-charts-apple.csv
+│   ├── fips-unemp-16.csv
+│   ├── flightdata.csv
+│   ├── florida-blue-data.json
+│   ├── florida-red-data.json
+│   ├── florida_county_data.geojson
+│   ├── gantt_example.csv
+│   ├── gapminder2007.csv
+│   ├── gapminderDataFiveYear.csv
+│   ├── gapminderDataFiveYear2.csv
+│   ├── gapminderData_Americas_2007.csv
+│   ├── gapminder_unfiltered.csv
+│   ├── gapminder_with_codes.csv
+│   ├── geojson-counties-fips.json
+│   ├── globe_contours.csv
+│   ├── hello-world-stock.csv
+│   ├── histogram_simple.csv
+│   ├── hobbs-pearson-trials.csv
+│   ├── imports-85.csv
+│   ├── inset.csv
+│   ├── iris-data.csv
+│   ├── iris-id.csv
+│   ├── iris.csv
+│   ├── job-automation-probability.csv
+│   ├── label-text.csv
+│   ├── latex-typesetting-with-excel.csv
+│   ├── laucnty16.csv
+│   ├── line_3d_dataset.csv
+│   ├── medicare.csv
+│   ├── medicare_cost.csv
+│   ├── mesh_dataset.txt
+│   ├── minoritymajority.csv
+│   ├── miserables.json
+│   ├── monthly-milk-production-pounds.csv
+│   ├── motor_trend_car_road_tests.csv
+│   ├── mpg.csv
+│   ├── mpg_2017.txt
+│   ├── mtcars.csv
+│   ├── mtl2013ternary.csv
+│   ├── multiple_y_axis.csv
+│   ├── nhl_draft_2013_@thejustinfisher.csv
+│   ├── normal-clusters.csv
+│   ├── nz_weather.csv
+│   ├── okcupid-compatibility-by-religion.csv
+│   ├── parcoords_data.csv
+│   ├── pareto-chart.csv
+│   ├── pie-charts-with-excel.csv
+│   ├── polar_dataset.csv
+│   ├── polar_scatter_chart.json
+│   ├── processed_data.csv
+│   ├── recessions.csv
+│   ├── scatter_data.json
+│   ├── school_earnings.csv
+│   ├── segment-funnel-dataset.csv
+│   ├── shaded-region.csv
+│   ├── solar.csv
+│   ├── spectral.csv
+│   ├── spinrates.csv
+│   ├── steepest.json
+│   ├── stockdata.csv
+│   ├── stockdata2.csv
+│   ├── streamtube-basic.csv
+│   ├── streamtube-wind.csv
+│   ├── styled-line.csv
+│   ├── subplot.csv
+│   ├── subplots.csv
+│   ├── sunburst-coffee-flavors-complete.csv
+│   ├── tesla-stock-price.csv
+│   ├── time-series-with-error-bars-excel.csv
+│   ├── timeseries.csv
+│   ├── tips.csv
+│   ├── titanic-mosaic-chart.csv
+│   ├── titanic.csv
+│   ├── tooth_growth_csv
+│   ├── uber-rides-data1.csv
+│   ├── uber-rides-data2.csv
+│   ├── uber-rides-data3.csv
+│   ├── us-cities-top-1k.csv
+│   ├── violin_data.csv
+│   ├── volcano.csv
+│   ├── volcano_db.csv
+│   ├── vortex.csv
+│   ├── wage rigidity dataset.csv
+│   ├── wind_rose.csv
+│   ├── wind_speed_laurel_nebraska.csv
+│   └── windrose_tidy.csv
+├── figs
+└── plotly-data.Rproj
+```
+
+As we can see, this displays the entire folder contents in a tree structure layout, similar to the [tree command line tool](https://michaelsoolee.com/tree-tool/). The tree shows us the data are stored in the `datasets` folder. 
+
+As you're working on a data project, you might want to organize the files in a way that works well for you. As Doug Merrill, the former chief information officer and VP of engineering at Google, says ["organization isn’t—nor should it be—the same for everybody"](https://www.amazon.com/Organized-Mind-Thinking-Straight-Information/dp/0147516315). If we look at the folder tree above, we can see there are six gapminder data sets. Let's create a new `gapminder` folder and put all the Gapminder data inside of it.
+
+## Create file paths
+
+[File paths can be a problem in R](https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error) depending on what operating system you use. Windows uses a backslash (`\`) and everyone else uses forward slashes (`/`). The difference can be a problem when projects get passed from one person to another, because code is written expecting certain files to be in certain places. The `fs` package makes the file paths tidy in two ways:
+
+1. Always use `/` to delimit directories  
+2. Never have multiple `/` or trailing `/`  
+
+The `fs::path()` function creates clean and tidy paths.
+
+```{r path}
+fs::path("path", "to", "my", "data", "files")
+```
+
+```r
+path/to/my/data/files
+```
+
+We'll use the `fs::dir_ls()` function to list the files in the `datasets` folder (`path = "datasets"`) with a regular expression (`regexp = "gapminder"`).
+
+```{r gap_files}
+gap_files <- fs::dir_ls(path = "datasets", 
+                        regexp = "gapminder")
+gap_files
+```
+
+```r
+datasets/gapminder2007.csv
+datasets/gapminderDataFiveYear.csv
+datasets/gapminderDataFiveYear2.csv
+datasets/gapminderData_Americas_2007.csv
+datasets/gapminder_unfiltered.csv
+datasets/gapminder_with_codes.csv
+```
+
+The `gap_files`
+
+## Create new folder
+
+The new folder path for these gapminder data will be `datasets/gapminder`. We'll use the `fs::path()` function to create a new file path.
+
+```{r gap_path}
+gap_path <- fs::path("datasets", "gapminder")
+gap_path
+```
+
+```r
+datasets/gapminder
+```
+
+## Create folder
+
+To create the new folder, we'll use the `fs::dir_create()` to create the new folder using our new `gap_path` object.
+
+```{r create-path}
+fs::dir_create(path = gap_path)
+```
+
+## Moving files 
+
+Both the `gap_path` and `gap_files` are "tidy file paths", and together can use these objects to move the gapminder files into the `gapminder` folder with the `fs::file_move()` function. This function takes two arguments, `path` and `new_path`. `path` is where they are, `new_path` is where they need to be.
+
+```{r file_move}
+fs::file_move(path = gap_files, new_path = gap_path)
+```
+
+After we've moved the files, we can check to see if it worked with the `dir:tree()` function again, but we'll add the `recurse = FALSE` to limit the output.
+
+## Coloring file paths
+
+```{r recurse}
+fs::dir_tree(path = gap_path, recurse = FALSE)
+```
+
+```r
+datasets/gapminder
+├── gapminder2007.csv
+├── gapminderDataFiveYear.csv
+├── gapminderDataFiveYear2.csv
+├── gapminderData_Americas_2007.csv
+├── gapminder_unfiltered.csv
+└── gapminder_with_codes.csv
+```
+
+In the RStudio IDE, the output is colored by file type.
+
+![](/post/2019-10-11-tidy-file-management_files/dir-tree.jpg){width=50% height=50%}
+
+## Get folder info
+
+`fs` also has some great functions for getting information for the files in each folder. For example, check out the `fs::dir_info()` function below:
+
+```{r dir_info}
+fs::dir_info("datasets") %>% 
+    dplyr::glimpse()
+```
+
+```r
+Observations: 149
+Variables: 18
+$ path              <fs::path> "datasets/1962_2006_walmart_store_openings.c…
+$ type              <fct> file, file, file, file, file, file, file, file, f…
+$ size              <fs::bytes> 310.02K, 2.55K, 10.82K, 15.5K, 5.17K, 5.36K…
+$ permissions       <fs::perms> rwxr-xr-x, rwxr-xr-x, rwxr-xr-x, rwxr-xr-x,…
+$ modification_time <dttm> 2019-08-27 13:31:08, 2019-08-27 13:31:08, 2019-0…
+$ user              <chr> "martinfrigaard", "martinfrigaard", "martinfrigaa…
+$ group             <chr> "staff", "staff", "staff", "staff", "staff", "sta…
+$ device_id         <dbl> 16777220, 16777220, 16777220, 16777220, 16777220,…
+$ hard_links        <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ special_device_id <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ inode             <dbl> 32132013, 32132014, 32132015, 32132016, 32132017,…
+$ block_size        <dbl> 4096, 4096, 4096, 4096, 4096, 4096, 4096, 4096, 4…
+$ blocks            <dbl> 624, 8, 24, 32, 16, 16, 8, 264, 8, 16, 784, 8, 89…
+$ flags             <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ generation        <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+$ access_time       <dttm> 2019-10-11 16:51:51, 2019-10-11 16:51:50, 2019-1…
+$ change_time       <dttm> 2019-10-11 16:51:50, 2019-10-11 16:51:50, 2019-1…
+$ birth_time        <dttm> 2019-08-27 13:31:08, 2019-08-27 13:31:08, 2019-0…
+```
+
+These variables are helpful if you're trying to determine file sizes. Let's limit the info to the top ten.
+
+```{r top-10-info}
+fs::dir_info("datasets") %>% 
+    dplyr::arrange(desc(size)) %>% 
+    dplyr::select(path, size, modification_time) %>% 
+    utils::head(10) 
+```
+
+```r
+# A tibble: 10 x 3
+   path                                        size modification_time  
+   <fs::path>                           <fs::bytes> <dttm>             
+ 1 datasets/processed_data.csv               86.28M 2019-08-27 13:31:08
+ 2 datasets/uber-rides-data3.csv             55.89M 2019-08-27 13:31:08
+ 3 datasets/uber-rides-data2.csv             55.89M 2019-08-27 13:31:08
+ 4 datasets/uber-rides-data1.csv             55.89M 2019-08-27 13:31:08
+ 5 datasets/flightdata.csv                   28.58M 2019-08-27 13:31:08
+ 6 datasets/data.csv                          6.18M 2019-08-27 13:31:08
+ 7 datasets/26k-consumer-complaints.csv       4.54M 2019-08-27 13:31:08
+ 8 datasets/geojson-counties-fips.json        3.07M 2019-08-27 13:31:08
+ 9 datasets/clustergram_GDS5373.soft          2.59M 2019-08-27 13:31:08
+10 datasets/data.csv.zip                      2.27M 2019-08-27 13:31:08
+```
+
+This is helpful if we're trying to organize data files by `size`, or the time they were last modified with `modification_time`.
+
+## Importing files 
+
+We can also use the `fs` package to import multiple files into a single data frame. If we combine all the `uber` files into a `fs_path`, and then combine this with the `purrr:map_df()` function, we can import all the files with `readr::read_csv()` (and some additional arguments).
+
+```{r import-multiple-files}
+# create file paths
+uber_files <- fs::dir_ls(path = "datasets", 
+                         regexp = "uber")
+# import
+UberData <- uber_files %>%
+  purrr::map_df(read_csv, 
+                .id = "file", 
+         col_types = cols())
+```
+
+```r
+# A tibble: 10 x 4
+   file                          `Date/Time`           Lat   Lon
+   <chr>                         <dttm>              <dbl> <dbl>
+ 1 datasets/uber-rides-data1.csv 2014-04-01 00:11:00  40.8 -74.0
+ 2 datasets/uber-rides-data1.csv 2014-04-01 00:17:00  40.7 -74.0
+ 3 datasets/uber-rides-data1.csv 2014-04-01 00:21:00  40.7 -74.0
+ 4 datasets/uber-rides-data1.csv 2014-04-01 00:28:00  40.8 -74.0
+ 5 datasets/uber-rides-data1.csv 2014-04-01 00:33:00  40.8 -74.0
+ 6 datasets/uber-rides-data1.csv 2014-04-01 00:33:00  40.7 -74.0
+ 7 datasets/uber-rides-data1.csv 2014-04-01 00:39:00  40.7 -74.0
+ 8 datasets/uber-rides-data1.csv 2014-04-01 00:45:00  40.8 -74.0
+ 9 datasets/uber-rides-data1.csv 2014-04-01 00:55:00  40.8 -74.0
+10 datasets/uber-rides-data1.csv 2014-04-01 01:01:00  40.8 -74.0
+```
+
+### Exporting files 
+
+In the same way the files were imported using the `fs`, we can plit and export the files. Let's assume we're collaborating with someone who wants the data in a tab-deliminted format. Well, we can split this new `UberData` into three files with the `.tsv` extension.
+
+```{r export}
+UberData %>% 
+  # split files for each file
+  base::split(.$file) %>%
+    # map select across the df, but remove 'file'
+  purrr::map(dplyr::select, -file) %>%
+    # walk the readr::write_tsv() function across df, 
+    # but also change the file path to end with ',tsv'
+  purrr::iwalk(~ write_tsv(x = .x, path = 
+                        stringr::str_replace_all(string = .y,
+                                                 pattern = ".csv",
+                                                 replacement = ".tsv")))
+```
+
+We can confirm this with the `fs::dir_tree()` function again. 
+
+```{r export-tree}
+fs::dir_tree(path = "datasets", regex = "uber")
+```
+
+```r
+datasets
+├── uber-rides-data1.csv
+├── uber-rides-data1.tsv
+├── uber-rides-data2.csv
+├── uber-rides-data2.tsv
+├── uber-rides-data3.csv
+└── uber-rides-data3.tsv
+```
+
+And we can see these files are colored to help us see if the export worked. 
+
+![](/post/2019-10-11-tidy-file-management_files/dir-tree-02.jpg)
+
+## End
+
+There you have it! Check out the [package website](https://fs.r-lib.org/) for more information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,10 +6,22 @@
     <description>Recent content in rstats on tidyverse tips</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 09 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 11 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/rstats/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>tidy file management</title>
+      <link>/post/tidy-file-management/</link>
+      <pubDate>Fri, 11 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/tidy-file-management/</guid>
+      <description>“The organization of information actually creates new information.” - Richard Saul Wurman
+ Keeping files organized is an essential part of any data project, and if you’re just starting a career in data science, it’s important to build good habits early. There are plenty of general resources on the internet for setting up a data science project. I like these:
+ Good Enough Practices for Scientific Computing
+ Best Practices for Scientific Computing</description>
+    </item>
     
     <item>
       <title>Hello and welcome!</title>
