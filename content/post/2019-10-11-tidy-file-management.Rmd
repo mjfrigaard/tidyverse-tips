@@ -240,10 +240,12 @@ As you're working on a data project, you might want to organize the files in a w
 
 ## Create file paths
 
-[File paths can be a problem in R](https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error) depending on what operating system you use. Windows uses a backslash (`\`) and everyone else uses forward slashes (`/`). The difference can be a problem when projects get passed from one person to another, because code is written expecting certain files to be in certain places. The `fs` package makes the file paths tidy in two ways:
+[File paths can be a problem in R](https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error) depending on what operating system you use. Windows uses a backslash (`\`), and everyone else uses forward slashes (`/`), which creates a lot of file paths with *two* forward slashes. As you can imagine, this can be a problem when projects get passed from one person to another, because file paths are expecting certain files to be in certain places. The `fs` package handles this problem with tidy file paths. 
 
-1. Always use `/` to delimit directories  
-2. Never have multiple `/` or trailing `/`  
+Tidy file paths have two properties that makes them useful:
+
+1. All tidy paths are created using only forward slashes (`/`)   
+2. Tidy paths replace double-forward slashes (`//`) with single forward slahes (`/`), and the remove any forward slashes at the end of a file path (`folder/`)  
 
 The `fs::path()` function creates clean and tidy paths.
 
@@ -272,7 +274,7 @@ datasets/gapminder_unfiltered.csv
 datasets/gapminder_with_codes.csv
 ```
 
-The `gap_files`
+The `gap_files` is a `fs_path` character vector with a few additional properties we'll explore later.  
 
 ## Create new folder
 
@@ -417,7 +419,7 @@ UberData <- uber_files %>%
 
 ### Exporting files 
 
-In the same way the files were imported using the `fs`, we can plit and export the files. Let's assume we're collaborating with someone who wants the data in a tab-deliminted format. Well, we can split this new `UberData` into three files with the `.tsv` extension.
+In the same way the files were imported using the `fs`, we can `split` and export the files. Let's assume we're collaborating with someone who wants the data in a tab-deliminted format. We can separate the new `UberData` into three files with the `.tsv` extension.
 
 ```{r export}
 UberData %>% 

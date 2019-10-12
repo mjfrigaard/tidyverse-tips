@@ -337,11 +337,12 @@
 </div>
 <div id="create-file-paths" class="section level2">
 <h2>Create file paths</h2>
-<p><a href="https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error">File paths can be a problem in R</a> depending on what operating system you use. Windows uses a backslash (<code>\</code>) and everyone else uses forward slashes (<code>/</code>). The difference can be a problem when projects get passed from one person to another, because code is written expecting certain files to be in certain places. The <code>fs</code> package makes the file paths tidy in two ways:</p>
+<p><a href="https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error">File paths can be a problem in R</a> depending on what operating system you use. Windows uses a backslash (<code>\</code>), and everyone else uses forward slashes (<code>/</code>), which creates a lot of file paths with <em>two</em> forward slashes. As you can imagine, this can be a problem when projects get passed from one person to another, because file paths are expecting certain files to be in certain places. The <code>fs</code> package handles this problem with tidy file paths.</p>
+<p>Tidy file paths have two properties that makes them useful:</p>
 <ol style="list-style-type: decimal">
-<li>Always use <code>/</code> to delimit directories<br />
+<li>All tidy paths are created using only forward slashes (<code>/</code>)<br />
 </li>
-<li>Never have multiple <code>/</code> or trailing <code>/</code></li>
+<li>Tidy paths replace double-forward slashes (<code>//</code>) with single forward slahes (<code>/</code>), and the remove any forward slashes at the end of a file path (<code>folder/</code>)</li>
 </ol>
 <p>The <code>fs::path()</code> function creates clean and tidy paths.</p>
 <pre class="r"><code>fs::path(&quot;path&quot;, &quot;to&quot;, &quot;my&quot;, &quot;data&quot;, &quot;files&quot;)</code></pre>
@@ -356,7 +357,7 @@ datasets/gapminderDataFiveYear2.csv
 datasets/gapminderData_Americas_2007.csv
 datasets/gapminder_unfiltered.csv
 datasets/gapminder_with_codes.csv</code></pre>
-<p>The <code>gap_files</code></p>
+<p>The <code>gap_files</code> is a <code>fs_path</code> character vector with a few additional properties we’ll explore later.</p>
 </div>
 <div id="create-new-folder" class="section level2">
 <h2>Create new folder</h2>
@@ -460,7 +461,7 @@ UberData &lt;- uber_files %&gt;%
 10 datasets/uber-rides-data1.csv 2014-04-01 01:01:00  40.8 -74.0</code></pre>
 <div id="exporting-files" class="section level3">
 <h3>Exporting files</h3>
-<p>In the same way the files were imported using the <code>fs</code>, we can plit and export the files. Let’s assume we’re collaborating with someone who wants the data in a tab-deliminted format. Well, we can split this new <code>UberData</code> into three files with the <code>.tsv</code> extension.</p>
+<p>In the same way the files were imported using the <code>fs</code>, we can <code>split</code> and export the files. Let’s assume we’re collaborating with someone who wants the data in a tab-deliminted format. We can separate the new <code>UberData</code> into three files with the <code>.tsv</code> extension.</p>
 <pre class="r"><code>UberData %&gt;% 
   # split files for each file
   base::split(.$file) %&gt;%
