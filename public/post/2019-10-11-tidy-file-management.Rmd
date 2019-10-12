@@ -240,7 +240,7 @@ As you're working on a data project, you might want to organize the files in a w
 
 ## Create file paths
 
-[File paths can be a problem in R](https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error) depending on what operating system you use. Windows uses a backslash (`\`), and everyone else uses forward slashes (`/`), which creates a lot of file paths with *two* forward slashes. As you can imagine, this can be a problem when projects get passed from one person to another, because file paths are expecting certain files to be in certain places. The `fs` package handles this problem with tidy file paths. 
+[File paths can be a problem in R](https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error) depending on what operating system you use. Windows uses a backslash (`C:\Users\username\Desktop\`), and everyone else uses forward slashes (`~/Users/username/Desktop`), which creates a lot of file paths with *two* forward slashes (`C:\\Users\\username\\Desktop\\`). As you can imagine, this can be a problem when projects get passed from one person to another, because file paths are expecting certain files to be in certain places. The `fs` package handles this problem with tidy file paths. 
 
 Tidy file paths have two properties that makes them useful:
 

@@ -196,7 +196,7 @@ description: Knowing where your files are is essential to being productive. This
 </div>
 <div id="create-file-paths" class="section level2">
 <h2>Create file paths</h2>
-<p><a href="https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error">File paths can be a problem in R</a> depending on what operating system you use. Windows uses a backslash (<code>\</code>), and everyone else uses forward slashes (<code>/</code>), which creates a lot of file paths with <em>two</em> forward slashes. As you can imagine, this can be a problem when projects get passed from one person to another, because file paths are expecting certain files to be in certain places. The <code>fs</code> package handles this problem with tidy file paths.</p>
+<p><a href="https://stackoverflow.com/questions/8425409/file-path-issues-in-r-using-windows-hex-digits-in-character-string-error">File paths can be a problem in R</a> depending on what operating system you use. Windows uses a backslash (<code>C:\Users\username\Desktop\</code>), and everyone else uses forward slashes (<code>~/Users/username/Desktop</code>), which creates a lot of file paths with <em>two</em> forward slashes (<code>C:\\Users\\username\\Desktop\\</code>). As you can imagine, this can be a problem when projects get passed from one person to another, because file paths are expecting certain files to be in certain places. The <code>fs</code> package handles this problem with tidy file paths.</p>
 <p>Tidy file paths have two properties that makes them useful:</p>
 <ol style="list-style-type: decimal">
 <li>All tidy paths are created using only forward slashes (<code>/</code>)<br />
