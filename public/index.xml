@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>tidyverse tips</title>
@@ -45,12 +45,13 @@ Installing the tidyverse The packages in the tidyverse can be loaded into R or R
     </item>
     
     <item>
-      <title>Showcase</title>
-      <link>/showcase/</link>
+      <title>Tidy Stuff</title>
+      <link>/tidy-stuff/</link>
       <pubDate>Tue, 09 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/showcase/</guid>
-      <description>shiny app for checking blood glucose monitors  The error grids clinicians use to check the accuracy of blood glucose monitors are out-of-date. Regulatory agencies don’t use error grids for approving monitors, but these tools could be useful for testing the performance of recommended products. The Diabetes Technology Society partnered with representatives from the Food and Drug Administration, the American Diabetes Association, the Endocrine Society, and the Association for the Advancement of Medical Instrumentation, and representatives from academia, industry, and government developed the surveillance error grid (SEG) as a tool to assess the degree of clinical risk from inaccurate blood glucose monitors (BGM).</description>
+      <guid>/tidy-stuff/</guid>
+      <description>Storybench&amp;rsquo;s &amp;ldquo;Data Journalism with R&amp;rdquo; This is a project from Northeastern University&amp;rsquo;s School of Journalism. It was started by Aleszu Bajak in 2016 and features common tasks for data journalist&amp;rsquo;s in R and the tidyverse.
+R for Data Science group Jesse Mostipak started the R for Data Science learning community, and it has a fantastic Slack channel. Learning is easier when you can do it with others, and the R4DS community is a great place for people looking to get started with Data Science.</description>
     </item>
     
   </channel>

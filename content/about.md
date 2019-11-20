@@ -19,10 +19,6 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
-## Where can I learn more?
-
-The best place to learn about the `tidyverse` is in [R for Data Science](https://r4ds.had.co.nz/), or the resources on the  [RStudio website](https://resources.rstudio.com/).
-
 ## Want to teach the `tidyverse` to others?
 
 If you love using all the tools in the `tidyverse`, and want to teach it to others, consider [becoming a certified instructor](https://education.rstudio.com/trainers#info) 
