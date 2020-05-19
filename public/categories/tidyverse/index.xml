@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tidyverse on Your Website Title</title>
+    <link>/categories/tidyverse/</link>
+    <description>Recent content in tidyverse on Your Website Title</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Copyright Year, Martin Frigaard</copyright>
+    <lastBuildDate>Mon, 18 May 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/tidyverse/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>File management with fs</title>
+      <link>/post/file-management-with-fs/</link>
+      <pubDate>Mon, 18 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/file-management-with-fs/</guid>
+      <description>   TLDR: This post covers how to keep track of all your files and documnets in a data analysis project.
+ </description>
+    </item>
+    
+  </channel>
+</rss>
