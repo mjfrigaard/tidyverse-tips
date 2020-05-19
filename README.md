@@ -1,8 +1,7 @@
 tidyverse tips
 ==============
 
-This is a blog for various `tidyverse` tips from around the web. I try to update
-this blog everyday, but that's not always possible. 
+This is a blog for various `tidyverse` tips from around the web. I try to update this blog everyday, but that's not always possible. 
 
 
 ## Blog structure and theme  
