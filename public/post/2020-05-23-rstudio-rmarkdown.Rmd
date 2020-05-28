@@ -51,8 +51,9 @@ RStudio has an extension of markdown, [RMarkdown](https://rmarkdown.rstudio.com/
 
 ![](/post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-workflow.png){width=80%}
 
-How does it work? See the example below: 
+How does it work? Follow the steps below and `copy + paste` the code into your Rmarkdown document. Then click on the Knit icon. 
 
+![](/post/2020-05-23-rstudio-rmarkdown_files/new-rmarkdown-file.png){width=80%}
 
 ~~~
 # R Markdown
@@ -61,7 +62,7 @@ Load the `tidyverse`.
 
 ```{r tidyverse_logo}
 library(tidyverse)
-crayon::strip_style(tidyverse::tidyverse_logo())
+tidyverse::tidyverse_logo()
 ```
 
 ### Code
@@ -84,6 +85,6 @@ diamonds %>%
 
 ~~~
 
-I can see this as an .html document below:
+Below is what you should see in your .html document:
 
-![](/post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-output.png){width=80%}
+![](/post/2020-05-23-rstudio-rmarkdown_files/rmarkdown-output.png){width=80%}

@@ -117,7 +117,8 @@ normal text
 <h2>Rmarkdown</h2>
 <p>RStudio has an extension of markdown, <a href="https://rmarkdown.rstudio.com/">RMarkdown</a>. Using RMarkdown in RStudio allows for a genuinely reproducible workflow: we’re able to write our thoughts, code, display results, and then share everything in multiple outputs.</p>
 <p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-workflow.png" style="width:80.0%" /></p>
-<p>How does it work? See the example below:</p>
+<p>How does it work? Follow the steps below and <code>copy + paste</code> the code into your Rmarkdown document. Then click on the Knit icon.</p>
+<p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/new-rmarkdown-file.png" style="width:80.0%" /></p>
 <pre><code># R Markdown
 
 Load the `tidyverse`.
@@ -125,7 +126,7 @@ Load the `tidyverse`.
 
 ```r
 library(tidyverse)
-crayon::strip_style(tidyverse::tidyverse_logo())
+tidyverse::tidyverse_logo()
 ## ⬢ __  _    __   .    ⬡           ⬢  . 
 ##  / /_(_)__/ /_ ___  _____ _______ ___ 
 ## / __/ / _  / // / |/ / -_) __(_-&lt;/ -_)
@@ -167,8 +168,8 @@ diamonds %&gt;%
 
 &lt;img src=&quot;2020-05-23-rstudio-rmarkdown_files/figure-html/unnamed-chunk-2-1.png&quot; width=&quot;672&quot; /&gt;
 </code></pre>
-<p>I can see this as an .html document below:</p>
-<p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-output.png" style="width:80.0%" /></p>
+<p>Below is what you should see in your .html document:</p>
+<p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/rmarkdown-output.png" style="width:80.0%" /></p>
 </div>
 
         </article>
