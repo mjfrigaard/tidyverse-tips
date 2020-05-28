@@ -1,5 +1,5 @@
 ---
-title: File management with fs
+title: How to manage your files with fs
 author: Martin Frigaard
 date: '2020-05-18'
 slug: file-management-with-fs
