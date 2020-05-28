@@ -1,5 +1,5 @@
 ---
-title: "RStudio & R Markdown"
+title: "How to use Rmarkdown in RStudio"
 author: "Martin Frigaard"
 date: 2020-05-23T21:13:14-05:00
 categories: ["R"]
@@ -7,29 +7,83 @@ tags: ["R Markdown", "R", "RStudio"]
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(collapse = TRUE)
+knitr::opts_chunk$set(fig.keep = FALSE,
+                      collapse = TRUE)
+library(tidyverse)
 ```
 
-# Markdown
+## Markdown
 
+![](/post/2020-05-23-rstudio-rmarkdown_files/02-markdown-icon.png){width=80%}
 
+[Markdown](https://en.wikipedia.org/wiki/Markdown) files (`.md`) are common type of plain text files. Markdown is a 'lightweight markup language,' which means it's easy for humans to read, and computers can convert it to HyperText Markup Language (HTML). Markdown allows for some formatting options to aid with communication (see below)
 
-```{r cars}
-summary(cars)
-fit <- lm(dist ~ speed, data = cars)
-fit
+```md
+<!-- comments -->
+
+normal text
+
+*italic*
+
+**bold**
+
+> quote
+
+`code`
+
+# h1
+## h2
+### h3
+#### h4
+##### h5
+###### h6
 ```
 
-# Including Plots
+To learn more, see [Markdown Syntax Documentation](https://daringfireball.net/projects/markdown/syntax) on John Gruber's site. 
 
-You can also embed plots. See Figure \@ref(fig:pie) for example:
+## Why learn markdown?
 
-```{r pie, fig.cap='A fancy pie chart.', tidy=FALSE}
-par(mar = c(0, 1, 0, 1))
-pie(
-  c(280, 60, 20),
-  c('Sky', 'Sunny side of pyramid', 'Shady side of pyramid'),
-  col = c('#0292D8', '#F7EA39', '#C4B632'),
-  init.angle = -50, border = NA
-)
+I recommend learning markdown before any other programming language because it's the lingua franca for asking code related questions on the internet. See [Stackoverflow](https://stackoverflow.com/), [RStudio community](https://community.rstudio.com/), [Reddit](https://www.reddit.com/), [Github](http://github.com/), and many other guidelines for posting questions.
+
+## Rmarkdown
+
+RStudio has an extension of markdown, [RMarkdown](https://rmarkdown.rstudio.com/). Using RMarkdown in RStudio allows for a genuinely reproducible workflow: we're able to write our thoughts, code, display results, and then share everything in multiple outputs.  
+
+![](/post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-workflow.png){width=80%}
+
+How does it work? See the example below: 
+
+
+~~~
+# R Markdown
+
+Load the `tidyverse`.
+
+```{r tidyverse_logo}
+library(tidyverse)
+crayon::strip_style(tidyverse::tidyverse_logo())
 ```
+
+### Code
+
+When you click the **Knit** button a document will be generated that includes text content, code inputs, and various outputs.
+
+```{r}
+ggplot2::diamonds %>% dplyr::glimpse(78)
+```
+
+### Graphs
+
+You can also include graphs.
+
+```{r}
+diamonds %>% 
+  ggplot2::ggplot(aes(x = carat, y = price, color = cut)) + 
+  ggplot2::geom_point()
+```
+
+~~~
+
+I can see this as an .html document below:
+
+![](/post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-output.png){width=80%}

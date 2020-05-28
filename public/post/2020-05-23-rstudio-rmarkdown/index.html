@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head>
-    <title>RStudio &amp; R Markdown</title>
+    <title>How to use Rmarkdown in RStudio</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="../../css/theme.css"/>
@@ -75,7 +75,7 @@
 <div class="container">
     <div class="pl-sm-2">
         <div class="mb-3">
-            <h3 class="mb-0">RStudio &amp; R Markdown</h3>
+            <h3 class="mb-0">How to use Rmarkdown in RStudio</h3>
             
             <small class="text-muted">Published May 23, 2020</small>
         </div>
@@ -85,42 +85,90 @@
 <script src="../../rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
-<div id="markdown" class="section level1">
-<h1>Markdown</h1>
-<pre class="r"><code>summary(cars)
-##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00
-fit &lt;- lm(dist ~ speed, data = cars)
-fit
-## 
-## Call:
-## lm(formula = dist ~ speed, data = cars)
-## 
-## Coefficients:
-## (Intercept)        speed  
-##     -17.579        3.932</code></pre>
+<div id="markdown" class="section level2">
+<h2>Markdown</h2>
+<p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/02-markdown-icon.png" style="width:80.0%" /></p>
+<p><a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> files (<code>.md</code>) are common type of plain text files. Markdown is a ‘lightweight markup language,’ which means it’s easy for humans to read, and computers can convert it to HyperText Markup Language (HTML). Markdown allows for some formatting options to aid with communication (see below)</p>
+<pre class="md"><code>&lt;!-- comments --&gt;
+
+normal text
+
+*italic*
+
+**bold**
+
+&gt; quote
+
+`code`
+
+# h1
+## h2
+### h3
+#### h4
+##### h5
+###### h6</code></pre>
+<p>To learn more, see <a href="https://daringfireball.net/projects/markdown/syntax">Markdown Syntax Documentation</a> on John Gruber’s site.</p>
 </div>
-<div id="including-plots" class="section level1">
-<h1>Including Plots</h1>
-<p>You can also embed plots. See Figure <a href="#fig:pie">1</a> for example:</p>
-<pre class="r"><code>par(mar = c(0, 1, 0, 1))
-pie(
-  c(280, 60, 20),
-  c(&#39;Sky&#39;, &#39;Sunny side of pyramid&#39;, &#39;Shady side of pyramid&#39;),
-  col = c(&#39;#0292D8&#39;, &#39;#F7EA39&#39;, &#39;#C4B632&#39;),
-  init.angle = -50, border = NA
-)</code></pre>
-<div class="figure"><span id="fig:pie"></span>
-<img src="../../post/2020-05-23-rstudio-rmarkdown_files/figure-html/pie-1.png" alt="A fancy pie chart." width="672" />
-<p class="caption">
-Figure 1: A fancy pie chart.
-</p>
+<div id="why-learn-markdown" class="section level2">
+<h2>Why learn markdown?</h2>
+<p>I recommend learning markdown before any other programming language because it’s the lingua franca for asking code related questions on the internet. See <a href="https://stackoverflow.com/">Stackoverflow</a>, <a href="https://community.rstudio.com/">RStudio community</a>, <a href="https://www.reddit.com/">Reddit</a>, <a href="http://github.com/">Github</a>, and many other guidelines for posting questions.</p>
 </div>
+<div id="rmarkdown" class="section level2">
+<h2>Rmarkdown</h2>
+<p>RStudio has an extension of markdown, <a href="https://rmarkdown.rstudio.com/">RMarkdown</a>. Using RMarkdown in RStudio allows for a genuinely reproducible workflow: we’re able to write our thoughts, code, display results, and then share everything in multiple outputs.</p>
+<p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-workflow.png" style="width:80.0%" /></p>
+<p>How does it work? See the example below:</p>
+<pre><code># R Markdown
+
+Load the `tidyverse`.
+
+
+```r
+library(tidyverse)
+crayon::strip_style(tidyverse::tidyverse_logo())
+## ⬢ __  _    __   .    ⬡           ⬢  . 
+##  / /_(_)__/ /_ ___  _____ _______ ___ 
+## / __/ / _  / // / |/ / -_) __(_-&lt;/ -_)
+## \__/_/\_,_/\_, /|___/\__/_/ /___/\__/ 
+##      ⬢  . /___/      ⬡      .       ⬢
+```
+
+### Code
+
+When you click the **Knit** button a document will be generated that includes text content, code inputs, and various outputs.
+
+
+```r
+ggplot2::diamonds %&gt;% dplyr::glimpse(78)
+## Rows: 53,940
+## Columns: 10
+## $ carat   &lt;dbl&gt; 0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, 0.23,…
+## $ cut     &lt;ord&gt; Ideal, Premium, Good, Premium, Good, Very Good, Very Good, …
+## $ color   &lt;ord&gt; E, E, E, I, J, J, I, H, E, H, J, J, F, J, E, E, I, J, J, J,…
+## $ clarity &lt;ord&gt; SI2, SI1, VS1, VS2, SI2, VVS2, VVS1, SI1, VS2, VS1, SI1, VS…
+## $ depth   &lt;dbl&gt; 61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, 59.4,…
+## $ table   &lt;dbl&gt; 55, 61, 65, 58, 58, 57, 57, 55, 61, 61, 55, 56, 61, 54, 62,…
+## $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340,…
+## $ x       &lt;dbl&gt; 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87, 4.00,…
+## $ y       &lt;dbl&gt; 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4.05,…
+## $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, 2.39,…
+```
+
+### Graphs
+
+You can also include graphs.
+
+
+```r
+diamonds %&gt;% 
+  ggplot2::ggplot(aes(x = carat, y = price, color = cut)) + 
+  ggplot2::geom_point()
+```
+
+&lt;img src=&quot;2020-05-23-rstudio-rmarkdown_files/figure-html/unnamed-chunk-2-1.png&quot; width=&quot;672&quot; /&gt;
+</code></pre>
+<p>I can see this as an .html document below:</p>
+<p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-output.png" style="width:80.0%" /></p>
 </div>
 
         </article>

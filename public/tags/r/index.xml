@@ -13,12 +13,13 @@
     
     
     <item>
-      <title>RStudio &amp; R Markdown</title>
+      <title>How to use Rmarkdown in RStudio</title>
       <link>/post/2020-05-23-rstudio-rmarkdown/</link>
       <pubDate>Sat, 23 May 2020 21:13:14 -0500</pubDate>
       
       <guid>/post/2020-05-23-rstudio-rmarkdown/</guid>
-      <description>Markdown summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.:19.0 3rd Qu.: 56.00 ## Max. :25.0 Max. :120.00 fit &amp;lt;- lm(dist ~ speed, data = cars) fit ## ## Call: ## lm(formula = dist ~ speed, data = cars) ## ## Coefficients: ## (Intercept) speed ## -17.</description>
+      <description>Markdown Markdown files (.md) are common type of plain text files. Markdown is a ‘lightweight markup language,’ which means it’s easy for humans to read, and computers can convert it to HyperText Markup Language (HTML). Markdown allows for some formatting options to aid with communication (see below)
+&amp;lt;!-- comments --&amp;gt; normal text *italic* **bold** &amp;gt; quote `code` # h1 ## h2 ### h3 #### h4 ##### h5 ###### h6 To learn more, see Markdown Syntax Documentation on John Gruber’s site.</description>
     </item>
     
   </channel>
