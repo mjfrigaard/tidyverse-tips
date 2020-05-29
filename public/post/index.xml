@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Copyright Year 2020, Martin Frigaard</copyright>
-    <lastBuildDate>Sat, 23 May 2020 21:13:14 -0500</lastBuildDate>
+    <lastBuildDate>Fri, 29 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How to manage your files with fs</title>
+      <link>/post/file-management-with-fs/</link>
+      <pubDate>Fri, 29 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/file-management-with-fs/</guid>
+      <description>Organizing your data, code, documents, and figures in a consistent way that’s easy to navigate is one of the most thoughtful and generous things you’ll ever do. It’s also a basic requirement for a reproducible data science project. In RStudio, this process is made easier with .Rproj files (read more) and the here package.
+What fs does? The fs package adds another layer of project organization by giving us access to a “uniform interface to file system operations.</description>
+    </item>
     
     <item>
       <title>How to use Rmarkdown in RStudio</title>
@@ -20,16 +30,6 @@
       <guid>/post/2020-05-23-rstudio-rmarkdown/</guid>
       <description>Markdown Markdown files (.md) are common type of plain text files. Markdown is a ‘lightweight markup language,’ which means it’s easy for humans to read, and computers can convert it to HyperText Markup Language (HTML). Markdown allows for some formatting options to aid with communication (see below)
 &amp;lt;!-- comments --&amp;gt; normal text *italic* **bold** &amp;gt; quote `code` # h1 ## h2 ### h3 #### h4 ##### h5 ###### h6 To learn more, see Markdown Syntax Documentation on John Gruber’s site.</description>
-    </item>
-    
-    <item>
-      <title>How to manage your files with fs</title>
-      <link>/post/file-management-with-fs/</link>
-      <pubDate>Mon, 18 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/file-management-with-fs/</guid>
-      <description>   TLDR: This post covers how to keep track of all your files and documnets in a data analysis project.
- </description>
     </item>
     
   </channel>

@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Copyright Year 2020, Martin Frigaard</copyright>
-    <lastBuildDate>Mon, 18 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 29 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/workflow/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,11 +15,11 @@
     <item>
       <title>How to manage your files with fs</title>
       <link>/post/file-management-with-fs/</link>
-      <pubDate>Mon, 18 May 2020 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 29 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/file-management-with-fs/</guid>
-      <description>   TLDR: This post covers how to keep track of all your files and documnets in a data analysis project.
- </description>
+      <description>Organizing your data, code, documents, and figures in a consistent way that’s easy to navigate is one of the most thoughtful and generous things you’ll ever do. It’s also a basic requirement for a reproducible data science project. In RStudio, this process is made easier with .Rproj files (read more) and the here package.
+What fs does? The fs package adds another layer of project organization by giving us access to a “uniform interface to file system operations.</description>
     </item>
     
   </channel>
