@@ -13,20 +13,20 @@
     
     
     <item>
-      <title>R</title>
-      <link>/categories/r/</link>
+      <title>Workflow</title>
+      <link>/categories/workflow/</link>
       <pubDate>Fri, 29 May 2020 00:00:00 +0000</pubDate>
       
-      <guid>/categories/r/</guid>
+      <guid>/categories/workflow/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>tidyverse</title>
-      <link>/categories/tidyverse/</link>
-      <pubDate>Fri, 29 May 2020 00:00:00 +0000</pubDate>
+      <title>Rmarkdown</title>
+      <link>/categories/rmarkdown/</link>
+      <pubDate>Sat, 23 May 2020 21:13:14 -0500</pubDate>
       
-      <guid>/categories/tidyverse/</guid>
+      <guid>/categories/rmarkdown/</guid>
       <description></description>
     </item>
     

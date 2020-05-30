@@ -3,11 +3,8 @@ title: How to manage your files with fs
 author: Martin Frigaard
 date: '2020-05-29'
 slug: file-management-with-fs
-categories:
-  - tidyverse
-  - R
-tags:
-  - workflow
+categories: ["Workflow"]
+tags: ["Workflow"]
 ---
 
 ```{r setup, include=FALSE}

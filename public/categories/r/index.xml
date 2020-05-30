@@ -22,15 +22,5 @@
 What fs does? The fs package adds another layer of project organization by giving us access to a “uniform interface to file system operations.</description>
     </item>
     
-    <item>
-      <title>How to use Rmarkdown in RStudio</title>
-      <link>/post/2020-05-23-rstudio-rmarkdown/</link>
-      <pubDate>Sat, 23 May 2020 21:13:14 -0500</pubDate>
-      
-      <guid>/post/2020-05-23-rstudio-rmarkdown/</guid>
-      <description>Markdown Markdown files (.md) are common type of plain text files. Markdown is a ‘lightweight markup language,’ which means it’s easy for humans to read, and computers can convert it to HyperText Markup Language (HTML). Markdown allows for some formatting options to aid with communication (see below)
-&amp;lt;!-- comments --&amp;gt; normal text *italic* **bold** &amp;gt; quote `code` # h1 ## h2 ### h3 #### h4 ##### h5 ###### h6 To learn more, see Markdown Syntax Documentation on John Gruber’s site.</description>
-    </item>
-    
   </channel>
 </rss>

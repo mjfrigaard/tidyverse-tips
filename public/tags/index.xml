@@ -13,20 +13,11 @@
     
     
     <item>
-      <title>workflow</title>
+      <title>Workflow</title>
       <link>/tags/workflow/</link>
       <pubDate>Fri, 29 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/workflow/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>/tags/r/</link>
-      <pubDate>Sat, 23 May 2020 21:13:14 -0500</pubDate>
-      
-      <guid>/tags/r/</guid>
       <description></description>
     </item>
     
@@ -40,11 +31,11 @@
     </item>
     
     <item>
-      <title>RStudio</title>
-      <link>/tags/rstudio/</link>
+      <title>Reproducible Research</title>
+      <link>/tags/reproducible-research/</link>
       <pubDate>Sat, 23 May 2020 21:13:14 -0500</pubDate>
       
-      <guid>/tags/rstudio/</guid>
+      <guid>/tags/reproducible-research/</guid>
       <description></description>
     </item>
     

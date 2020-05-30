@@ -18,17 +18,7 @@
   </url>
   
   <url>
-    <loc>/categories/r/</loc>
-    <lastmod>2020-05-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/</loc>
-    <lastmod>2020-05-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/tidyverse/</loc>
     <lastmod>2020-05-29T00:00:00+00:00</lastmod>
   </url>
   
@@ -43,12 +33,12 @@
   </url>
   
   <url>
-    <loc>/post/2020-05-23-rstudio-rmarkdown/</loc>
-    <lastmod>2020-05-23T21:13:14-05:00</lastmod>
+    <loc>/categories/workflow/</loc>
+    <lastmod>2020-05-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/r/</loc>
+    <loc>/post/2020-05-23-rstudio-rmarkdown/</loc>
     <lastmod>2020-05-23T21:13:14-05:00</lastmod>
   </url>
   
@@ -58,7 +48,12 @@
   </url>
   
   <url>
-    <loc>/tags/rstudio/</loc>
+    <loc>/tags/reproducible-research/</loc>
+    <lastmod>2020-05-23T21:13:14-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/rmarkdown/</loc>
     <lastmod>2020-05-23T21:13:14-05:00</lastmod>
   </url>
   

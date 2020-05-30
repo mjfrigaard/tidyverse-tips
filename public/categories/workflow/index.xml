@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Workflow on tidyverse tips</title>
-    <link>/tags/workflow/</link>
+    <link>/categories/workflow/</link>
     <description>Recent content in Workflow on tidyverse tips</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Copyright Year 2020, Martin Frigaard</copyright>
     <lastBuildDate>Fri, 29 May 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/workflow/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/workflow/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>

@@ -2,8 +2,8 @@
 title: "How to use Rmarkdown in RStudio"
 author: "Martin Frigaard"
 date: 2020-05-23T21:13:14-05:00
-categories: ["R"]
-tags: ["R Markdown", "R", "RStudio"]
+categories: ["Rmarkdown"]
+tags: ["R Markdown", "Reproducible Research"]
 ---
 
 ```{r setup, include=FALSE}
