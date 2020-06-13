@@ -1,0 +1,105 @@
+---
+title: How to download html tables with rvest and xml2
+author: Martin Frigaard
+date: '2020-06-13'
+slug: how-to-split-and-tidy-column-contents
+categories:
+  - wrangle
+tags:
+  - rstats
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p><a href="https://twitter.com/MarkBermanFox26">Mark Berman</a> recently tweeted his interview with <a href="https://twitter.com/GinnyFuchsUSA">Ginny Finch</a>, 2016 USA Olympic Boxing team member:</p>
+<blockquote class="twitter-tweet">
+<p lang="en" dir="ltr">
+USADA told Houston Olympic boxer <a href="https://twitter.com/GinnyFuchsUSA?ref_src=twsrc%5Etfw"><span class="citation">@GinnyFuchsUSA</span></a>,who tested positive for prohibited substance,was determined to have been ingested by her(unprotected sex)without fault or negligence&amp;won’t face ineligibility.USA Boxing told Fuchs the USADA sanction of”No Fault”is the proper outcome <a href="https://t.co/ez0gkS7fah">pic.twitter.com/ez0gkS7fah</a>
+</p>
+— Mark Berman (<span class="citation">@MarkBermanFox26</span>) <a href="https://twitter.com/MarkBermanFox26/status/1270931237847404545?ref_src=twsrc%5Etfw">June 11, 2020</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>According to <a href="https://www.insidehook.com/daily_brief/sports/sex-clears-olympic-boxer-virginia-fuchs-doping">insidehook</a>, Fuch tested positive for <a href="https://en.wikipedia.org/wiki/Letrozole">Letrozole</a> and <a href="https://en.wikipedia.org/wiki/GW501516">GW501516</a>, two drugs listed as “Hormone and Metabolic Modulators” on the <a href="https://www.wada-ama.org/en/content/what-is-prohibited">World Anti-Doping Agency (WADA) Prohibited List</a>.</p>
+<div id="how-many-postive-tests-without-negative-consequences" class="section level2">
+<h2>How many postive tests without negative consequences?</h2>
+<p>In post on their <a href="https://www.usada.org/sanction/virginia-fuchs-found-not-at-fault/">website</a>, USADA determined Fuch was not at fault, and would not face any time of ineligibility:</p>
+<blockquote>
+<p><em>USADA determined that Fuchs’ male partner was using therapeutic doses of letrozole and GW1516 and the low amounts of letrozole metabolite and GW1516 metabolites detected in her sample were consistent with recent exposure to the substances via sexual transmission. Additionally, a WADA-accredited laboratory confirmed that products possessed by Fuchs’ partner contained therapeutic amounts of letrozole and GW1516.</em></p>
+</blockquote>
+<p>Fuch’s case got me wondering how many athletes have had positive test results and had their athletic careers continue uninterrupted.
+I decided I would download the USADA data see for myself.</p>
+</div>
+<div id="the-data" class="section level2">
+<h2>The data</h2>
+<p>The USADA sanction data is available on the <a href="https://www.usada.org/news/sanctions/">USADA website</a>.</p>
+<p><img src="/post/2020-06-13-how-to-download-html-tables-with-rvest-and-xml2_files/usada-sanctions.png" style="width:100.0%" /></p>
+<p>It’s a searchable database in the browser, but I want to download this into R so I can wrangle and visualize it.</p>
+<p>In order to extract data from the website, I’ll be using the <a href="https://cran.r-project.org/web/packages/rvest/index.html"><code>rvest</code> package</a> written by Hadley Wickham to scrape the <code>html</code> code. The code chunk below loads the packages needed to reproduce the graphics.</p>
+<pre class="r"><code>library(tidyverse)
+library(rvest)
+library(xml2)</code></pre>
+</div>
+<div id="scraping-the-usada-website" class="section level2">
+<h2>Scraping the USADA website</h2>
+<p>The website for these data is available <a href="https://tinyurl.com/yc346fq5">here</a>. The <code>rvest::read_html()</code> and <code>rvest::html_nodes()</code> functions extract the content from the table in the Web page and translates it from HTML into a data frame.</p>
+<pre class="r"><code>USADA_url &lt;- &quot;https://www.usada.org/testing/results/sanctions/&quot;
+USADA_extraction &lt;- USADA_url %&gt;%
+     xml2::read_html() %&gt;%
+     rvest::html_nodes(&quot;table&quot;)</code></pre>
+<blockquote>
+<p><strong>Store and explore</strong>* refers to storing an output of a call to an object, then checking the contents of that new object. This is a great way to get to know R, objet-oriented programming, and how functions work together in packages.</p>
+</blockquote>
+<div id="check-the-structure-of-the-extraction" class="section level3">
+<h3>Check the structure of the extraction</h3>
+<p>Look at the structure of <code>USADA_extraction</code>.</p>
+<pre class="r"><code># check the structure of the new USADA_extraction object
+USADA_extraction %&gt;% utils::str()</code></pre>
+<pre><code>## List of 1
+##  $ :List of 2
+##   ..$ node:&lt;externalptr&gt; 
+##   ..$ doc :&lt;externalptr&gt; 
+##   ..- attr(*, &quot;class&quot;)= chr &quot;xml_node&quot;
+##  - attr(*, &quot;class&quot;)= chr &quot;xml_nodeset&quot;</code></pre>
+<p>This contains a <code>node</code> and a <code>doc</code> in a <code>List</code>.</p>
+</div>
+<div id="check-the-class-of-the-extraction" class="section level3">
+<h3>Check the class of the extraction</h3>
+<p>If I check the class of the list we extracted, we find…</p>
+<pre class="r"><code>USADA_extraction %&gt;% class()</code></pre>
+<pre><code>## [1] &quot;xml_nodeset&quot;</code></pre>
+<p>…this is an <code>xml_nodeset</code> with 2 lists (stored within the 1 list). After a little bit of exploration, I find the <code>table id</code> in the <code>html_node</code>.</p>
+<pre class="r"><code>USADA_extraction[[1]]</code></pre>
+<pre><code>## {html_node}
+## &lt;table id=&quot;tablepress-1&quot; class=&quot;tablepress tablepress-id-1&quot;&gt;
+## [1] &lt;thead&gt;&lt;tr class=&quot;row-1 odd&quot;&gt;\n&lt;th class=&quot;column-1&quot;&gt;Athlete&lt;/th&gt;\n&lt;th cla ...
+## [2] &lt;tbody class=&quot;row-hover&quot;&gt;\n&lt;tr class=&quot;row-2 even&quot;&gt;\n&lt;td class=&quot;column-1&quot;&gt; ...</code></pre>
+<p>Now I know the data I want from this object is in position <code>[[1]]</code> of this list.</p>
+<p>I can subset the <code>USADA_extraction</code> list with the <code>rvest::html_table()</code> function and store the table contents in the <code>UsadaRaw</code> object. I check my work using the <code>dplyr::glimpse(70)</code>.</p>
+<pre class="r"><code>UsadaRaw &lt;- rvest::html_table(USADA_extraction[[1]])
+UsadaRaw %&gt;% dplyr::glimpse(70)</code></pre>
+<pre><code>## Rows: 766
+## Columns: 5
+## $ Athlete              &lt;chr&gt; &quot;Fuchs, Virginia&quot;, &quot;Nickles, Madilyn&quot;,…
+## $ Sport                &lt;chr&gt; &quot;Boxing&quot;, &quot;Softball&quot;, &quot;Weightlifting&quot;,…
+## $ `Substance/Reason`   &lt;chr&gt; &quot;Letrozole; GW1516&quot;, &quot;LGD-4033&quot;, &quot;Non-…
+## $ `Sanction Terms`     &lt;chr&gt; &quot;No Fault or Negligence&quot;, &quot;No Fault or…
+## $ `Sanction Announced` &lt;chr&gt; &quot;06/11/2020&quot;, &quot;06/11/2020&quot;, &quot;06/09/202…</code></pre>
+<blockquote>
+<p>why <code>dplyr::glimpse(70)</code>? It prints less to the screen and keeps the col width to &lt;80, which is nice for working in plain text.</p>
+</blockquote>
+<p>This reveals a data frame with 766 observations. The contents from the HTML list (<code>USADA_extraction</code>) has been converted to a data frame (<code>UsadaRaw</code>). I’m going to store this data frame as a .csv in a <code>data/raw</code> folder (so I don’t have to scrape it every time I run this script).</p>
+<pre class="r"><code># create raw data path
+fs::dir_create(&quot;data/raw/&quot;)
+# export the .csv file
+write_csv(as.data.frame(UsadaRaw), 
+          base::paste0(&quot;data/raw/&quot;,
+                       base::noquote(lubridate::today()),
+                           &quot;-UsadaRaw.csv&quot;))
+# check
+fs::dir_tree(&quot;data/raw&quot;)</code></pre>
+<pre><code>## data/raw
+## └── 2020-06-13-UsadaRaw.csv</code></pre>
+<p>We will start wrangling the doping data for visualizations in the next posting.</p>
+</div>
+</div>
