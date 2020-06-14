@@ -2,7 +2,7 @@
 title: How to download html tables with rvest and xml2
 author: Martin Frigaard
 date: '2020-06-13'
-slug: how-to-split-and-tidy-column-contents
+slug: 2020-06-13-how-to-download-html-tables-with-rvest-and-xml2
 categories:
   - wrangle
 tags:
@@ -32,18 +32,18 @@ In post on their [website](https://www.usada.org/sanction/virginia-fuchs-found-n
 
 > *USADA determined that Fuchs' male partner was using therapeutic doses of letrozole and GW1516 and the low amounts of letrozole metabolite and GW1516 metabolites detected in her sample were consistent with recent exposure to the substances via sexual transmission. Additionally, a WADA-accredited laboratory confirmed that products possessed by Fuchs' partner contained therapeutic amounts of letrozole and GW1516.*
 
-Fuch's case got me wondering how many athletes have had positive test results and had their athletic careers continue uninterrupted. 
-I decided I would download the USADA data see for myself. 
+Fuch's case got me wondering how many athletes have had positive test results and had their athletic careers continue uninterrupted.
+I decided I would download the USADA data see for myself.
 
-## The Data 
+## The Data
 
-The USADA sanction data is available on the [USADA website](https://www.usada.org/news/sanctions/). 
+The USADA sanction data is available on the [USADA website](https://www.usada.org/news/sanctions/).
 
 ![](/post/2020-06-13-how-to-download-html-tables-with-rvest-and-xml2_files/usada-sanctions.png){width=100%}
 
 It's a searchable database in the browser, but I want to download this into R so I can wrangle and visualize it.
 
-In order to extract data from the website, I'll be using the [`rvest` package](https://cran.r-project.org/web/packages/rvest/index.html) written by Hadley Wickham to scrape the `html` code. The code chunk below loads the packages needed to reproduce the graphics. 
+In order to extract data from the website, I'll be using the [`rvest` package](https://cran.r-project.org/web/packages/rvest/index.html) written by Hadley Wickham to scrape the `html` code. The code chunk below loads the packages needed to reproduce the graphics.
 
 ```{r packages, message=FALSE, warning=FALSE, eval=TRUE}
 library(tidyverse)
@@ -64,7 +64,7 @@ USADA_extraction <- USADA_url %>%
      rvest::html_nodes("table")
 ```
 
-> **Store and explore*** refers to storing an output of a call to an object, then checking the contents of that new object. This is a great way to get to know R, objet-oriented programming, and how functions work together in packages. 
+> **Store and explore*** refers to storing an output of a call to an object, then checking the contents of that new object. This is a great way to get to know R, objet-oriented programming, and how functions work together in packages.
 
 ### Check the structure of the extraction
 
@@ -91,7 +91,7 @@ USADA_extraction %>% class()
 USADA_extraction[[1]]
 ```
 
-Now I know the data I want from this object is in position `[[1]]` of this list. 
+Now I know the data I want from this object is in position `[[1]]` of this list.
 
 ### Ha`rvest` the html table
 
@@ -104,13 +104,13 @@ UsadaRaw %>% dplyr::glimpse(70)
 
 > why `dplyr::glimpse(70)`? It prints less to the screen and keeps the col width to <80, which is nice for working in plain text.
 
-This reveals a data frame with `r nrow(UsadaRaw)` observations. The contents from the HTML list (`USADA_extraction`) has been converted to a data frame (`UsadaRaw`). I'm going to store this data frame as a .csv in a `data/raw` folder (so I don't have to scrape it every time I run this script). 
+This reveals a data frame with `r nrow(UsadaRaw)` observations. The contents from the HTML list (`USADA_extraction`) has been converted to a data frame (`UsadaRaw`). I'm going to store this data frame as a .csv in a `data/raw` folder (so I don't have to scrape it every time I run this script).
 
 ```{r raw_data_path, eval=TRUE}
 # create raw data path
 fs::dir_create("data/raw/")
 # export the .csv file
-write_csv(as.data.frame(UsadaRaw), 
+write_csv(as.data.frame(UsadaRaw),
           base::paste0("data/raw/",
                        base::noquote(lubridate::today()),
                            "-UsadaRaw.csv"))
@@ -137,63 +137,63 @@ Now I need to identify the athletes with the `no fault or negligence` outcome in
 
 I also need to clean up the track and field responses in the `sport` column with some help from [`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) and [`stringr::str_replace_all()`](https://stringr.tidyverse.org/reference/str_replace.html).
 
-I will get a quick count and visualize these with 
+I will get a quick count and visualize these with
 
 ```{r UsadaNoFaults}
-UsadaNoFaults <- Usada %>% 
-  dplyr::filter(stringr::str_detect(string = sanction_terms, 
-                                    pattern = "^no fault or negligence$")) %>% 
+UsadaNoFaults <- Usada %>%
+  dplyr::filter(stringr::str_detect(string = sanction_terms,
+                                    pattern = "^no fault or negligence$")) %>%
                                       # replace & with and
-  dplyr::mutate(sport = stringr::str_replace_all(string = sport, 
+  dplyr::mutate(sport = stringr::str_replace_all(string = sport,
                                          # replace this
-                                       pattern = "&", 
+                                       pattern = "&",
                                          # with this
                                        replacement = "and"))
 ```
 
 ## Graph sanction terms and substances
 
-Now we can create a quick graph of the most common `no fault or negligence` sanction terms, and label these by the type of substance. 
+Now we can create a quick graph of the most common `no fault or negligence` sanction terms, and label these by the type of substance.
 
 ```{r graph}
 label_data <- UsadaNoFaults %>%
   # count up the sport and sanction_terms
-  dplyr::count(sport, sanction_terms, sort = TRUE) %>% 
+  dplyr::count(sport, sanction_terms, sort = TRUE) %>%
   # ungroup them
   dplyr::ungroup() %>%
   # join back to data
-  dplyr::inner_join(x = ., y = UsadaNoFaults, 
-                    by = c("sport", "sanction_terms")) %>% 
+  dplyr::inner_join(x = ., y = UsadaNoFaults,
+                    by = c("sport", "sanction_terms")) %>%
   # sort by n
-  dplyr::arrange(desc(n)) %>% 
+  dplyr::arrange(desc(n)) %>%
   # get the top 15 rows
   dplyr::slice(1:15)
 
 UsadaNoFaults %>%
   # count up the sport and sanction_terms
-  dplyr::count(sport, sanction_terms, sort = TRUE) %>% 
+  dplyr::count(sport, sanction_terms, sort = TRUE) %>%
   # ungroup them
   dplyr::ungroup() %>%
   # top 5
-  utils::head(5) %>% 
+  utils::head(5) %>%
   # plot these by count and sport
-  ggplot2::ggplot(aes(x = stats::reorder(sport, n), 
-                      y = n, 
+  ggplot2::ggplot(aes(x = stats::reorder(sport, n),
+                      y = n,
                       group = sanction_terms)) +
-  ggplot2::geom_point(aes(color = sanction_terms, 
-                          size = n), 
+  ggplot2::geom_point(aes(color = sanction_terms,
+                          size = n),
                       show.legend = FALSE) +
-  ggrepel::geom_text_repel(data = label_data, 
+  ggrepel::geom_text_repel(data = label_data,
                            aes(label = substance_reason, size = 2),
                            show.legend = FALSE) +
   ggplot2::labs(y = "Number of 'no fault or negligence' sanctions",
-                x = NULL, 
-                title = "Positive tests without consequences", 
+                x = NULL,
+                title = "Positive tests without consequences",
                 subtitle = "Top 5 sports, athletes, and substances with 'no fault or negligence' terms",
                 caption = "source: https://www.usada.org/news/sanctions/") +
   ggplot2::coord_flip() +
-  ggplot2::theme_classic(base_size = 9, 
+  ggplot2::theme_classic(base_size = 9,
                          base_family = "Ubuntu")
 ```
 
-This looks like MMA and Track and Field lead the way in term of *no fault or negligence*, and most of these are [meldonium](https://en.wikipedia.org/wiki/Meldonium) and [clenbuterol.](https://en.wikipedia.org/wiki/Clenbuterol). 
+This looks like MMA and Track and Field lead the way in term of *no fault or negligence*, and most of these are [meldonium](https://en.wikipedia.org/wiki/Meldonium) and [clenbuterol.](https://en.wikipedia.org/wiki/Clenbuterol).

@@ -2,7 +2,7 @@
 title: How to download html tables with rvest and xml2
 author: Martin Frigaard
 date: '2020-06-13'
-slug: how-to-split-and-tidy-column-contents
+slug: 2020-06-13-how-to-download-html-tables-with-rvest-and-xml2
 categories:
   - wrangle
 tags:
@@ -97,7 +97,7 @@ UsadaRaw %&gt;% dplyr::glimpse(70)</code></pre>
 <pre class="r"><code># create raw data path
 fs::dir_create(&quot;data/raw/&quot;)
 # export the .csv file
-write_csv(as.data.frame(UsadaRaw), 
+write_csv(as.data.frame(UsadaRaw),
           base::paste0(&quot;data/raw/&quot;,
                        base::noquote(lubridate::today()),
                            &quot;-UsadaRaw.csv&quot;))</code></pre>
@@ -127,13 +127,13 @@ utils::head(Usada)</code></pre>
 <p>Now I need to identify the athletes with the <code>no fault or negligence</code> outcome in the <code>sanction_terms</code> column. I can do this with <a href="https://dplyr.tidyverse.org/reference/filter.html"><code>dplyr::filter()</code></a> and <a href="https://stringr.tidyverse.org/reference/str_detect.html"><code>stringr::str_detect()</code></a>.</p>
 <p>I also need to clean up the track and field responses in the <code>sport</code> column with some help from <a href="https://dplyr.tidyverse.org/reference/mutate.html"><code>dplyr::mutate()</code></a> and <a href="https://stringr.tidyverse.org/reference/str_replace.html"><code>stringr::str_replace_all()</code></a>.</p>
 <p>I will get a quick count and visualize these with</p>
-<pre class="r"><code>UsadaNoFaults &lt;- Usada %&gt;% 
-  dplyr::filter(stringr::str_detect(string = sanction_terms, 
-                                    pattern = &quot;^no fault or negligence$&quot;)) %&gt;% 
+<pre class="r"><code>UsadaNoFaults &lt;- Usada %&gt;%
+  dplyr::filter(stringr::str_detect(string = sanction_terms,
+                                    pattern = &quot;^no fault or negligence$&quot;)) %&gt;%
                                       # replace &amp; with and
-  dplyr::mutate(sport = stringr::str_replace_all(string = sport, 
+  dplyr::mutate(sport = stringr::str_replace_all(string = sport,
                                          # replace this
-                                       pattern = &quot;&amp;&quot;, 
+                                       pattern = &quot;&amp;&quot;,
                                          # with this
                                        replacement = &quot;and&quot;))</code></pre>
 </div>
@@ -142,41 +142,41 @@ utils::head(Usada)</code></pre>
 <p>Now we can create a quick graph of the most common <code>no fault or negligence</code> sanction terms, and label these by the type of substance.</p>
 <pre class="r"><code>label_data &lt;- UsadaNoFaults %&gt;%
   # count up the sport and sanction_terms
-  dplyr::count(sport, sanction_terms, sort = TRUE) %&gt;% 
+  dplyr::count(sport, sanction_terms, sort = TRUE) %&gt;%
   # ungroup them
   dplyr::ungroup() %&gt;%
   # join back to data
-  dplyr::inner_join(x = ., y = UsadaNoFaults, 
-                    by = c(&quot;sport&quot;, &quot;sanction_terms&quot;)) %&gt;% 
+  dplyr::inner_join(x = ., y = UsadaNoFaults,
+                    by = c(&quot;sport&quot;, &quot;sanction_terms&quot;)) %&gt;%
   # sort by n
-  dplyr::arrange(desc(n)) %&gt;% 
+  dplyr::arrange(desc(n)) %&gt;%
   # get the top 15 rows
   dplyr::slice(1:15)
 
 UsadaNoFaults %&gt;%
   # count up the sport and sanction_terms
-  dplyr::count(sport, sanction_terms, sort = TRUE) %&gt;% 
+  dplyr::count(sport, sanction_terms, sort = TRUE) %&gt;%
   # ungroup them
   dplyr::ungroup() %&gt;%
   # top 5
-  utils::head(5) %&gt;% 
+  utils::head(5) %&gt;%
   # plot these by count and sport
-  ggplot2::ggplot(aes(x = stats::reorder(sport, n), 
-                      y = n, 
+  ggplot2::ggplot(aes(x = stats::reorder(sport, n),
+                      y = n,
                       group = sanction_terms)) +
-  ggplot2::geom_point(aes(color = sanction_terms, 
-                          size = n), 
+  ggplot2::geom_point(aes(color = sanction_terms,
+                          size = n),
                       show.legend = FALSE) +
-  ggrepel::geom_text_repel(data = label_data, 
+  ggrepel::geom_text_repel(data = label_data,
                            aes(label = substance_reason, size = 2),
                            show.legend = FALSE) +
   ggplot2::labs(y = &quot;Number of &#39;no fault or negligence&#39; sanctions&quot;,
-                x = NULL, 
-                title = &quot;Positive tests without consequences&quot;, 
+                x = NULL,
+                title = &quot;Positive tests without consequences&quot;,
                 subtitle = &quot;Top 5 sports, athletes, and substances with &#39;no fault or negligence&#39; terms&quot;,
                 caption = &quot;source: https://www.usada.org/news/sanctions/&quot;) +
   ggplot2::coord_flip() +
-  ggplot2::theme_classic(base_size = 9, 
+  ggplot2::theme_classic(base_size = 9,
                          base_family = &quot;Ubuntu&quot;)</code></pre>
 <p><img src="/post/2020-06-13-how-to-download-html-tables-with-rvest-and-xml2_files/figure-html/graph-1.png" width="672" /></p>
 <p>This looks like MMA and Track and Field lead the way in term of <em>no fault or negligence</em>, and most of these are <a href="https://en.wikipedia.org/wiki/Meldonium">meldonium</a> and <a href="https://en.wikipedia.org/wiki/Clenbuterol">clenbuterol.</a>.</p>
