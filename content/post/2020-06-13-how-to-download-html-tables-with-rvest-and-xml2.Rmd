@@ -35,7 +35,7 @@ In post on their [website](https://www.usada.org/sanction/virginia-fuchs-found-n
 Fuch's case got me wondering how many athletes have had positive test results and had their athletic careers continue uninterrupted. 
 I decided I would download the USADA data see for myself. 
 
-## The data 
+## The Data 
 
 The USADA sanction data is available on the [USADA website](https://www.usada.org/news/sanctions/). 
 
@@ -49,9 +49,11 @@ In order to extract data from the website, I'll be using the [`rvest` package](h
 library(tidyverse)
 library(rvest)
 library(xml2)
+library(janitor)
+library(ggrepel)
 ```
 
-## Scraping the USADA website
+### Scraping the USADA website
 
 The website for these data is available [here](https://tinyurl.com/yc346fq5). The `rvest::read_html()` and `rvest::html_nodes()` functions extract the content from the table in the Web page and translates it from HTML into a data frame.
 
@@ -91,6 +93,8 @@ USADA_extraction[[1]]
 
 Now I know the data I want from this object is in position `[[1]]` of this list. 
 
+### Ha`rvest` the html table
+
 I can subset the `USADA_extraction` list with the `rvest::html_table()` function and store the table contents in the `UsadaRaw` object. I check my work using the `dplyr::glimpse(70)`.
 
 ```{r UsadaRaw, eval=TRUE}
@@ -110,8 +114,86 @@ write_csv(as.data.frame(UsadaRaw),
           base::paste0("data/raw/",
                        base::noquote(lubridate::today()),
                            "-UsadaRaw.csv"))
-# check
-fs::dir_tree("data/raw")
 ```
 
-We will start wrangling the doping data for visualizations in the next posting. 
+### Wrangle the sanctions and substance/reason
+
+The `clean_names()` function from the [`janitor`](https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html) package lets me quickly format all of the column names in the `UsadaRaw` data frame. This function has a `case` argument that allows me to select how I want to format the column names.
+
+The [`purrr`](https://purrr.tidyverse.org/) package is excellent for iteration and functional programming. Both of these topics are too large to cover in this post, but I will demonstrate an example with the `purrr::map_df()` function:
+
+`purrr::map_df()` takes a data frame (`.x`) and in input, and applies a function (`.f`) across it.
+
+```{r clean-names, message=FALSE, warning=FALSE}
+Usada <- UsadaRaw %>% janitor::clean_names(case = "snake")
+# lowercase text -----
+Usada <- purrr::map_df(.x = Usada, .f = stringr::str_to_lower)
+utils::head(Usada)
+```
+
+## Filter out the "no fault or negligence" sanction terms
+
+Now I need to identify the athletes with the `no fault or negligence` outcome in the `sanction_terms` column. I can do this with [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html) and [`stringr::str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html).
+
+I also need to clean up the track and field responses in the `sport` column with some help from [`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) and [`stringr::str_replace_all()`](https://stringr.tidyverse.org/reference/str_replace.html).
+
+I will get a quick count and visualize these with 
+
+```{r UsadaNoFaults}
+UsadaNoFaults <- Usada %>% 
+  dplyr::filter(stringr::str_detect(string = sanction_terms, 
+                                      pattern = "^no fault or negligence$")) %>% 
+                                      # replace & with and
+              dplyr::mutate(sport = stringr::str_replace_all(string = sport, 
+                                                             # replace this
+                                                           pattern = "&", 
+                                                             # with this
+                                                           replacement = "and"))
+```
+
+## Graph sanction terms and substances
+
+Now we can create a quick graph of the most common `no fault or negligence` sanction terms, and label these by the type of substance. 
+
+```{r graph}
+label_data <- UsadaNoFaults %>%
+  # count up the sport and sanction_terms
+  dplyr::count(sport, sanction_terms, sort = TRUE) %>% 
+  # ungroup them
+  dplyr::ungroup() %>%
+  # join back to data
+  dplyr::inner_join(x = ., y = UsadaNoFaults, 
+                    by = c("sport", "sanction_terms")) %>% 
+  # sort by n
+  dplyr::arrange(desc(n)) %>% 
+  # get the top 15 rows
+  dplyr::slice(1:15)
+
+UsadaNoFaults %>%
+  # count up the sport and sanction_terms
+  dplyr::count(sport, sanction_terms, sort = TRUE) %>% 
+  # ungroup them
+  dplyr::ungroup() %>%
+  # top 5
+  utils::head(5) %>% 
+  # plot these by count and sport
+  ggplot2::ggplot(aes(x = stats::reorder(sport, n), 
+                      y = n, 
+                      group = sanction_terms)) +
+  ggplot2::geom_point(aes(color = sanction_terms, 
+                          size = n), 
+                      show.legend = FALSE) +
+  ggrepel::geom_text_repel(data = label_data, 
+                           aes(label = substance_reason, size = 2),
+                           show.legend = FALSE) +
+  ggplot2::labs(y = "Number of 'no fault or negligence' sanctions",
+                x = NULL, 
+                title = "Positive tests without consequences", 
+                subtitle = "Top 5 sports with athletes who tested positive,\nbut received 'no fault or negligence'",
+                caption = "source: https://www.usada.org/news/sanctions/") +
+  ggplot2::coord_flip() +
+  ggplot2::theme_classic(base_size = 9, 
+                         base_family = "Ubuntu")
+```
+
+This looks like MMA and Track and Field lead the way in term of *no fault or negligence*, and most of these are [meldonium](https://en.wikipedia.org/wiki/Meldonium) and [clenbuterol.](https://en.wikipedia.org/wiki/Clenbuterol). 

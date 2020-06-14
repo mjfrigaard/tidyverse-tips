@@ -31,17 +31,18 @@ USADA told Houston Olympic boxer <a href="https://twitter.com/GinnyFuchsUSA?ref_
 I decided I would download the USADA data see for myself.</p>
 </div>
 <div id="the-data" class="section level2">
-<h2>The data</h2>
+<h2>The Data</h2>
 <p>The USADA sanction data is available on the <a href="https://www.usada.org/news/sanctions/">USADA website</a>.</p>
 <p><img src="/post/2020-06-13-how-to-download-html-tables-with-rvest-and-xml2_files/usada-sanctions.png" style="width:100.0%" /></p>
 <p>It’s a searchable database in the browser, but I want to download this into R so I can wrangle and visualize it.</p>
 <p>In order to extract data from the website, I’ll be using the <a href="https://cran.r-project.org/web/packages/rvest/index.html"><code>rvest</code> package</a> written by Hadley Wickham to scrape the <code>html</code> code. The code chunk below loads the packages needed to reproduce the graphics.</p>
 <pre class="r"><code>library(tidyverse)
 library(rvest)
-library(xml2)</code></pre>
-</div>
-<div id="scraping-the-usada-website" class="section level2">
-<h2>Scraping the USADA website</h2>
+library(xml2)
+library(janitor)
+library(ggrepel)</code></pre>
+<div id="scraping-the-usada-website" class="section level3">
+<h3>Scraping the USADA website</h3>
 <p>The website for these data is available <a href="https://tinyurl.com/yc346fq5">here</a>. The <code>rvest::read_html()</code> and <code>rvest::html_nodes()</code> functions extract the content from the table in the Web page and translates it from HTML into a data frame.</p>
 <pre class="r"><code>USADA_url &lt;- &quot;https://www.usada.org/testing/results/sanctions/&quot;
 USADA_extraction &lt;- USADA_url %&gt;%
@@ -50,6 +51,7 @@ USADA_extraction &lt;- USADA_url %&gt;%
 <blockquote>
 <p><strong>Store and explore</strong>* refers to storing an output of a call to an object, then checking the contents of that new object. This is a great way to get to know R, objet-oriented programming, and how functions work together in packages.</p>
 </blockquote>
+</div>
 <div id="check-the-structure-of-the-extraction" class="section level3">
 <h3>Check the structure of the extraction</h3>
 <p>Look at the structure of <code>USADA_extraction</code>.</p>
@@ -75,6 +77,9 @@ USADA_extraction %&gt;% utils::str()</code></pre>
 ## [1] &lt;thead&gt;&lt;tr class=&quot;row-1 odd&quot;&gt;\n&lt;th class=&quot;column-1&quot;&gt;Athlete&lt;/th&gt;\n&lt;th cla ...
 ## [2] &lt;tbody class=&quot;row-hover&quot;&gt;\n&lt;tr class=&quot;row-2 even&quot;&gt;\n&lt;td class=&quot;column-1&quot;&gt; ...</code></pre>
 <p>Now I know the data I want from this object is in position <code>[[1]]</code> of this list.</p>
+</div>
+<div id="harvest-the-html-table" class="section level3">
+<h3>Ha<code>rvest</code> the html table</h3>
 <p>I can subset the <code>USADA_extraction</code> list with the <code>rvest::html_table()</code> function and store the table contents in the <code>UsadaRaw</code> object. I check my work using the <code>dplyr::glimpse(70)</code>.</p>
 <pre class="r"><code>UsadaRaw &lt;- rvest::html_table(USADA_extraction[[1]])
 UsadaRaw %&gt;% dplyr::glimpse(70)</code></pre>
@@ -95,11 +100,84 @@ fs::dir_create(&quot;data/raw/&quot;)
 write_csv(as.data.frame(UsadaRaw), 
           base::paste0(&quot;data/raw/&quot;,
                        base::noquote(lubridate::today()),
-                           &quot;-UsadaRaw.csv&quot;))
-# check
-fs::dir_tree(&quot;data/raw&quot;)</code></pre>
-<pre><code>## data/raw
-## └── 2020-06-13-UsadaRaw.csv</code></pre>
-<p>We will start wrangling the doping data for visualizations in the next posting.</p>
+                           &quot;-UsadaRaw.csv&quot;))</code></pre>
 </div>
+<div id="wrangle-the-sanctions-and-substancereason" class="section level3">
+<h3>Wrangle the sanctions and substance/reason</h3>
+<p>The <code>clean_names()</code> function from the <a href="https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html"><code>janitor</code></a> package lets me quickly format all of the column names in the <code>UsadaRaw</code> data frame. This function has a <code>case</code> argument that allows me to select how I want to format the column names.</p>
+<p>The <a href="https://purrr.tidyverse.org/"><code>purrr</code></a> package is excellent for iteration and functional programming. Both of these topics are too large to cover in this post, but I will demonstrate an example with the <code>purrr::map_df()</code> function:</p>
+<p><code>purrr::map_df()</code> takes a data frame (<code>.x</code>) and in input, and applies a function (<code>.f</code>) across it.</p>
+<pre class="r"><code>Usada &lt;- UsadaRaw %&gt;% janitor::clean_names(case = &quot;snake&quot;)
+# lowercase text -----
+Usada &lt;- purrr::map_df(.x = Usada, .f = stringr::str_to_lower)
+utils::head(Usada)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   athlete   sport   substance_reason        sanction_terms      sanction_announ…
+##   &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;                   &lt;chr&gt;               &lt;chr&gt;           
+## 1 fuchs, v… boxing  letrozole; gw1516       no fault or neglig… 06/11/2020      
+## 2 nickles,… softba… lgd-4033                no fault or neglig… 06/11/2020      
+## 3 glanvill… weight… non-analytical: posses… 4-year suspension;… 06/09/2020      
+## 4 walsh, c… track … cannabinoids            6-month suspension… 06/01/2020      
+## 5 romero n… triath… androgenic anabolic st… 4-year suspension;… 05/22/2020      
+## 6 gastelum… mixed … cannabinoids            9-month suspension… 05/11/2020</code></pre>
+</div>
+</div>
+<div id="filter-out-the-no-fault-or-negligence-sanction-terms" class="section level2">
+<h2>Filter out the “no fault or negligence” sanction terms</h2>
+<p>Now I need to identify the athletes with the <code>no fault or negligence</code> outcome in the <code>sanction_terms</code> column. I can do this with <a href="https://dplyr.tidyverse.org/reference/filter.html"><code>dplyr::filter()</code></a> and <a href="https://stringr.tidyverse.org/reference/str_detect.html"><code>stringr::str_detect()</code></a>.</p>
+<p>I also need to clean up the track and field responses in the <code>sport</code> column with some help from <a href="https://dplyr.tidyverse.org/reference/mutate.html"><code>dplyr::mutate()</code></a> and <a href="https://stringr.tidyverse.org/reference/str_replace.html"><code>stringr::str_replace_all()</code></a>.</p>
+<p>I will get a quick count and visualize these with</p>
+<pre class="r"><code>UsadaNoFaults &lt;- Usada %&gt;% 
+  dplyr::filter(stringr::str_detect(string = sanction_terms, 
+                                      pattern = &quot;^no fault or negligence$&quot;)) %&gt;% 
+                                      # replace &amp; with and
+              dplyr::mutate(sport = stringr::str_replace_all(string = sport, 
+                                                             # replace this
+                                                           pattern = &quot;&amp;&quot;, 
+                                                             # with this
+                                                           replacement = &quot;and&quot;))</code></pre>
+</div>
+<div id="graph-sanction-terms-and-substances" class="section level2">
+<h2>Graph sanction terms and substances</h2>
+<p>Now we can create a quick graph of the most common <code>no fault or negligence</code> sanction terms, and label these by the type of substance.</p>
+<pre class="r"><code>label_data &lt;- UsadaNoFaults %&gt;%
+  # count up the sport and sanction_terms
+  dplyr::count(sport, sanction_terms, sort = TRUE) %&gt;% 
+  # ungroup them
+  dplyr::ungroup() %&gt;%
+  # join back to data
+  dplyr::inner_join(x = ., y = UsadaNoFaults, 
+                    by = c(&quot;sport&quot;, &quot;sanction_terms&quot;)) %&gt;% 
+  # sort by n
+  dplyr::arrange(desc(n)) %&gt;% 
+  # get the top 15 rows
+  dplyr::slice(1:15)
+
+UsadaNoFaults %&gt;%
+  # count up the sport and sanction_terms
+  dplyr::count(sport, sanction_terms, sort = TRUE) %&gt;% 
+  # ungroup them
+  dplyr::ungroup() %&gt;%
+  # top 5
+  utils::head(5) %&gt;% 
+  # plot these by count and sport
+  ggplot2::ggplot(aes(x = stats::reorder(sport, n), 
+                      y = n, 
+                      group = sanction_terms)) +
+  ggplot2::geom_point(aes(color = sanction_terms, 
+                          size = n), 
+                      show.legend = FALSE) +
+  ggrepel::geom_text_repel(data = label_data, 
+                           aes(label = substance_reason, size = 2),
+                           show.legend = FALSE) +
+  ggplot2::labs(y = &quot;Number of &#39;no fault or negligence&#39; sanctions&quot;,
+                x = NULL, 
+                title = &quot;Positive tests without consequences&quot;, 
+                subtitle = &quot;Top 5 sports with athletes who tested positive,\nbut received &#39;no fault or negligence&#39;&quot;,
+                caption = &quot;source: https://www.usada.org/news/sanctions/&quot;) +
+  ggplot2::coord_flip() +
+  ggplot2::theme_classic(base_size = 9, 
+                         base_family = &quot;Ubuntu&quot;)</code></pre>
+<p><img src="/post/2020-06-13-how-to-download-html-tables-with-rvest-and-xml2_files/figure-html/graph-1.png" width="672" /></p>
+<p>This looks like MMA and Track and Field lead the way in term of <em>no fault or negligence</em>, and most of these are <a href="https://en.wikipedia.org/wiki/Meldonium">meldonium</a> and <a href="https://en.wikipedia.org/wiki/Clenbuterol">clenbuterol.</a>.</p>
 </div>
