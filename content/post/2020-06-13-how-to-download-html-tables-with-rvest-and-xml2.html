@@ -129,13 +129,13 @@ utils::head(Usada)</code></pre>
 <p>I will get a quick count and visualize these with</p>
 <pre class="r"><code>UsadaNoFaults &lt;- Usada %&gt;% 
   dplyr::filter(stringr::str_detect(string = sanction_terms, 
-                                      pattern = &quot;^no fault or negligence$&quot;)) %&gt;% 
+                                    pattern = &quot;^no fault or negligence$&quot;)) %&gt;% 
                                       # replace &amp; with and
-              dplyr::mutate(sport = stringr::str_replace_all(string = sport, 
-                                                             # replace this
-                                                           pattern = &quot;&amp;&quot;, 
-                                                             # with this
-                                                           replacement = &quot;and&quot;))</code></pre>
+  dplyr::mutate(sport = stringr::str_replace_all(string = sport, 
+                                         # replace this
+                                       pattern = &quot;&amp;&quot;, 
+                                         # with this
+                                       replacement = &quot;and&quot;))</code></pre>
 </div>
 <div id="graph-sanction-terms-and-substances" class="section level2">
 <h2>Graph sanction terms and substances</h2>
@@ -173,7 +173,7 @@ UsadaNoFaults %&gt;%
   ggplot2::labs(y = &quot;Number of &#39;no fault or negligence&#39; sanctions&quot;,
                 x = NULL, 
                 title = &quot;Positive tests without consequences&quot;, 
-                subtitle = &quot;Top 5 sports with athletes who tested positive,\nbut received &#39;no fault or negligence&#39;&quot;,
+                subtitle = &quot;Top 5 sports, athletes, and substances with &#39;no fault or negligence&#39; terms&quot;,
                 caption = &quot;source: https://www.usada.org/news/sanctions/&quot;) +
   ggplot2::coord_flip() +
   ggplot2::theme_classic(base_size = 9, 

@@ -142,13 +142,13 @@ I will get a quick count and visualize these with
 ```{r UsadaNoFaults}
 UsadaNoFaults <- Usada %>% 
   dplyr::filter(stringr::str_detect(string = sanction_terms, 
-                                      pattern = "^no fault or negligence$")) %>% 
+                                    pattern = "^no fault or negligence$")) %>% 
                                       # replace & with and
-              dplyr::mutate(sport = stringr::str_replace_all(string = sport, 
-                                                             # replace this
-                                                           pattern = "&", 
-                                                             # with this
-                                                           replacement = "and"))
+  dplyr::mutate(sport = stringr::str_replace_all(string = sport, 
+                                         # replace this
+                                       pattern = "&", 
+                                         # with this
+                                       replacement = "and"))
 ```
 
 ## Graph sanction terms and substances
@@ -189,7 +189,7 @@ UsadaNoFaults %>%
   ggplot2::labs(y = "Number of 'no fault or negligence' sanctions",
                 x = NULL, 
                 title = "Positive tests without consequences", 
-                subtitle = "Top 5 sports with athletes who tested positive,\nbut received 'no fault or negligence'",
+                subtitle = "Top 5 sports, athletes, and substances with 'no fault or negligence' terms",
                 caption = "source: https://www.usada.org/news/sanctions/") +
   ggplot2::coord_flip() +
   ggplot2::theme_classic(base_size = 9, 
