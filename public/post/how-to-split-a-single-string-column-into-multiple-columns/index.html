@@ -83,20 +83,21 @@
         <article>
             
 <script src="../../rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<link href="../../rmarkdown-libs/pagedtable/css/pagedtable.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/pagedtable/js/pagedtable.js"></script>
 
 
 <p>This post comes from a <a href="https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns">Stackoverflow question</a> that I’ve revisited numerous times over the years.</p>
 <blockquote>
 <p><strong>Stackoverflow: “Split data frame string column into multiple columns”</strong></p>
 </blockquote>
-<p>This question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed on <a href="https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns">Stackoverflow</a>.</p>
 <p>Let’s load the <code>tidyverse</code> and get started!</p>
 <div id="load-packages" class="section level4">
 <h4>Load packages</h4>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<p><br></br></p>
-<div id="create-some-messy-data" class="section level5">
-<h5>Create some messy data</h5>
+</div>
+<div id="create-some-messy-data" class="section level4">
+<h4>Create some messy data</h4>
 <p>Below is an example <code>tibble</code> with a jumbled <code>name</code> column (<code>JJJSBefore</code>),</p>
 <pre class="r"><code>JJJSBefore &lt;- tibble::tribble(
      ~value,                       ~name,
@@ -105,48 +106,25 @@
         39L, &quot;John, Jacob, Jingleheimer&quot;,
         28L,     &quot;Jingleheimer, Schmidt&quot;,
         12L,              &quot;JJJ, Schmidt&quot;)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">value</th>
-<th align="left">name</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">29</td>
-<td align="left">John</td>
-</tr>
-<tr class="even">
-<td align="left">91</td>
-<td align="left">John, Jacob</td>
-</tr>
-<tr class="odd">
-<td align="left">39</td>
-<td align="left">John, Jacob, Jingleheimer</td>
-</tr>
-<tr class="even">
-<td align="left">28</td>
-<td align="left">Jingleheimer, Schmidt</td>
-</tr>
-<tr class="odd">
-<td align="left">12</td>
-<td align="left">JJJ, Schmidt</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John"},{"1":"91","2":"John, Jacob"},{"1":"39","2":"John, Jacob, Jingleheimer"},{"1":"28","2":"Jingleheimer, Schmidt"},{"1":"12","2":"JJJ, Schmidt"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 <hr />
-<p>Personally, I liked the approach <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a> took because 1) it offers a <code>tidyverse</code> solution <em>and</em> 2) it’s written as a function.</p>
+</div>
+<div id="all-the-possible-solutions" class="section level3">
+<h3>All the possible solutions</h3>
+<p>This particular question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed. Personally, I liked the approach <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a> took because 1) it offers a <code>tidyverse</code> solution <em>and</em> 2) it’s written as a function.</p>
 <p>I’ve copied <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a>’s comment on the proposed solution below:</p>
 <blockquote>
 <p><em>We can’t use <code>dplyr</code> <code>separate()</code> because we don’t know the number of the result columns before the split, so I have then created a function that uses <code>stringr</code> to split a column, given the pattern and a name prefix for the generated columns.</em></p>
 </blockquote>
 <p><br></br></p>
 </div>
-</div>
-<div id="original-split_into_multiple" class="section level2">
-<h2>Original <code>split_into_multiple()</code></h2>
+<div id="original-split_into_multiple" class="section level3">
+<h3>Original <code>split_into_multiple()</code></h3>
 <p>Here is the function:</p>
 <pre class="r"><code>split_into_multiple &lt;- function(column, pattern = &quot;, &quot;, into_prefix){
   cols &lt;- str_split_fixed(column, pattern, n = Inf)
@@ -165,8 +143,8 @@
   return(cols)
 }</code></pre>
 </div>
-<div id="how-it-works" class="section level2">
-<h2>How it works</h2>
+<div id="how-it-works" class="section level3">
+<h3>How it works</h3>
 <p>Let’s break down the <code>split_into_multiple()</code> function’s components:</p>
 <p>The first step takes an input column and apply the <code>stringr::str_split_fixed()</code> function, which returns <a href="https://stringr.tidyverse.org/reference/str_split.html">“a character matrix with <code>n</code> columns.”</a></p>
 <pre class="r"><code>cols &lt;- stringr::str_split_fixed(column, pattern, n = Inf)</code></pre>
@@ -196,9 +174,10 @@ cols
 ## [4,] &quot;Jingleheimer&quot; &quot;Schmidt&quot; NA            
 ## [5,] &quot;JJJ&quot;          &quot;Schmidt&quot; NA</code></pre>
 <p>Next, we need a <code>tibble</code>, not a matrix, so <code>split_into_multiple()</code> converts <code>cols</code> into a tibble with <code>cols &lt;- as.tibble(cols)</code>.</p>
-<div id="as.tibble-error" class="section level3">
-<h3><code>as.tibble()</code> error</h3>
-<p><code>as.tibble()</code> throws the following error,</p>
+</div>
+<div id="as.tibble-warning" class="section level3">
+<h3><code>as.tibble()</code> warning</h3>
+<p><code>as.tibble()</code> throws the following warning,</p>
 <pre><code>1: `as.tibble()` is deprecated as of tibble 2.0.0.
 Please use `as_tibble()` instead.
 The signature and semantics have changed, see `?as_tibble`.
@@ -207,83 +186,27 @@ This warning is displayed once every 8 hours.</code></pre>
 <pre class="r"><code>cols &lt;- tibble::as_tibble(cols, .name_repair = &quot;universal&quot;)
 cols</code></pre>
 </div>
-<div id="as_tibble-error" class="section level3">
-<h3><code>as_tibble()</code> error</h3>
-<p>Now <code>tibble::as_tibble()</code> is throwing this error,</p>
+<div id="as_tibble-warning" class="section level3">
+<h3><code>as_tibble()</code> warning</h3>
+<p>Now <code>tibble::as_tibble()</code> is throwing this warning,</p>
 <pre><code>2: The `x` argument of `as_tibble.matrix()` must have column 
 names if  `.name_repair` is omitted as of tibble 2.0.0.  
 Using compatibility `.name_repair`.  
 This warning is displayed once every 8 hours.</code></pre>
 <p>If I supply the <code>.name_repair = "universal"</code> argument, I get the following column names:</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">…1</th>
-<th align="left">…2</th>
-<th align="left">…3</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">John</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">Jingleheimer</td>
-</tr>
-<tr class="even">
-<td align="left">Jingleheimer</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">JJJ</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["...1"],"name":[1],"type":["chr"],"align":["left"]},{"label":["...2"],"name":[2],"type":["chr"],"align":["left"]},{"label":["...3"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"John","2":"NA","3":"NA"},{"1":"John","2":"Jacob","3":"NA"},{"1":"John","2":"Jacob","3":"Jingleheimer"},{"1":"Jingleheimer","2":"Schmidt","3":"NA"},{"1":"JJJ","2":"Schmidt","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 <p>This might be an issue down the road, so I’ll address it when I make some adjustments to the <code>split_into_multiple()</code> function.</p>
 <p>Now we have a <code>tibble</code>, but we’re missing the original <code>value</code> column from <code>JJJSBefore</code> (see below).</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">value</th>
-<th align="left">name</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">29</td>
-<td align="left">John</td>
-</tr>
-<tr class="even">
-<td align="left">91</td>
-<td align="left">John, Jacob</td>
-</tr>
-<tr class="odd">
-<td align="left">39</td>
-<td align="left">John, Jacob, Jingleheimer</td>
-</tr>
-<tr class="even">
-<td align="left">28</td>
-<td align="left">Jingleheimer, Schmidt</td>
-</tr>
-<tr class="odd">
-<td align="left">12</td>
-<td align="left">JJJ, Schmidt</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John"},{"1":"91","2":"John, Jacob"},{"1":"39","2":"John, Jacob, Jingleheimer"},{"1":"28","2":"Jingleheimer, Schmidt"},{"1":"12","2":"JJJ, Schmidt"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 <p><code>split_into_multiple()</code> then takes the second value from the <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/dim.html"><code>base::dim()</code></a> function (which is short for <code>dim</code>ensions).</p>
 <p>The second number from <code>base::dim()</code> is the number of columns in the <code>cols</code> tibble,</p>
@@ -303,46 +226,15 @@ base::paste(into_prefix, 1:m, sep = &quot;_&quot;)
                     pattern = &quot;, &quot;, 
                     into_prefix = &quot;name&quot;) -&gt; JJJAfter
 JJJAfter</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">name_1</th>
-<th align="left">name_2</th>
-<th align="left">name_3</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">John</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">Jingleheimer</td>
-</tr>
-<tr class="even">
-<td align="left">Jingleheimer</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">JJJ</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["name_1"],"name":[1],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"John","2":"NA","3":"NA"},{"1":"John","2":"Jacob","3":"NA"},{"1":"John","2":"Jacob","3":"Jingleheimer"},{"1":"Jingleheimer","2":"Schmidt","3":"NA"},{"1":"JJJ","2":"Schmidt","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 </div>
-<div id="address-the-warnings" class="section level3">
-<h3>Address the warnings</h3>
+<div id="address-tibble-warnings" class="section level3">
+<h3>Address <code>tibble</code> warnings</h3>
 <p>The <code>as_tibble()</code>/<code>as.tibble()</code> warning can be addressed by assigning column names with <code>base::colnames()</code> to the matrix <em>before</em> converting this into a tibble.</p>
 <pre class="r"><code># create cols matrix
 cols &lt;- str_split_fixed(JJJSBefore$name, 
@@ -358,42 +250,11 @@ colnames(cols) &lt;- paste(into_prefix, 1:m, sep = &quot;_&quot;)
 # create tibble
 cols &lt;- as_tibble(cols)
 cols</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">name_1</th>
-<th align="left">name_2</th>
-<th align="left">name_3</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">John</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">Jingleheimer</td>
-</tr>
-<tr class="even">
-<td align="left">Jingleheimer</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">JJJ</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["name_1"],"name":[1],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"John","2":"NA","3":"NA"},{"1":"John","2":"Jacob","3":"NA"},{"1":"John","2":"Jacob","3":"Jingleheimer"},{"1":"Jingleheimer","2":"Schmidt","3":"NA"},{"1":"JJJ","2":"Schmidt","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 </div>
 <div id="add-arguments" class="section level3">
@@ -409,7 +270,6 @@ cols</code></pre>
 <li>I changed the names of the inputs to have an <code>in_</code> prefix, and the outputs to have an <code>out_</code> prefix</li>
 </ul>
 <p><br></br></p>
-</div>
 </div>
 <div id="new-split_into_multiple" class="section level2">
 <h2>New <code>split_into_multiple()</code></h2>
@@ -445,131 +305,31 @@ cols</code></pre>
                       col = &quot;name&quot;, 
                       into_prefix = &quot;name&quot;) -&gt; JJJAfter
 JJJAfter</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">value</th>
-<th align="left">name</th>
-<th align="left">name_1</th>
-<th align="left">name_2</th>
-<th align="left">name_3</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">29</td>
-<td align="left">John</td>
-<td align="left">John</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="left">91</td>
-<td align="left">John, Jacob</td>
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">39</td>
-<td align="left">John, Jacob, Jingleheimer</td>
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">Jingleheimer</td>
-</tr>
-<tr class="even">
-<td align="left">28</td>
-<td align="left">Jingleheimer, Schmidt</td>
-<td align="left">Jingleheimer</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">12</td>
-<td align="left">JJJ, Schmidt</td>
-<td align="left">JJJ</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John","3":"John","4":"NA","5":"NA"},{"1":"91","2":"John, Jacob","3":"John","4":"Jacob","5":"NA"},{"1":"39","2":"John, Jacob, Jingleheimer","3":"John","4":"Jacob","5":"Jingleheimer"},{"1":"28","2":"Jingleheimer, Schmidt","3":"Jingleheimer","4":"Schmidt","5":"NA"},{"1":"12","2":"JJJ, Schmidt","3":"JJJ","4":"Schmidt","5":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 <p>I’ll test <code>split_into_multiple()</code> on the <code>Before</code> data in the original example, too.</p>
 <p><br></br></p>
 <pre class="r"><code>Before</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">attr</th>
-<th align="left">type</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">foo_and_bar</td>
-</tr>
-<tr class="even">
-<td align="left">30</td>
-<td align="left">foo_and_bar_2</td>
-</tr>
-<tr class="odd">
-<td align="left">4</td>
-<td align="left">foo_and_bar_2_and_bar_3</td>
-</tr>
-<tr class="even">
-<td align="left">6</td>
-<td align="left">foo_and_bar</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["attr"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo_and_bar"},{"1":"30","2":"foo_and_bar_2"},{"1":"4","2":"foo_and_bar_2_and_bar_3"},{"1":"6","2":"foo_and_bar"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 <pre class="r"><code>Before %&gt;% 
   split_into_multiple(data = ., 
                       col = &quot;type&quot;, 
                       pattern = &quot;_and_&quot;, 
                       into_prefix = &quot;type&quot;)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">attr</th>
-<th align="left">type</th>
-<th align="left">type_1</th>
-<th align="left">type_2</th>
-<th align="left">type_3</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">foo_and_bar</td>
-<td align="left">foo</td>
-<td align="left">bar</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="right">30</td>
-<td align="left">foo_and_bar_2</td>
-<td align="left">foo</td>
-<td align="left">bar_2</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="right">4</td>
-<td align="left">foo_and_bar_2_and_bar_3</td>
-<td align="left">foo</td>
-<td align="left">bar_2</td>
-<td align="left">bar_3</td>
-</tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="left">foo_and_bar</td>
-<td align="left">foo</td>
-<td align="left">bar</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["attr"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["type_1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["type_2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["type_3"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo_and_bar","3":"foo","4":"bar","5":"NA"},{"1":"30","2":"foo_and_bar_2","3":"foo","4":"bar_2","5":"NA"},{"1":"4","2":"foo_and_bar_2_and_bar_3","3":"foo","4":"bar_2","5":"bar_3"},{"1":"6","2":"foo_and_bar","3":"foo","4":"bar","5":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 <p>What if there is a <code>data.frame</code>/<code>tibble</code> with a bunch of different characters we need to split on?</p>
 <p>I’ll test this one the <code>WorseThanBefore</code> data below.</p>
@@ -581,89 +341,22 @@ JJJAfter</code></pre>
         6L,               &quot;foo | bar&quot;)
 WorseThanBefore</code></pre>
 <p><br></br></p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">attr</th>
-<th align="left">type</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">foo, bar</td>
-</tr>
-<tr class="even">
-<td align="left">30</td>
-<td align="left">foo-bar/2</td>
-</tr>
-<tr class="odd">
-<td align="left">4</td>
-<td align="left">foo…bar…2…bar…3</td>
-</tr>
-<tr class="even">
-<td align="left">6</td>
-<td align="left">foo | bar</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["attr"],"name":[1],"type":["int"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo, bar"},{"1":"30","2":"foo-bar/2"},{"1":"4","2":"foo...bar...2...bar...3"},{"1":"6","2":"foo | bar"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 <p>We’ll use <code>split_into_multiple()</code> on <code>WorseThanBefore</code> without giving an argument for <code>pattern</code>.</p>
 <pre class="r"><code>WorseThanBefore %&gt;% 
     split_into_multiple(data = ., 
                       col = &quot;type&quot;, 
                       into_prefix = &quot;type&quot;)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">attr</th>
-<th align="left">type</th>
-<th align="left">type_1</th>
-<th align="left">type_2</th>
-<th align="left">type_3</th>
-<th align="left">type_4</th>
-<th align="left">type_5</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">foo, bar</td>
-<td align="left">foo</td>
-<td align="left">bar</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="right">30</td>
-<td align="left">foo-bar/2</td>
-<td align="left">foo</td>
-<td align="left">bar</td>
-<td align="left">2</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="right">4</td>
-<td align="left">foo…bar…2…bar…3</td>
-<td align="left">foo</td>
-<td align="left">bar</td>
-<td align="left">2</td>
-<td align="left">bar</td>
-<td align="left">3</td>
-</tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="left">foo | bar</td>
-<td align="left">foo</td>
-<td align="left">bar</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["attr"],"name":[1],"type":["int"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["type_1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["type_2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["type_3"],"name":[5],"type":["chr"],"align":["left"]},{"label":["type_4"],"name":[6],"type":["chr"],"align":["left"]},{"label":["type_5"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo, bar","3":"foo","4":"bar","5":"NA","6":"NA","7":"NA"},{"1":"30","2":"foo-bar/2","3":"foo","4":"bar","5":"2","6":"NA","7":"NA"},{"1":"4","2":"foo...bar...2...bar...3","3":"foo","4":"bar","5":"2","6":"bar","7":"3"},{"1":"6","2":"foo | bar","3":"foo","4":"bar","5":"NA","6":"NA","7":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p><br></br></p>
 <p>This removed any sequence of non-alphanumeric values. <code>split_into_multiple()</code> retains the original column, which I can remove using <code>dplyr::select()</code> helpers (like above).</p>
 <pre class="r"><code>JJJSBefore %&gt;% 
@@ -671,55 +364,17 @@ WorseThanBefore</code></pre>
                       col = &quot;name&quot;, 
                       into_prefix = &quot;name&quot;) %&gt;% 
   dplyr::select(value, dplyr::contains(&quot;name_&quot;))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">value</th>
-<th align="left">name_1</th>
-<th align="left">name_2</th>
-<th align="left">name_3</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">29</td>
-<td align="left">John</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-</tr>
-<tr class="even">
-<td align="left">91</td>
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">39</td>
-<td align="left">John</td>
-<td align="left">Jacob</td>
-<td align="left">Jingleheimer</td>
-</tr>
-<tr class="even">
-<td align="left">28</td>
-<td align="left">Jingleheimer</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">12</td>
-<td align="left">JJJ</td>
-<td align="left">Schmidt</td>
-<td align="left">NA</td>
-</tr>
-</tbody>
-</table>
-<p><br></br></p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name_1"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[3],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John","3":"NA","4":"NA"},{"1":"91","2":"John","3":"Jacob","4":"NA"},{"1":"39","2":"John","3":"Jacob","4":"Jingleheimer"},{"1":"28","2":"Jingleheimer","3":"Schmidt","4":"NA"},{"1":"12","2":"JJJ","3":"Schmidt","4":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
-<div id="in-closing" class="section level2">
-<h2>In closing</h2>
+<p><br></br></p>
+<div id="in-closing" class="section level3">
+<h3>In closing</h3>
 <p>This <code>split_into_multiple()</code> function has been really helpful for me in the last few projects I’ve been working on. I hope you can use it too!</p>
-<div id="noteworthy-non-tidyverse-alternatives" class="section level5">
-<h5>Noteworthy non-<code>tidyverse</code> alternatives</h5>
+<div id="noteworthy-non-tidyverse-alternatives" class="section level4">
+<h4>Noteworthy non-<code>tidyverse</code> alternatives</h4>
 <p>I also liked the <code>cSplit()</code> function from the <a href="https://github.com/mrdwab/splitstackshape"><code>splitstackshape</code> package</a> because it can take multiple columns and can be tidied up all in one go!</p>
 <pre class="r"><code>library(splitstackshape)
 # original
@@ -738,7 +393,7 @@ JJJSBefore %&gt;%
                           splitCols = &quot;name&quot;, 
                           sep = &quot;, &quot;, 
                           drop = FALSE, 
-                          direction = &quot;wide&quot;)
+                          direction = &quot;wide&quot;) 
 ##    value                      name       name_1  name_2       name_3
 ## 1:    29                      John         John    &lt;NA&gt;         &lt;NA&gt;
 ## 2:    91               John, Jacob         John   Jacob         &lt;NA&gt;
@@ -750,7 +405,7 @@ JJJSBefore %&gt;%
   splitstackshape::cSplit(indt = ., 
                           splitCols = &quot;name&quot;, 
                           sep = &quot;, &quot;, 
-                          direction = &quot;long&quot;)
+                          direction = &quot;long&quot;) 
 ##     value         name
 ##  1:    29         John
 ##  2:    91         John
@@ -769,6 +424,7 @@ JJJSBefore %&gt;%
 ## / __/ / _  / // / |/ / -_) __(_-&lt;/ -_)
 ## \__/_/\_,_/\_, /|___/\__/_/ /___/\__/ 
 ##      ⬢  . /___/      ⬡      .       ⬢</code></pre>
+</div>
 </div>
 </div>
 

@@ -25,8 +25,6 @@ This post comes from a [Stackoverflow question](https://stackoverflow.com/questi
 
 > **Stackoverflow: "Split data frame string column into multiple columns"**
 
-This question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed on [Stackoverflow](https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns). 
-
 Let's load the `tidyverse` and get started!
 
 #### Load packages
@@ -35,9 +33,7 @@ Let's load the `tidyverse` and get started!
 library(tidyverse)
 ```
 
-<br></br>
-
-##### Create some messy data
+#### Create some messy data
 
 Below is an example `tibble` with a jumbled `name` column (`JJJSBefore`), 
 
@@ -52,15 +48,17 @@ JJJSBefore <- tibble::tribble(
 ```
 
 ```{r, echo=FALSE}
-knitr::kable(JJJSBefore, align = 'l')
+rmarkdown::paged_table(JJJSBefore)
 ```
 
 <br></br>
 
 ***
 
+### All the possible solutions 
 
-Personally, I liked the approach [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p) took because 1) it offers a `tidyverse` solution *and* 2) it's written as a function. 
+
+This particular question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed. Personally, I liked the approach [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p) took because 1) it offers a `tidyverse` solution *and* 2) it's written as a function. 
 
 I've copied [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p)'s comment on the proposed solution below:
 
@@ -68,7 +66,7 @@ I've copied [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p)'s comme
 
 <br></br>
 
-## Original `split_into_multiple()`
+### Original `split_into_multiple()`
 
 Here is the function:
 
@@ -93,7 +91,7 @@ split_into_multiple <- function(column, pattern = ", ", into_prefix){
 
 
 
-## How it works
+### How it works
 
 Let's break down the `split_into_multiple()` function's components: 
 
@@ -131,9 +129,9 @@ cols
 
 Next, we need a `tibble`, not a matrix, so `split_into_multiple()` converts `cols` into a tibble with `cols <- as.tibble(cols)`. 
 
-### `as.tibble()` error
+### `as.tibble()` warning
 
-`as.tibble()` throws the following error, 
+`as.tibble()` throws the following warning, 
 
 ```
 1: `as.tibble()` is deprecated as of tibble 2.0.0.
@@ -149,9 +147,9 @@ cols <- tibble::as_tibble(cols, .name_repair = "universal")
 cols
 ```
 
-### `as_tibble()` error
+### `as_tibble()` warning
 
-Now `tibble::as_tibble()` is throwing this error, 
+Now `tibble::as_tibble()` is throwing this warning, 
 
 ```
 2: The `x` argument of `as_tibble.matrix()` must have column 
@@ -164,7 +162,7 @@ If I supply the `.name_repair = "universal"` argument, I get the following colum
 
 ```{r , echo=FALSE}
 cols <- tibble::as_tibble(cols, .name_repair = "universal")
-knitr::kable(cols, align = 'l')
+rmarkdown::paged_table(cols)
 ```
 
 <br></br>
@@ -174,7 +172,7 @@ This might be an issue down the road, so I'll address it when I make some adjust
 Now we have a `tibble`, but we're missing the original `value` column from `JJJSBefore` (see below). 
 
 ```{r , echo=FALSE}
-knitr::kable(JJJSBefore, align = 'l')
+rmarkdown::paged_table(JJJSBefore)
 ```
 
 <br></br>
@@ -216,12 +214,12 @@ JJJAfter
 split_into_multiple(column = JJJSBefore$name, 
                     pattern = ", ", 
                     into_prefix = "name") -> JJJAfter
-knitr::kable(JJJAfter, align = 'l', )
+rmarkdown::paged_table(JJJAfter)
 ```
 
 <br></br>
 
-### Address the warnings 
+### Address `tibble` warnings 
 
 The `as_tibble()`/`as.tibble()` warning can be addressed by assigning column names with `base::colnames()` to the matrix *before* converting this into a tibble. 
 
@@ -256,8 +254,8 @@ into_prefix <- "name"
 colnames(cols) <- paste(into_prefix, 1:m, sep = "_")
 # create tibble
 cols <- as_tibble(cols)
-knitr::kable(
-cols, align = 'l')
+rmarkdown::paged_table(
+cols)
 ```
 
 <br></br>
@@ -317,12 +315,11 @@ JJJAfter
 ```
 
 ```{r , echo=FALSE}
-knitr::kable(
+rmarkdown::paged_table(
 JJJSBefore %>% 
   split_into_multiple(data = ., 
                       col = "name", 
-                      into_prefix = "name"),
-align = 'l')
+                      into_prefix = "name"))
 ```
 
 <br></br>
@@ -344,7 +341,7 @@ Before
 ```
 
 ```{r , echo=FALSE}
-knitr::kable(Before, align = 'l')
+rmarkdown::paged_table(Before)
 ```
 
 <br></br>
@@ -358,7 +355,7 @@ Before %>%
 ```
 
 ```{r , echo=FALSE}
-knitr::kable(
+rmarkdown::paged_table(
 Before %>% 
   split_into_multiple(data = ., 
                       col = "type", 
@@ -393,8 +390,8 @@ WorseThanBefore <- tibble::tribble(
        30L,               "foo-bar/2",
         4L, "foo...bar...2...bar...3",
         6L,               "foo | bar")
-knitr::kable(
-WorseThanBefore, align = 'l')
+rmarkdown::paged_table(
+WorseThanBefore)
 ```
 
 <br></br>
@@ -409,7 +406,7 @@ WorseThanBefore %>%
 ```
 
 ```{r , echo=FALSE}
-knitr::kable(
+rmarkdown::paged_table(
 WorseThanBefore %>% 
     split_into_multiple(data = ., 
                       col = "type", 
@@ -430,20 +427,20 @@ JJJSBefore %>%
 ```
 
 ```{r , echo=FALSE}
-knitr::kable(
+rmarkdown::paged_table(
   JJJSBefore %>% 
   split_into_multiple(data = ., col = "name", into_prefix = "name") %>% 
-  dplyr::select(value, dplyr::contains("name_")), align = 'l'
+  dplyr::select(value, dplyr::contains("name_"))
 )
 ```
 
 <br></br>
 
-## In closing
+### In closing
 
 This `split_into_multiple()` function has been really helpful for me in the last few projects I've been working on. I hope you can use it too!
 
-##### Noteworthy non-`tidyverse` alternatives
+#### Noteworthy non-`tidyverse` alternatives
 
 I also liked the `cSplit()` function from the [`splitstackshape` package](https://github.com/mrdwab/splitstackshape) because it can take multiple columns and can be tidied up all in one go!
 
@@ -460,7 +457,7 @@ JJJSBefore %>%
                           splitCols = "name", 
                           sep = ", ", 
                           drop = FALSE, 
-                          direction = "wide")
+                          direction = "wide") 
 ```
 
 ```{r cSplit-long}
@@ -469,7 +466,7 @@ JJJSBefore %>%
   splitstackshape::cSplit(indt = ., 
                           splitCols = "name", 
                           sep = ", ", 
-                          direction = "long")
+                          direction = "long") 
 ```
 
 Huge thanks to [Hadley](https://stackoverflow.com/users/16632/hadley) and [Yannis P.](https://stackoverflow.com/users/1885713/yannis-p) and everyone else on Stackoverflow!
