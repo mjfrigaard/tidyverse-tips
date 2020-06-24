@@ -1,0 +1,700 @@
+---
+title: How to split a single string column into multiple columns
+author: Martin Frigaard
+date: '2020-06-23'
+slug: how-to-split-a-single-string-column-into-multiple-columns
+categories:
+  - wrangle
+tags:
+  - rstats
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>This post comes from a <a href="https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns">Stackoverflow question</a> that I’ve revisited numerous times over the years.</p>
+<blockquote>
+<p><strong>Stackoverflow: “Split data frame string column into multiple columns”</strong></p>
+</blockquote>
+<p>This question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed on <a href="https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns">Stackoverflow</a>.</p>
+<p>Let’s load the <code>tidyverse</code> and get started!</p>
+<div id="load-packages" class="section level4">
+<h4>Load packages</h4>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<p><br></br></p>
+<div id="create-some-messy-data" class="section level5">
+<h5>Create some messy data</h5>
+<p>Below is an example <code>tibble</code> with a jumbled <code>name</code> column (<code>JJJSBefore</code>),</p>
+<pre class="r"><code>JJJSBefore &lt;- tibble::tribble(
+     ~value,                       ~name,
+        29L,                      &quot;John&quot;,
+        91L,               &quot;John, Jacob&quot;,
+        39L, &quot;John, Jacob, Jingleheimer&quot;,
+        28L,     &quot;Jingleheimer, Schmidt&quot;,
+        12L,              &quot;JJJ, Schmidt&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">value</th>
+<th align="left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">29</td>
+<td align="left">John</td>
+</tr>
+<tr class="even">
+<td align="left">91</td>
+<td align="left">John, Jacob</td>
+</tr>
+<tr class="odd">
+<td align="left">39</td>
+<td align="left">John, Jacob, Jingleheimer</td>
+</tr>
+<tr class="even">
+<td align="left">28</td>
+<td align="left">Jingleheimer, Schmidt</td>
+</tr>
+<tr class="odd">
+<td align="left">12</td>
+<td align="left">JJJ, Schmidt</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<hr />
+<p>Personally, I liked the approach <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a> took because 1) it offers a <code>tidyverse</code> solution <em>and</em> 2) it’s written as a function.</p>
+<p>I’ve copied <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a>’s comment on the proposed solution below:</p>
+<blockquote>
+<p><em>We can’t use <code>dplyr</code> <code>separate()</code> because we don’t know the number of the result columns before the split, so I have then created a function that uses <code>stringr</code> to split a column, given the pattern and a name prefix for the generated columns.</em></p>
+</blockquote>
+<p><br></br></p>
+</div>
+</div>
+<div id="original-split_into_multiple" class="section level2">
+<h2>Original <code>split_into_multiple()</code></h2>
+<p>Here is the function:</p>
+<pre class="r"><code>split_into_multiple &lt;- function(column, pattern = &quot;, &quot;, into_prefix){
+  cols &lt;- str_split_fixed(column, pattern, n = Inf)
+  # Sub out the &quot;&quot;&#39;s returned by filling the matrix 
+  # to the right, with NAs which are useful
+  cols[which(cols == &quot;&quot;)] &lt;- NA
+  
+  cols &lt;- as.tibble(cols)
+  # name the &#39;cols&#39; tibble as &#39;into_prefix_1&#39;, 
+  # &#39;into_prefix_2&#39;, ..., &#39;into_prefix_m&#39; 
+  # where m = # columns of &#39;cols&#39;
+  m &lt;- dim(cols)[2]
+  
+  names(cols) &lt;- paste(into_prefix, 1:m, sep = &quot;_&quot;)
+  
+  return(cols)
+}</code></pre>
+</div>
+<div id="how-it-works" class="section level2">
+<h2>How it works</h2>
+<p>Let’s break down the <code>split_into_multiple()</code> function’s components:</p>
+<p>The first step takes an input column and apply the <code>stringr::str_split_fixed()</code> function, which returns <a href="https://stringr.tidyverse.org/reference/str_split.html">“a character matrix with <code>n</code> columns.”</a></p>
+<pre class="r"><code>cols &lt;- stringr::str_split_fixed(column, pattern, n = Inf)</code></pre>
+<p>By setting <code>n</code> to <code>Inf</code>, the number of items to split the <code>string</code> into is infinite.</p>
+<pre class="r"><code>cols &lt;- stringr::str_split_fixed(string = JJJSBefore$name, 
+                                 pattern = &quot;, &quot;, 
+                                 n = Inf)
+cols
+##      [,1]           [,2]      [,3]          
+## [1,] &quot;John&quot;         &quot;&quot;        &quot;&quot;            
+## [2,] &quot;John&quot;         &quot;Jacob&quot;   &quot;&quot;            
+## [3,] &quot;John&quot;         &quot;Jacob&quot;   &quot;Jingleheimer&quot;
+## [4,] &quot;Jingleheimer&quot; &quot;Schmidt&quot; &quot;&quot;            
+## [5,] &quot;JJJ&quot;          &quot;Schmidt&quot; &quot;&quot;</code></pre>
+<p>After the <code>name</code> column is split into a character matrix of split columns (<code>cols</code>), the <code>split_into_multiple()</code> function uses <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/which.html"><code>base::which()</code></a> to identify the empty columns in the matrix.</p>
+<pre class="r"><code>base::which(cols == &quot;&quot;)
+## [1]  6 11 12 14 15</code></pre>
+<p><code>base::which()</code> returns a numerical vector that correspond to the empty columns in the <code>cols</code> matrix.</p>
+<p><img src="/post/2020-06-23-how-to-split-a-single-string-column-into-multiple-columns_files/matrix-indeces.png" style="width:80.0%" /></p>
+<p>The <code>split_into_multiple()</code> function subsets the <code>cols</code> matrix with the output from <code>which(cols == "")</code> and assigns <code>NA</code>s to the locations identified above.</p>
+<pre class="r"><code>cols[which(cols == &quot;&quot;)] &lt;- NA
+cols
+##      [,1]           [,2]      [,3]          
+## [1,] &quot;John&quot;         NA        NA            
+## [2,] &quot;John&quot;         &quot;Jacob&quot;   NA            
+## [3,] &quot;John&quot;         &quot;Jacob&quot;   &quot;Jingleheimer&quot;
+## [4,] &quot;Jingleheimer&quot; &quot;Schmidt&quot; NA            
+## [5,] &quot;JJJ&quot;          &quot;Schmidt&quot; NA</code></pre>
+<p>Next, we need a <code>tibble</code>, not a matrix, so <code>split_into_multiple()</code> converts <code>cols</code> into a tibble with <code>cols &lt;- as.tibble(cols)</code>.</p>
+<div id="as.tibble-error" class="section level3">
+<h3><code>as.tibble()</code> error</h3>
+<p><code>as.tibble()</code> throws the following error,</p>
+<pre><code>1: `as.tibble()` is deprecated as of tibble 2.0.0.
+Please use `as_tibble()` instead.
+The signature and semantics have changed, see `?as_tibble`.
+This warning is displayed once every 8 hours.</code></pre>
+<p>I’ll replace it with <a href="https://tibble.tidyverse.org/reference/as_tibble.html"><code>as_tibble()</code> from <code>tibble</code></a>.</p>
+<pre class="r"><code>cols &lt;- tibble::as_tibble(cols, .name_repair = &quot;universal&quot;)
+cols</code></pre>
+</div>
+<div id="as_tibble-error" class="section level3">
+<h3><code>as_tibble()</code> error</h3>
+<p>Now <code>tibble::as_tibble()</code> is throwing this error,</p>
+<pre><code>2: The `x` argument of `as_tibble.matrix()` must have column 
+names if  `.name_repair` is omitted as of tibble 2.0.0.  
+Using compatibility `.name_repair`.  
+This warning is displayed once every 8 hours.</code></pre>
+<p>If I supply the <code>.name_repair = "universal"</code> argument, I get the following column names:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">…1</th>
+<th align="left">…2</th>
+<th align="left">…3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">John</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">Jingleheimer</td>
+</tr>
+<tr class="even">
+<td align="left">Jingleheimer</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">JJJ</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<p>This might be an issue down the road, so I’ll address it when I make some adjustments to the <code>split_into_multiple()</code> function.</p>
+<p>Now we have a <code>tibble</code>, but we’re missing the original <code>value</code> column from <code>JJJSBefore</code> (see below).</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">value</th>
+<th align="left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">29</td>
+<td align="left">John</td>
+</tr>
+<tr class="even">
+<td align="left">91</td>
+<td align="left">John, Jacob</td>
+</tr>
+<tr class="odd">
+<td align="left">39</td>
+<td align="left">John, Jacob, Jingleheimer</td>
+</tr>
+<tr class="even">
+<td align="left">28</td>
+<td align="left">Jingleheimer, Schmidt</td>
+</tr>
+<tr class="odd">
+<td align="left">12</td>
+<td align="left">JJJ, Schmidt</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<p><code>split_into_multiple()</code> then takes the second value from the <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/dim.html"><code>base::dim()</code></a> function (which is short for <code>dim</code>ensions).</p>
+<p>The second number from <code>base::dim()</code> is the number of columns in the <code>cols</code> tibble,</p>
+<pre class="r"><code>m &lt;- base::dim(cols)[2]
+m
+## [1] 3</code></pre>
+<p>I can also get this with <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/nrow.html"><code>base::ncols()</code></a></p>
+<pre class="r"><code>base::ncol(cols)
+## [1] 3</code></pre>
+<p>Finally, <code>split_into_columns()</code> uses <code>base::paste()</code> to combine <code>m</code> with <code>into_prefix</code> to create the new column <code>base::names()</code> (separated by an underscore <code>"_"</code>).</p>
+<p>The <code>return()</code> value is <code>cols</code> with the new names.</p>
+<pre class="r"><code>into_prefix &lt;- &quot;name&quot;
+base::paste(into_prefix, 1:m, sep = &quot;_&quot;)
+## [1] &quot;name_1&quot; &quot;name_2&quot; &quot;name_3&quot;</code></pre>
+<p>Put all together, the function works like so,</p>
+<pre class="r"><code>split_into_multiple(column = JJJSBefore$name, 
+                    pattern = &quot;, &quot;, 
+                    into_prefix = &quot;name&quot;) -&gt; JJJAfter
+JJJAfter</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name_1</th>
+<th align="left">name_2</th>
+<th align="left">name_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">John</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">Jingleheimer</td>
+</tr>
+<tr class="even">
+<td align="left">Jingleheimer</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">JJJ</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+</div>
+<div id="address-the-warnings" class="section level3">
+<h3>Address the warnings</h3>
+<p>The <code>as_tibble()</code>/<code>as.tibble()</code> warning can be addressed by assigning column names with <code>base::colnames()</code> to the matrix <em>before</em> converting this into a tibble.</p>
+<pre class="r"><code># create cols matrix
+cols &lt;- str_split_fixed(JJJSBefore$name, 
+                        pattern = &quot;, &quot;, 
+                        n = Inf)
+# replace &quot;&quot; with NAs
+cols[which(cols == &quot;&quot;)] &lt;- NA
+# get cols
+m &lt;- dim(cols)[2]
+# assign names
+into_prefix &lt;- &quot;name&quot;
+colnames(cols) &lt;- paste(into_prefix, 1:m, sep = &quot;_&quot;)
+# create tibble
+cols &lt;- as_tibble(cols)
+cols</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name_1</th>
+<th align="left">name_2</th>
+<th align="left">name_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">John</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">Jingleheimer</td>
+</tr>
+<tr class="even">
+<td align="left">Jingleheimer</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">JJJ</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+</div>
+<div id="add-arguments" class="section level3">
+<h3>Add arguments</h3>
+<p>I’ll also add a few arguments:</p>
+<ul>
+<li>an argument for data (<code>data =</code>),<br />
+</li>
+<li>a default pattern argument (<code>pattern = [^[:alnum:]]+</code>),<br />
+</li>
+<li><code>dplyr::bind_cols()</code> to combine the new output columns with the original input <code>data.frame</code>/<code>tibble</code>, and<br />
+</li>
+<li>I changed the names of the inputs to have an <code>in_</code> prefix, and the outputs to have an <code>out_</code> prefix</li>
+</ul>
+<p><br></br></p>
+</div>
+</div>
+<div id="new-split_into_multiple" class="section level2">
+<h2>New <code>split_into_multiple()</code></h2>
+<p>My adjusted <code>split_into_multiple()</code> function is below.</p>
+<pre class="r"><code>split_into_multiple &lt;- function(data, col, pattern = &quot;[^[:alnum:]]+&quot;, into_prefix){
+  # use regex for pattern, or whatever is provided 
+  in_pattern &lt;- pattern
+  # convert data to tibble and add ,.name_repair
+  in_data &lt;- tibble::as_tibble(data)
+  # convert col to character vector
+  in_col &lt;- base::as.character(col)
+  # split columns into character matrix
+  out_cols &lt;- stringr::str_split_fixed(in_data[[in_col]], 
+                                       pattern = in_pattern, 
+                                       n = Inf)
+  # replace NAs in matrix
+  out_cols[base::which(out_cols == &quot;&quot;)] &lt;- NA
+  # get number of cols
+  m &lt;- base::dim(out_cols)[2]
+  # assign column names
+  base::colnames(out_cols) &lt;- base::paste(into_prefix, 1:m, sep = &quot;_&quot;)
+  # convert to tibble
+  out_cols &lt;- tibble::as_tibble(out_cols)
+  # bind cols together
+  out_tibble &lt;- dplyr::bind_cols(in_data, out_cols)
+  # return the out_tibble
+  return(out_tibble)
+}</code></pre>
+<p><br></br></p>
+<p>Now I’ll test <code>split_into_multiple()</code> with <code>JJJSBefore</code> and see what I get:</p>
+<pre class="r"><code>JJJSBefore %&gt;% 
+  split_into_multiple(data = ., 
+                      col = &quot;name&quot;, 
+                      into_prefix = &quot;name&quot;) -&gt; JJJAfter
+JJJAfter</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">value</th>
+<th align="left">name</th>
+<th align="left">name_1</th>
+<th align="left">name_2</th>
+<th align="left">name_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">29</td>
+<td align="left">John</td>
+<td align="left">John</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">91</td>
+<td align="left">John, Jacob</td>
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">39</td>
+<td align="left">John, Jacob, Jingleheimer</td>
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">Jingleheimer</td>
+</tr>
+<tr class="even">
+<td align="left">28</td>
+<td align="left">Jingleheimer, Schmidt</td>
+<td align="left">Jingleheimer</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">12</td>
+<td align="left">JJJ, Schmidt</td>
+<td align="left">JJJ</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<p>I’ll test <code>split_into_multiple()</code> on the <code>Before</code> data in the original example, too.</p>
+<p><br></br></p>
+<pre class="r"><code>Before</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">attr</th>
+<th align="left">type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">foo_and_bar</td>
+</tr>
+<tr class="even">
+<td align="left">30</td>
+<td align="left">foo_and_bar_2</td>
+</tr>
+<tr class="odd">
+<td align="left">4</td>
+<td align="left">foo_and_bar_2_and_bar_3</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="left">foo_and_bar</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<pre class="r"><code>Before %&gt;% 
+  split_into_multiple(data = ., 
+                      col = &quot;type&quot;, 
+                      pattern = &quot;_and_&quot;, 
+                      into_prefix = &quot;type&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">attr</th>
+<th align="left">type</th>
+<th align="left">type_1</th>
+<th align="left">type_2</th>
+<th align="left">type_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">foo_and_bar</td>
+<td align="left">foo</td>
+<td align="left">bar</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">30</td>
+<td align="left">foo_and_bar_2</td>
+<td align="left">foo</td>
+<td align="left">bar_2</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">foo_and_bar_2_and_bar_3</td>
+<td align="left">foo</td>
+<td align="left">bar_2</td>
+<td align="left">bar_3</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">foo_and_bar</td>
+<td align="left">foo</td>
+<td align="left">bar</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<p>What if there is a <code>data.frame</code>/<code>tibble</code> with a bunch of different characters we need to split on?</p>
+<p>I’ll test this one the <code>WorseThanBefore</code> data below.</p>
+<pre class="r"><code>WorseThanBefore &lt;- tibble::tribble(
+     ~attr,                     ~type,
+        1L,                &quot;foo, bar&quot;,
+       30L,               &quot;foo-bar/2&quot;,
+        4L, &quot;foo...bar...2...bar...3&quot;,
+        6L,               &quot;foo | bar&quot;)
+WorseThanBefore</code></pre>
+<p><br></br></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">attr</th>
+<th align="left">type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">foo, bar</td>
+</tr>
+<tr class="even">
+<td align="left">30</td>
+<td align="left">foo-bar/2</td>
+</tr>
+<tr class="odd">
+<td align="left">4</td>
+<td align="left">foo…bar…2…bar…3</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="left">foo | bar</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<p>We’ll use <code>split_into_multiple()</code> on <code>WorseThanBefore</code> without giving an argument for <code>pattern</code>.</p>
+<pre class="r"><code>WorseThanBefore %&gt;% 
+    split_into_multiple(data = ., 
+                      col = &quot;type&quot;, 
+                      into_prefix = &quot;type&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">attr</th>
+<th align="left">type</th>
+<th align="left">type_1</th>
+<th align="left">type_2</th>
+<th align="left">type_3</th>
+<th align="left">type_4</th>
+<th align="left">type_5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">foo, bar</td>
+<td align="left">foo</td>
+<td align="left">bar</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">30</td>
+<td align="left">foo-bar/2</td>
+<td align="left">foo</td>
+<td align="left">bar</td>
+<td align="left">2</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">foo…bar…2…bar…3</td>
+<td align="left">foo</td>
+<td align="left">bar</td>
+<td align="left">2</td>
+<td align="left">bar</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">foo | bar</td>
+<td align="left">foo</td>
+<td align="left">bar</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+<p>This removed any sequence of non-alphanumeric values. <code>split_into_multiple()</code> retains the original column, which I can remove using <code>dplyr::select()</code> helpers (like above).</p>
+<pre class="r"><code>JJJSBefore %&gt;% 
+  split_into_multiple(data = ., 
+                      col = &quot;name&quot;, 
+                      into_prefix = &quot;name&quot;) %&gt;% 
+  dplyr::select(value, dplyr::contains(&quot;name_&quot;))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">value</th>
+<th align="left">name_1</th>
+<th align="left">name_2</th>
+<th align="left">name_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">29</td>
+<td align="left">John</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">91</td>
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">39</td>
+<td align="left">John</td>
+<td align="left">Jacob</td>
+<td align="left">Jingleheimer</td>
+</tr>
+<tr class="even">
+<td align="left">28</td>
+<td align="left">Jingleheimer</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">12</td>
+<td align="left">JJJ</td>
+<td align="left">Schmidt</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p><br></br></p>
+</div>
+<div id="in-closing" class="section level2">
+<h2>In closing</h2>
+<p>This <code>split_into_multiple()</code> function has been really helpful for me in the last few projects I’ve been working on. I hope you can use it too!</p>
+<div id="noteworthy-non-tidyverse-alternatives" class="section level5">
+<h5>Noteworthy non-<code>tidyverse</code> alternatives</h5>
+<p>I also liked the <code>cSplit()</code> function from the <a href="https://github.com/mrdwab/splitstackshape"><code>splitstackshape</code> package</a> because it can take multiple columns and can be tidied up all in one go!</p>
+<pre class="r"><code>library(splitstackshape)
+# original
+JJJSBefore
+## # A tibble: 5 x 2
+##   value name                     
+##   &lt;int&gt; &lt;chr&gt;                    
+## 1    29 John                     
+## 2    91 John, Jacob              
+## 3    39 John, Jacob, Jingleheimer
+## 4    28 Jingleheimer, Schmidt    
+## 5    12 JJJ, Schmidt</code></pre>
+<pre class="r"><code># wide
+JJJSBefore %&gt;% 
+  splitstackshape::cSplit(indt = ., 
+                          splitCols = &quot;name&quot;, 
+                          sep = &quot;, &quot;, 
+                          drop = FALSE, 
+                          direction = &quot;wide&quot;)
+##    value                      name       name_1  name_2       name_3
+## 1:    29                      John         John    &lt;NA&gt;         &lt;NA&gt;
+## 2:    91               John, Jacob         John   Jacob         &lt;NA&gt;
+## 3:    39 John, Jacob, Jingleheimer         John   Jacob Jingleheimer
+## 4:    28     Jingleheimer, Schmidt Jingleheimer Schmidt         &lt;NA&gt;
+## 5:    12              JJJ, Schmidt          JJJ Schmidt         &lt;NA&gt;</code></pre>
+<pre class="r"><code># long
+JJJSBefore %&gt;% 
+  splitstackshape::cSplit(indt = ., 
+                          splitCols = &quot;name&quot;, 
+                          sep = &quot;, &quot;, 
+                          direction = &quot;long&quot;)
+##     value         name
+##  1:    29         John
+##  2:    91         John
+##  3:    91        Jacob
+##  4:    39         John
+##  5:    39        Jacob
+##  6:    39 Jingleheimer
+##  7:    28 Jingleheimer
+##  8:    28      Schmidt
+##  9:    12          JJJ
+## 10:    12      Schmidt</code></pre>
+<p>Huge thanks to <a href="https://stackoverflow.com/users/16632/hadley">Hadley</a> and <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis P.</a> and everyone else on Stackoverflow!</p>
+<pre class="r"><code>tidyverse_logo()
+## ⬢ __  _    __   .    ⬡           ⬢  . 
+##  / /_(_)__/ /_ ___  _____ _______ ___ 
+## / __/ / _  / // / |/ / -_) __(_-&lt;/ -_)
+## \__/_/\_,_/\_, /|___/\__/_/ /___/\__/ 
+##      ⬢  . /___/      ⬡      .       ⬢</code></pre>
+</div>
+</div>

@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Copyright Year 2020, Martin Frigaard</copyright>
-    <lastBuildDate>Sat, 13 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/rstats/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How to split a single string column into multiple columns</title>
+      <link>/post/how-to-split-a-single-string-column-into-multiple-columns/</link>
+      <pubDate>Tue, 23 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/how-to-split-a-single-string-column-into-multiple-columns/</guid>
+      <description>This post comes from a Stackoverflow question that I’ve revisited numerous times over the years.
+ Stackoverflow: “Split data frame string column into multiple columns”
+ This question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed on Stackoverflow.
+Let’s load the tidyverse and get started!
+Load packages library(tidyverse) 
+
+Create some messy data Below is an example tibble with a jumbled name column (JJJSBefore),</description>
+    </item>
     
     <item>
       <title>How to download html tables with rvest and xml2</title>

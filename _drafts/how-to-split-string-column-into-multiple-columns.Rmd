@@ -1,0 +1,235 @@
+---
+title: How to split a string column into multiple columns
+author: Martin Frigaard
+date: '2020-06-24'
+slug: file-management-with-fs
+categories: ["Wrangling"]
+tags: ["Wrangling"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.keep = FALSE,
+                      collapse = TRUE,
+                      eval = FALSE)
+library(tidyverse)
+```
+
+
+## Comma separated content in a single column 
+
+This post comes from a [Stackoverflow question](https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns) that I've revisited numerous times over the years. Below is an example of this data structure, 
+
+```{r JJJSBefore}
+JJJSBefore <- tibble::tribble(
+     ~value,                       ~name,
+        29L,                      "John",
+      9120L,               "John, Jacob",
+       392L, "John, Jacob, Jingleheimer",
+       284L,     "Jingleheimer, Schmidt",
+       128L,              "JJJ, Schmidt")
+JJJSBefore
+```
+
+There are various solutions listed, but I prefer the by [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p) because it uses offers a tidyverse solution and it's written as a function. I've copied the proposed solution below:
+
+> *We can't use `dplyr` `separate()` because we don't know the number of the result columns before the split, so I have then created a function that uses `stringr` to split a column, given the pattern and a name prefix for the generated columns.*
+
+```{r example-split_into_multiple}
+split_into_multiple <- function(column, pattern = ", ", into_prefix){
+  cols <- str_split_fixed(column, pattern, n = Inf)
+  # Sub out the ""'s returned by filling the matrix to the right, with NAs which are useful
+  cols[which(cols == "")] <- NA
+  cols <- as.tibble(cols)
+  # name the 'cols' tibble as 'into_prefix_1', 'into_prefix_2', ..., 'into_prefix_m' 
+  # where m = # columns of 'cols'
+  m <- dim(cols)[2]
+
+  names(cols) <- paste(into_prefix, 1:m, sep = "_")
+  return(cols)
+}
+```
+
+Let's break down the `split_into_multiple` function's components: 
+
+```{r cols}
+cols <- stringr::str_split_fixed(column, pattern, n = Inf)
+```
+
+The first step takes an input column and apply the `stringr::str_split_fixed()` function, which returns ["a character matrix with `n` columns."](https://stringr.tidyverse.org/reference/str_split.html). By setting `n` to `Inf`, the number of items to split the `string` into is infinite. 
+
+```{r cols}
+cols <- stringr::str_split_fixed(string = JJJSBefore$name, pattern = ", ", n = Inf)
+cols
+```
+
+```{r test-cols}
+is.matrix(cols)
+typeof(cols)
+```
+
+After the `name` column is split into a character matrix of split columns (`cols`), the `split_into_multiple()` function uses [`base::which()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/which.html) to identify the empty columns in the matrix.
+
+
+```{r which}
+base::which(cols == "")
+```
+
+`base::which()` returns a numerical vector that correspond to the following columns in the `cols` matrix.
+
+```{r matrix-indeces, echo=FALSE}
+# fs::dir_ls("../figs")
+knitr::include_graphics(path = "../figs/matrix-indeces.png")
+```
+
+The function subsets the `cols` matrix with the output from `which(cols == "")` and assigning `NA`s to the locations identified above. 
+
+```{r replace-NAs-cols}
+cols[which(cols == "")] <- NA
+cols
+```
+
+Next, we need a `tibble`, not a matrix, so the function converts `cols` into a tibble with `cols <- as.tibble(cols)`. I will replace it with [`as_tibble()` from `tibble`](https://tibble.tidyverse.org/reference/as_tibble.html).
+
+```{r as_tibble}
+cols <- tibble::as_tibble(cols)
+cols
+```
+
+Now we have a `tibble`, but we're missing the original `value` column from `JJJSBefore` (see below). 
+
+```{r JJJSBefore-again}
+JJJSBefore
+```
+
+
+To solve this, `split_into_multiple()` takes the second value from [`base::dim()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/dim.html) (for dimensions). The second number from `base::dim()` is the number of columns in the `cols` tibble, 
+
+```{r cols-2nd-column}
+# name the 'cols' tibble as 'into_prefix_1', 'into_prefix_2', ..., 'into_prefix_m' 
+# where m = # columns of 'cols'
+m <- dim(cols)[2]
+m
+```
+
+We could also get this with [`base::ncols()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/nrow.html)
+
+```{r ncol}
+base::ncol(cols)
+```
+
+Finally, `split_into_columns()` uses `base::paste()` to combine `m` with `into_prefix` to create the new column `base::names()` (separated by an underscore `"_"`). The `return()` value is `cols` with the new names. 
+
+```{r into_prefix}
+into_prefix <- "name"
+base::paste(into_prefix, 1:m, sep = "_")
+```
+
+Put all together, the function works like so,
+
+```{r full-split_into_multiple-example}
+split_into_multiple(column = JJJSBefore$name, pattern = ", ", into_prefix = "name")
+```
+
+## Minor adjustments
+
+The trouble is, I want the output from `split_into_multiple()` to be combined with the original `data.frame`/`tibble`. I'll add a few  arguments: one for the `data`, and `dplyr::bind_cols()` to bind the input data to the new split columns. 
+
+```{r split_into_multiple}
+split_into_multiple <- function(data, col, pattern = "[^[:alnum:]]+", into_prefix){
+  # use regex for pattern, or whatever is provided 
+  in_pattern <- pattern
+  # convert data to tibble
+  in_data <- tibble::as_tibble(data)
+  # convert col to character vector
+  in_col <- base::as.character(col)
+  # split columns into matrix
+  out_cols <- stringr::str_split_fixed(in_data[[in_col]], pattern = in_pattern, n = Inf)
+  # replace NAs in matrix
+  out_cols[base::which(out_cols == "")] <- NA
+  # convert to tibble
+  out_cols <- tibble::as_tibble(out_cols)
+  # get number of cols
+  m <- base::ncol(out_cols)
+  # assign col names
+  base::names(out_cols) <- base::paste(into_prefix, 1:m, sep = "_")
+  # bind cols together
+  final_tibble <- dplyr::bind_cols(in_data, out_cols)
+  # return the final_tibble
+  return(final_tibble)
+}
+```
+
+Now I'll test `split_into_multiple()` with `JJJSBefore` and see what I get:
+
+```{r test-split_into_multiple}
+JJJSBefore %>% 
+  split_into_multiple(data = ., col = "name", into_prefix = "name")
+```
+
+I'll test is on the `Before` data in the original example, too.  
+
+```{r test-split_into_multiple-on-Before}
+Before <- base::data.frame(attr = c(1, 30, 4, 6), 
+                           type = c('foo_and_bar', 
+                                    'foo_and_bar_2', 
+                                    'foo_and_bar_2_and_bar_3', 
+                                    'foo_and_bar'))
+Before %>% 
+  split_into_multiple(data = ., 
+                      col = "type", 
+                      pattern = "_and_", 
+                      into_prefix = "type")
+```
+
+What if there was a dataset with a bunch of different characters to split on? We'll test this one the `WorseThanBefore` data below. 
+
+```{r WorseThanBefore}
+WorseThanBefore <- tibble::tribble(
+     ~attr,                     ~type,
+        1L,                "foo, bar",
+       30L,               "foo-bar/2",
+        4L, "foo...bar...2...bar...3",
+        6L,               "foo | bar")
+WorseThanBefore %>% 
+    split_into_multiple(data = ., 
+                      col = "type", 
+                      into_prefix = "type")
+```
+
+
+As we can see, this retains the original column, but I can remove this using `dplyr::select()` helpers (like above).
+
+```{r test-split_into_multiple-with-select-helpers}
+JJJSBefore %>% 
+  split_into_multiple(data = ., col = "name", into_prefix = "name") %>% 
+  dplyr::select(value, dplyr::contains("name_"))
+```
+
+This `split_into_multiple()` function has been really helpful in the last couple projects I've been working on. I hope you can use it!
+
+Huge thanks to [Hadley](https://stackoverflow.com/users/16632/hadley) and [Yannis P.](https://stackoverflow.com/users/1885713/yannis-p).
+
+## Non-`tidyverse` mentions
+
+I also liked the `cSplit()` function from the [`splitstackshape` package](https://github.com/mrdwab/splitstackshape) because it can take multiple columns and can be tidied up all in one go!
+
+```{r cSplit}
+library(splitstackshape)
+# original
+JJJSBefore
+# wide
+JJJSBefore %>% 
+  splitstackshape::cSplit(indt = ., 
+                          splitCols = "name", 
+                          sep = ", ", 
+                          drop = FALSE, 
+                          direction = "wide")
+# long
+JJJSBefore %>% 
+  splitstackshape::cSplit(indt = ., 
+                          splitCols = "name", 
+                          sep = ", ", 
+                          direction = "long")
+```
+
+

@@ -1,0 +1,210 @@
+---
+title: "How to display interaction effects"
+output: 
+  github_document:
+    df_print: kable
+---
+
+```{r setup, include=FALSE}
+require(tidyverse)
+# knitr settings ------
+knitr::opts_chunk$set(
+    echo = TRUE, # show/hide all code
+    # results = 'hide', # hide results
+    tidy = FALSE, # cleaner code printing
+    comment = "#> ", # better console printing
+    eval = TRUE, # turn this to FALSE stop code chunks from running
+    message = FALSE, # show messages
+    warning = FALSE, # show warnings
+    size = "small", # size of the text
+    fig.width = 9, # size of the fig
+    fig.height = 7, # size of the fig
+    fig.path = "figs/") # location of files
+knitr::opts_knit$set(
+    width = 78)
+base::options(tibble.print_max = 25,
+              tibble.width = 78,
+              scipen = 1000000000)
+```
+
+## Graph theme
+
+```{r set-theme_clean}
+library(ggthemes)
+ggplot2::theme_set(ggthemes::theme_tufte(base_family = "Roboto Condensed", 
+                                         base_size = 12))
+```
+
+## Interaction effects
+
+Two variables are *interacting* when the effect of one variable depends on the value of another variable. Like many statistical topics, interactions are easier to visualize than conceptualize. This post is going to walk through a few examples of how to display interaction effects in the `tidyverse`.
+
+## Example: Is there a relationship between education, gender, and poverty? 
+
+```{r Nhanes2011_12}
+library(NHANES)
+Nhanes <- NHANES::NHANES %>% janitor::clean_names()
+Nhanes2011_12 <- Nhanes %>% 
+    dplyr::filter(survey_yr == "2011_12") %>% 
+    dplyr::select(id, gender, age, race1, bp_sys_ave, education, 
+                  height, bmi, weight, poverty)
+```
+
+The `Nhanes2011_12` is NHANES data from 2011-12. This dataset has the following variables. 
+
+`id` - Participant identifier.
+
+`gender` - Gender (sex) of study participant, coded as `male` or `female`
+
+`age` - Age in years at screening of study participant. Note: Subjects 80 years or older were recorded as 80.
+
+`race1` - Reported race of study participant: `Mexican`, `Hispanic`, `White`, `Black`, or `Other`
+
+`bp_sys_ave` - Combined systolic blood pressure reading, following the procedure outlined for BPXSAR.
+
+`education` - Educational level of study participant Reported for participants aged 20 years or older. One of `8thGrade`, `9-11thGrade`, `HighSchool`, `SomeCollege`, or `CollegeGrad.`
+
+`height` - Standing height in cm. Reported for participants aged 2 years or older.
+
+`bmi` - Body mass index (weight/height2 in kg/m2). Reported for participants aged 2 years or older.
+
+`weight` - Weight in kg
+
+`poverty` = A ratio of family income to poverty guidelines. Smaller numbers indicate more poverty.
+
+```{r Nhanes2011_12-glimpse}
+Nhanes2011_12 %>% glimpse()
+```
+
+First we will examine the data graphically, then we will build a model. 
+
+## Interaction terms (`Nhanes2011_12`)
+
+```{r geom_smooth-Nhanes2011_12}
+gg_intrxn <- Nhanes2011_12 %>% 
+    ggplot2::ggplot(aes(x = height, 
+                    y = bp_sys_ave, 
+                    color = gender)) + 
+    ggplot2::geom_point(alpha = 1/3, 
+                      show.legend = FALSE) + 
+    ggplot2::geom_smooth(method = "lm", 
+                       se = FALSE) +
+    ggplot2::labs(x = "Height", 
+                y = "Systolic Blood Pressure (Average)", 
+                color = "Gender") 
+gg_intrxn
+```
+
+## Setting the reference categories 
+
+The categorical variables are ordered alphabetically if they're not explicitly set, so we will do that here. 
+
+```{r relevel-gender}
+Nhanes2011_12$gender <- stats::relevel(x = Nhanes2011_12$gender, ref = "male")
+```
+
+We can check this with `levels()`
+
+```{r levels-gender}
+base::levels(Nhanes2011_12$gender)
+```
+
+## Modeling interactions (`Nhanes2011_12`)
+
+Now we can model the blood pressure as a function of `height` and `gender`. 
+
+```{r intrxn_mod01}
+intrxn_mod01 <- lm(bp_sys_ave ~ height*gender, data = Nhanes2011_12)
+coef(intrxn_mod02)
+```
+
+For `men` , a 1 point increase in `height` (measured in `cm`) is associated with an increase of systolic blood pressure of `0.3785803`.
+
+For `female`, a 1 point increase in `height` is associated with an increase of systolic blood pressure of the offset of `height` plus the `height:genderfemale` estimate: 
+
+`0.3785803` + (`-0.3297897`) = 
+
+```{r female-slope}
+0.3785803 + (-0.3297897)
+```
+
+### Getting regression coefficients (`Nhanes2011_12`)
+
+The standard way of getting the regression coefficients 
+
+```{r summary-intrxn_mod01}
+summary(intrxn_mod01)
+```
+
+A cleaner way to get the interaction coefficients is with `moderndive::get_regression_table()`.
+
+```{r get_regression_table-intrxn_mod01}
+moderndive::get_regression_table(intrxn_mod01, digits = 10)
+```
+
+The `intercept` is the intercept and `height` is the slope for `height` for only the `male`s.
+
+The red regression line in the graph below has intercept 4.883 and slope for age of -0.018. 
+
+```{r}
+gg_intrxn
+```
+
+
+
+Or with `broom::tidy()`
+
+```{r tidy-intrxn_mod01}
+library(broom)
+broom::tidy(intrxn_mod01)
+```
+
+## The `interactions` package 
+
+```{r interactions}
+library(interactions)
+```
+
+```{r interact_plot-wages}
+interact_plot(intrxn_mod01, pred = height, modx = sex, plot.points = TRUE, interval = TRUE)
+```
+
+```{r interact_plot-Nhanes2011_12}
+interact_plot(intrxn_mod02, pred = height, modx = gender, 
+              plot.points = TRUE, 
+              interval = TRUE)
+```
+
+This package lets us get the [Johnson-Neyman intervals](https://clavelresearch.wordpress.com/2015/03/23/advanced-topics-plotting-better-interactions-using-the-johnson-neyman-technique-in-mplus/).
+
+We will stick with the `Nhanes2011_12` dataset, and swap out `gender` for `age`. 
+
+```{r intrxn_mod03}
+intrxn_mod03 <- lm(bp_sys_ave ~ height*age, data = Nhanes2011_12)
+coef(intrxn_mod03)
+```
+
+It's harder to see the interaction effects with a continuous moderator (i.e. `age`), so we can use the `sim_slopes` function to see where the *the range of values of the moderator in which the slope of the predictor is significant vs. nonsignificant at a specified alpha level.*
+
+```{r sim_slopes-Nhanes2011_12}
+interactions::sim_slopes(intrxn_mod03, pred = height, modx = age, 
+                         jnplot = TRUE)
+```
+
+## Parallel slopes plot (`Nhanes2011_12`)
+
+To get the parallel slopes plot, we can use the [`geom_parallel_slopes()` function from `moderndive`](https://moderndive.github.io/moderndive/reference/geom_parallel_slopes.html)
+
+```{r geom_parallel_slopes-Nhanes2011_12}
+library(moderndive)
+Nhanes2011_12 %>% 
+    ggplot2::ggplot(aes(y = bp_sys_ave, 
+                        x = height, 
+                        color = gender)) +
+    ggplot2::geom_point(alpha = 0.3, 
+                        show.legend = FALSE) +
+    moderndive::geom_parallel_slopes(se = FALSE) + 
+    ggplot2::labs(x = "Height", 
+       y = "Systolic Blood Pressure (Average)", 
+       color = "Gender") 
+```
