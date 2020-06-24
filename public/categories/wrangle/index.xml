@@ -19,10 +19,10 @@
       
       <guid>/post/how-to-split-a-single-string-column-into-multiple-columns/</guid>
       <description>This post comes from a Stackoverflow question that I’ve revisited numerous times over the years.
- Stackoverflow: “Split data frame string column into multiple columns”
- Let’s load the tidyverse and get started!
-Load packages library(tidyverse)  Create some messy data Below is an example tibble with a jumbled name column (JJJSBefore),
-JJJSBefore &amp;lt;- tibble::tribble( ~value, ~name, 29L, &amp;quot;John&amp;quot;, 91L, &amp;quot;John, Jacob&amp;quot;, 39L, &amp;quot;John, Jacob, Jingleheimer&amp;quot;, 28L, &amp;quot;Jingleheimer, Schmidt&amp;quot;, 12L, &amp;quot;JJJ, Schmidt&amp;quot;) {&#34;</description>
+The original question:
+ Stackoverflow: Split data frame string column into multiple columns
+  I’d like to take data of the form
+ before = data.frame(attr = c(1, 30, 4, 6), type = c(&amp;#39;foo_and_bar&amp;#39;, &amp;#39;foo_and_bar_2&amp;#39;)) attr type 1 1 foo_and_bar 2 30 foo_and_bar_2 3 4 foo_and_bar 4 6 foo_and_bar_2  and use split() on the column “type” from above to get something like this:</description>
     </item>
     
     <item>

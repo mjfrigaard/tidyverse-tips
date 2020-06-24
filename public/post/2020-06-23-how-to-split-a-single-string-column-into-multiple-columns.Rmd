@@ -23,11 +23,37 @@ library(tidyverse)
 
 This post comes from a [Stackoverflow question](https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns) that I've revisited numerous times over the years. 
 
-> **Stackoverflow: "Split data frame string column into multiple columns"**
+The original question:
 
-Let's load the `tidyverse` and get started!
+> **Stackoverflow: Split data frame string column into multiple columns**
+
+> *I'd like to take data of the form*
+
+```r
+before = data.frame(attr = c(1, 30, 4, 6), 
+                    type = c('foo_and_bar', 
+                             'foo_and_bar_2'))
+                              
+  attr          type
+1    1   foo_and_bar
+2   30 foo_and_bar_2
+3    4   foo_and_bar
+4    6 foo_and_bar_2
+```
+
+> *and use `split()` on the column "`type`" from above to get something like this:*
+
+```r
+  attr type_1 type_2
+1    1    foo    bar
+2   30    foo  bar_2
+3    4    foo    bar
+4    6    foo  bar_2
+```
 
 #### Load packages
+
+Let's load the `tidyverse` and get started!
 
 ```{r packages}
 library(tidyverse)
@@ -35,7 +61,7 @@ library(tidyverse)
 
 #### Create some messy data
 
-Below is an example `tibble` with a jumbled `name` column (`JJJSBefore`), 
+Below is an example `tibble` with a jumbled `name` column (`JJJSBefore`) similar to the one above. I chose to use commas and spaces because they're a little easier to read. 
 
 ```{r JJJSBefore}
 JJJSBefore <- tibble::tribble(
@@ -57,10 +83,32 @@ rmarkdown::paged_table(JJJSBefore)
 
 ### All the possible solutions 
 
+One possible solution is to combine `dplyr::mutate()`, `stringr::str_split()`, and `tidyr::unnest()`.  
 
-This particular question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed. Personally, I liked the approach [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p) took because 1) it offers a `tidyverse` solution *and* 2) it's written as a function. 
+```{r mutate-str_split-unnest, eval=FALSE}
+JJJSBefore %>%
+        dplyr::mutate(name = 
+    # 1) split this on the ", " pattern
+             stringr::str_split(string = name, 
+                                pattern = ", ")) %>% 
+    # 2) convert output from str_split across rows
+        tidyr::unnest(name) 
+```
 
-I've copied [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p)'s comment on the proposed solution below:
+```{r , echo=FALSE}
+rmarkdown::paged_table(
+JJJSBefore %>%
+        dplyr::mutate(name = 
+             stringr::str_split(string = name, 
+                                pattern = ", ")) %>% 
+        tidyr::unnest(name))
+```
+
+This gets the `JJJSBefore` data into a tidy format, but it would require some additional wrangling to get the data back into the two columns the question was looking for. 
+
+Fortunately, this particular question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed. I liked the approach [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p) took because 1) it offers a `tidyverse` solution *and* 2) it's written as a function. 
+
+I've copied Yannis-P's comment on the proposed solution below:
 
 > *We can't use `dplyr` `separate()` because we don't know the number of the result columns before the split, so I have then created a function that uses `stringr` to split a column, given the pattern and a name prefix for the generated columns.*
 
@@ -95,7 +143,7 @@ split_into_multiple <- function(column, pattern = ", ", into_prefix){
 
 Let's break down the `split_into_multiple()` function's components: 
 
-The first step takes an input column and apply the `stringr::str_split_fixed()` function, which returns ["a character matrix with `n` columns."](https://stringr.tidyverse.org/reference/str_split.html) 
+The first step takes an input column and applies the `stringr::str_split_fixed()` function, which returns ["a character matrix with `n` columns."](https://stringr.tidyverse.org/reference/str_split.html) 
 
 ```{r arg-cols, eval=FALSE}
 cols <- stringr::str_split_fixed(column, pattern, n = Inf)
@@ -120,14 +168,19 @@ base::which(cols == "")
 
 ![](/post/2020-06-23-how-to-split-a-single-string-column-into-multiple-columns_files/matrix-indeces.png){width=80%}
 
-The `split_into_multiple()` function subsets the `cols` matrix with the output from `which(cols == "")` and assigns `NA`s to the locations identified above. 
+The `split_into_multiple()` function subsets the `cols` matrix with the output from `base::which(cols == "")` and assigns `NA`s to the locations identified above. 
 
 ```{r replace-NAs-cols}
-cols[which(cols == "")] <- NA
+cols[base::which(cols == "")] <- NA
 cols
 ```
 
 Next, we need a `tibble`, not a matrix, so `split_into_multiple()` converts `cols` into a tibble with `cols <- as.tibble(cols)`. 
+
+```{r as.tibble, message=FALSE, warning=FALSE, eval=FALSE}
+cols <- tibble::as.tibble(cols)
+cols
+```
 
 ### `as.tibble()` warning
 
@@ -167,7 +220,7 @@ rmarkdown::paged_table(cols)
 
 <br></br>
 
-This might be an issue down the road, so I'll address it when I make some adjustments to the `split_into_multiple()` function.
+This will likely be an issue down the road, so I'll address it when I make some adjustments to the `split_into_multiple()` function.
 
 Now we have a `tibble`, but we're missing the original `value` column from `JJJSBefore` (see below). 
 
@@ -219,9 +272,11 @@ rmarkdown::paged_table(JJJAfter)
 
 <br></br>
 
+***
+
 ### Address `tibble` warnings 
 
-The `as_tibble()`/`as.tibble()` warning can be addressed by assigning column names with `base::colnames()` to the matrix *before* converting this into a tibble. 
+The `as_tibble()`/`as.tibble()` warnings can be addressed by assigning column names with `base::colnames()` to the matrix ***before*** converting this into a tibble. 
 
 ```{r assign-colnames, eval=FALSE}
 # create cols matrix
@@ -431,7 +486,8 @@ JJJSBefore %>%
 ```{r , echo=FALSE}
 rmarkdown::paged_table(
   JJJSBefore %>% 
-  split_into_multiple(data = ., col = "name", into_prefix = "name") %>% 
+  split_into_multiple(data = ., col = "name", 
+                      into_prefix = "name") %>% 
   dplyr::select(value, dplyr::contains("name_"))
 )
 ```
@@ -441,6 +497,7 @@ rmarkdown::paged_table(
 ### In closing
 
 This `split_into_multiple()` function has been really helpful for me in the last few projects I've been working on. I hope you can use it too!
+
 
 #### Noteworthy non-`tidyverse` alternatives
 
@@ -470,6 +527,8 @@ JJJSBefore %>%
                           sep = ", ", 
                           direction = "long") 
 ```
+
+
 
 Huge thanks to [Hadley](https://stackoverflow.com/users/16632/hadley) and [Yannis P.](https://stackoverflow.com/users/1885713/yannis-p) and everyone else on Stackoverflow!
 

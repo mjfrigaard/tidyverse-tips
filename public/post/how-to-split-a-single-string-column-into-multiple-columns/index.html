@@ -88,17 +88,38 @@
 
 
 <p>This post comes from a <a href="https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns">Stackoverflow question</a> that I’ve revisited numerous times over the years.</p>
+<p>The original question:</p>
 <blockquote>
-<p><strong>Stackoverflow: “Split data frame string column into multiple columns”</strong></p>
+<p><strong>Stackoverflow: Split data frame string column into multiple columns</strong></p>
 </blockquote>
-<p>Let’s load the <code>tidyverse</code> and get started!</p>
+<blockquote>
+<p><em>I’d like to take data of the form</em></p>
+</blockquote>
+<pre class="r"><code>before = data.frame(attr = c(1, 30, 4, 6), 
+                    type = c(&#39;foo_and_bar&#39;, 
+                             &#39;foo_and_bar_2&#39;))
+                              
+  attr          type
+1    1   foo_and_bar
+2   30 foo_and_bar_2
+3    4   foo_and_bar
+4    6 foo_and_bar_2</code></pre>
+<blockquote>
+<p><em>and use <code>split()</code> on the column “<code>type</code>” from above to get something like this:</em></p>
+</blockquote>
+<pre class="r"><code>  attr type_1 type_2
+1    1    foo    bar
+2   30    foo  bar_2
+3    4    foo    bar
+4    6    foo  bar_2</code></pre>
 <div id="load-packages" class="section level4">
 <h4>Load packages</h4>
+<p>Let’s load the <code>tidyverse</code> and get started!</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
 </div>
 <div id="create-some-messy-data" class="section level4">
 <h4>Create some messy data</h4>
-<p>Below is an example <code>tibble</code> with a jumbled <code>name</code> column (<code>JJJSBefore</code>),</p>
+<p>Below is an example <code>tibble</code> with a jumbled <code>name</code> column (<code>JJJSBefore</code>) similar to the one above. I chose to use commas and spaces because they’re a little easier to read.</p>
 <pre class="r"><code>JJJSBefore &lt;- tibble::tribble(
      ~value,                       ~name,
         29L,                      &quot;John&quot;,
@@ -116,8 +137,22 @@
 </div>
 <div id="all-the-possible-solutions" class="section level3">
 <h3>All the possible solutions</h3>
-<p>This particular question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed. Personally, I liked the approach <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a> took because 1) it offers a <code>tidyverse</code> solution <em>and</em> 2) it’s written as a function.</p>
-<p>I’ve copied <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a>’s comment on the proposed solution below:</p>
+<p>One possible solution is to combine <code>dplyr::mutate()</code>, <code>stringr::str_split()</code>, and <code>tidyr::unnest()</code>.</p>
+<pre class="r"><code>JJJSBefore %&gt;%
+        dplyr::mutate(name = 
+    # 1) split this on the &quot;, &quot; pattern
+             stringr::str_split(string = name, 
+                                pattern = &quot;, &quot;)) %&gt;% 
+    # 2) convert output from str_split across rows
+        tidyr::unnest(name) </code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John"},{"1":"91","2":"John"},{"1":"91","2":"Jacob"},{"1":"39","2":"John"},{"1":"39","2":"Jacob"},{"1":"39","2":"Jingleheimer"},{"1":"28","2":"Jingleheimer"},{"1":"28","2":"Schmidt"},{"1":"12","2":"JJJ"},{"1":"12","2":"Schmidt"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>This gets the <code>JJJSBefore</code> data into a tidy format, but it would require some additional wrangling to get the data back into the two columns the question was looking for.</p>
+<p>Fortunately, this particular question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed. I liked the approach <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a> took because 1) it offers a <code>tidyverse</code> solution <em>and</em> 2) it’s written as a function.</p>
+<p>I’ve copied Yannis-P’s comment on the proposed solution below:</p>
 <blockquote>
 <p><em>We can’t use <code>dplyr</code> <code>separate()</code> because we don’t know the number of the result columns before the split, so I have then created a function that uses <code>stringr</code> to split a column, given the pattern and a name prefix for the generated columns.</em></p>
 </blockquote>
@@ -146,7 +181,7 @@
 <div id="how-it-works" class="section level3">
 <h3>How it works</h3>
 <p>Let’s break down the <code>split_into_multiple()</code> function’s components:</p>
-<p>The first step takes an input column and apply the <code>stringr::str_split_fixed()</code> function, which returns <a href="https://stringr.tidyverse.org/reference/str_split.html">“a character matrix with <code>n</code> columns.”</a></p>
+<p>The first step takes an input column and applies the <code>stringr::str_split_fixed()</code> function, which returns <a href="https://stringr.tidyverse.org/reference/str_split.html">“a character matrix with <code>n</code> columns.”</a></p>
 <pre class="r"><code>cols &lt;- stringr::str_split_fixed(column, pattern, n = Inf)</code></pre>
 <p>By setting <code>n</code> to <code>Inf</code>, the number of items to split the <code>string</code> into is infinite.</p>
 <pre class="r"><code>cols &lt;- stringr::str_split_fixed(string = JJJSBefore$name, 
@@ -164,8 +199,8 @@ cols
 ## [1]  6 11 12 14 15</code></pre>
 <p><code>base::which()</code> returns a numerical vector that correspond to the empty columns in the <code>cols</code> matrix.</p>
 <p><img src="../../post/2020-06-23-how-to-split-a-single-string-column-into-multiple-columns_files/matrix-indeces.png" style="width:80.0%" /></p>
-<p>The <code>split_into_multiple()</code> function subsets the <code>cols</code> matrix with the output from <code>which(cols == "")</code> and assigns <code>NA</code>s to the locations identified above.</p>
-<pre class="r"><code>cols[which(cols == &quot;&quot;)] &lt;- NA
+<p>The <code>split_into_multiple()</code> function subsets the <code>cols</code> matrix with the output from <code>base::which(cols == "")</code> and assigns <code>NA</code>s to the locations identified above.</p>
+<pre class="r"><code>cols[base::which(cols == &quot;&quot;)] &lt;- NA
 cols
 ##      [,1]           [,2]      [,3]          
 ## [1,] &quot;John&quot;         NA        NA            
@@ -174,6 +209,8 @@ cols
 ## [4,] &quot;Jingleheimer&quot; &quot;Schmidt&quot; NA            
 ## [5,] &quot;JJJ&quot;          &quot;Schmidt&quot; NA</code></pre>
 <p>Next, we need a <code>tibble</code>, not a matrix, so <code>split_into_multiple()</code> converts <code>cols</code> into a tibble with <code>cols &lt;- as.tibble(cols)</code>.</p>
+<pre class="r"><code>cols &lt;- tibble::as.tibble(cols)
+cols</code></pre>
 </div>
 <div id="as.tibble-warning" class="section level3">
 <h3><code>as.tibble()</code> warning</h3>
@@ -200,7 +237,7 @@ This warning is displayed once every 8 hours.</code></pre>
   </script>
 </div>
 <p><br></br></p>
-<p>This might be an issue down the road, so I’ll address it when I make some adjustments to the <code>split_into_multiple()</code> function.</p>
+<p>This will likely be an issue down the road, so I’ll address it when I make some adjustments to the <code>split_into_multiple()</code> function.</p>
 <p>Now we have a <code>tibble</code>, but we’re missing the original <code>value</code> column from <code>JJJSBefore</code> (see below).</p>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
@@ -232,10 +269,11 @@ JJJAfter</code></pre>
   </script>
 </div>
 <p><br></br></p>
+<hr />
 </div>
 <div id="address-tibble-warnings" class="section level3">
 <h3>Address <code>tibble</code> warnings</h3>
-<p>The <code>as_tibble()</code>/<code>as.tibble()</code> warning can be addressed by assigning column names with <code>base::colnames()</code> to the matrix <em>before</em> converting this into a tibble.</p>
+<p>The <code>as_tibble()</code>/<code>as.tibble()</code> warnings can be addressed by assigning column names with <code>base::colnames()</code> to the matrix <strong><em>before</em></strong> converting this into a tibble.</p>
 <pre class="r"><code># create cols matrix
 cols &lt;- str_split_fixed(JJJSBefore$name, 
                         pattern = &quot;, &quot;, 
