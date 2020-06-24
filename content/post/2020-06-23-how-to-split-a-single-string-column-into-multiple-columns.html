@@ -204,7 +204,7 @@ cols</code></pre>
 <pre class="r"><code>split_into_multiple &lt;- function(data, col, pattern = &quot;[^[:alnum:]]+&quot;, into_prefix){
   # use regex for pattern, or whatever is provided 
   in_pattern &lt;- pattern
-  # convert data to tibble and add ,.name_repair
+  # convert data to tibble 
   in_data &lt;- tibble::as_tibble(data)
   # convert col to character vector
   in_col &lt;- base::as.character(col)
@@ -237,8 +237,9 @@ JJJAfter</code></pre>
 {"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John","3":"John","4":"NA","5":"NA"},{"1":"91","2":"John, Jacob","3":"John","4":"Jacob","5":"NA"},{"1":"39","2":"John, Jacob, Jingleheimer","3":"John","4":"Jacob","5":"Jingleheimer"},{"1":"28","2":"Jingleheimer, Schmidt","3":"Jingleheimer","4":"Schmidt","5":"NA"},{"1":"12","2":"JJJ, Schmidt","3":"JJJ","4":"Schmidt","5":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+<p><strong>GREAT!</strong> It works! But I should test <code>split_into_multiple()</code> on a few more examples.</p>
 <p><br></br></p>
-<p>I’ll test <code>split_into_multiple()</code> on the <code>Before</code> data in the original example, too.</p>
+<p>I’ll test to see if <code>split_into_multiple()</code> works on the <code>Before</code> data in the original example,</p>
 <p><br></br></p>
 <pre class="r"><code>Before</code></pre>
 <div data-pagedtable="false">
@@ -257,9 +258,9 @@ JJJAfter</code></pre>
 {"columns":[{"label":["attr"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["type_1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["type_2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["type_3"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo_and_bar","3":"foo","4":"bar","5":"NA"},{"1":"30","2":"foo_and_bar_2","3":"foo","4":"bar_2","5":"NA"},{"1":"4","2":"foo_and_bar_2_and_bar_3","3":"foo","4":"bar_2","5":"bar_3"},{"1":"6","2":"foo_and_bar","3":"foo","4":"bar","5":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+<p>So far, so good!</p>
 <p><br></br></p>
-<p>What if there is a <code>data.frame</code>/<code>tibble</code> with a bunch of different characters we need to split on?</p>
-<p>I’ll test this one the <code>WorseThanBefore</code> data below.</p>
+<p>What if there is a <code>data.frame</code>/<code>tibble</code> with a bunch of different characters we need to split on? I can test these data in the <code>WorseThanBefore</code> data below.</p>
 <pre class="r"><code>WorseThanBefore &lt;- tibble::tribble(
      ~attr,                     ~type,
         1L,                &quot;foo, bar&quot;,
@@ -274,7 +275,7 @@ WorseThanBefore</code></pre>
   </script>
 </div>
 <p><br></br></p>
-<p>We’ll use <code>split_into_multiple()</code> on <code>WorseThanBefore</code> without giving an argument for <code>pattern</code>.</p>
+<p>We’ll use <code>split_into_multiple()</code> on <code>WorseThanBefore</code>, but omit the argument for <code>pattern</code>.</p>
 <pre class="r"><code>WorseThanBefore %&gt;% 
     split_into_multiple(data = ., 
                       col = &quot;type&quot;, 
@@ -285,7 +286,7 @@ WorseThanBefore</code></pre>
   </script>
 </div>
 <p><br></br></p>
-<p>This removed any sequence of non-alphanumeric values. <code>split_into_multiple()</code> retains the original column, which I can remove using <code>dplyr::select()</code> helpers (like above).</p>
+<p><code>split_into_multiple()</code> removed any sequence of non-alphanumeric values, but it still retains the original column, which I can remove using <code>dplyr::select()</code> helpers (like above).</p>
 <pre class="r"><code>JJJSBefore %&gt;% 
   split_into_multiple(data = ., 
                       col = &quot;name&quot;, 

@@ -279,7 +279,7 @@ My adjusted `split_into_multiple()` function is below.
 split_into_multiple <- function(data, col, pattern = "[^[:alnum:]]+", into_prefix){
   # use regex for pattern, or whatever is provided 
   in_pattern <- pattern
-  # convert data to tibble and add ,.name_repair
+  # convert data to tibble 
   in_data <- tibble::as_tibble(data)
   # convert col to character vector
   in_col <- base::as.character(col)
@@ -322,9 +322,11 @@ JJJSBefore %>%
                       into_prefix = "name"))
 ```
 
+**GREAT!** It works! But I should test `split_into_multiple()` on a few more examples.
+
 <br></br>
 
-I'll test `split_into_multiple()` on the `Before` data in the original example, too.  
+I'll test to see if `split_into_multiple()` works on the `Before` data in the original example,  
 
 ```{r test-split_into_multiple-on-Before, echo=FALSE}
 Before <- base::data.frame(attr = c(1, 30, 4, 6), 
@@ -364,12 +366,12 @@ Before %>%
 )
 ```
 
+So far, so good!
+
 <br></br>
 
 
-What if there is a `data.frame`/`tibble` with a bunch of different characters we need to split on? 
-
-I'll test this one the `WorseThanBefore` data below. 
+What if there is a `data.frame`/`tibble` with a bunch of different characters we need to split on? I can test these data in the `WorseThanBefore` data below. 
 
 ```{r , eval=FALSE}
 WorseThanBefore <- tibble::tribble(
@@ -396,7 +398,7 @@ WorseThanBefore)
 
 <br></br>
 
-We'll use `split_into_multiple()` on `WorseThanBefore` without giving an argument for `pattern`.
+We'll use `split_into_multiple()` on `WorseThanBefore`, but omit the argument for `pattern`.
 
 ```{r WorseThanBefore-split_into_multiple-no-pattern, eval=FALSE}
 WorseThanBefore %>% 
@@ -416,7 +418,7 @@ WorseThanBefore %>%
 
 <br></br>
 
-This removed any sequence of non-alphanumeric values. `split_into_multiple()` retains the original column, which I can remove using `dplyr::select()` helpers (like above).
+`split_into_multiple()` removed any sequence of non-alphanumeric values, but it still retains the original column, which I can remove using `dplyr::select()` helpers (like above).
 
 ```{r test-split_into_multiple-with-select-helpers, eval=FALSE}
 JJJSBefore %>% 
