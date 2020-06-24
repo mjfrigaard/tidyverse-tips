@@ -81,7 +81,7 @@ rmarkdown::paged_table(JJJSBefore)
 
 ***
 
-### All the possible solutions 
+### A 'not quite' solution
 
 One possible solution is to combine `dplyr::mutate()`, `stringr::str_split()`, and `tidyr::unnest()`.  
 
