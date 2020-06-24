@@ -3,7 +3,7 @@ title: "How to use Rmarkdown in RStudio"
 author: "Martin Frigaard"
 date: 2020-05-23T21:13:14-05:00
 categories: ["Rmarkdown"]
-tags: ["R Markdown", "Reproducible Research"]
+tags: ["RMarkdown"]
 ---
 
 ```{r setup, include=FALSE}
@@ -56,20 +56,22 @@ How does it work? Follow the steps below and `copy + paste` the code into your R
 ![](/post/2020-05-23-rstudio-rmarkdown_files/new-rmarkdown-file.png){width=80%}
 
 ~~~
+
 # R Markdown
 
 Load the `tidyverse`.
 
-```{r tidyverse_logo}
+```{r tidyverse_logo, eval=FALSE}
 library(tidyverse)
 tidyverse::tidyverse_logo()
 ```
+
 
 ### Code
 
 When you click the **Knit** button a document will be generated that includes text content, code inputs, and various outputs.
 
-```{r}
+```{r , eval=FALSE}
 ggplot2::diamonds %>% dplyr::glimpse(78)
 ```
 
@@ -77,13 +79,14 @@ ggplot2::diamonds %>% dplyr::glimpse(78)
 
 You can also include graphs.
 
-```{r}
+```{r , eval=FALSE}
 diamonds %>% 
   ggplot2::ggplot(aes(x = carat, y = price, color = cut)) + 
   ggplot2::geom_point()
 ```
-
 ~~~
+
+
 
 Below is what you should see in your .html document:
 

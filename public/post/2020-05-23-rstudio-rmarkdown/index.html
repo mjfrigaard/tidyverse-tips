@@ -119,7 +119,8 @@ normal text
 <p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/02-rmarkdown-workflow.png" style="width:80.0%" /></p>
 <p>How does it work? Follow the steps below and <code>copy + paste</code> the code into your Rmarkdown document. Then click on the Knit icon.</p>
 <p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/new-rmarkdown-file.png" style="width:80.0%" /></p>
-<pre><code># R Markdown
+<pre><code>
+# R Markdown
 
 Load the `tidyverse`.
 
@@ -127,12 +128,8 @@ Load the `tidyverse`.
 ```r
 library(tidyverse)
 tidyverse::tidyverse_logo()
-## ⬢ __  _    __   .    ⬡           ⬢  . 
-##  / /_(_)__/ /_ ___  _____ _______ ___ 
-## / __/ / _  / // / |/ / -_) __(_-&lt;/ -_)
-## \__/_/\_,_/\_, /|___/\__/_/ /___/\__/ 
-##      ⬢  . /___/      ⬡      .       ⬢
 ```
+
 
 ### Code
 
@@ -141,18 +138,6 @@ When you click the **Knit** button a document will be generated that includes te
 
 ```r
 ggplot2::diamonds %&gt;% dplyr::glimpse(78)
-## Rows: 53,940
-## Columns: 10
-## $ carat   &lt;dbl&gt; 0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, 0.23,…
-## $ cut     &lt;ord&gt; Ideal, Premium, Good, Premium, Good, Very Good, Very Good, …
-## $ color   &lt;ord&gt; E, E, E, I, J, J, I, H, E, H, J, J, F, J, E, E, I, J, J, J,…
-## $ clarity &lt;ord&gt; SI2, SI1, VS1, VS2, SI2, VVS2, VVS1, SI1, VS2, VS1, SI1, VS…
-## $ depth   &lt;dbl&gt; 61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, 59.4,…
-## $ table   &lt;dbl&gt; 55, 61, 65, 58, 58, 57, 57, 55, 61, 61, 55, 56, 61, 54, 62,…
-## $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 340,…
-## $ x       &lt;dbl&gt; 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87, 4.00,…
-## $ y       &lt;dbl&gt; 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4.05,…
-## $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, 2.39,…
 ```
 
 ### Graphs
@@ -164,10 +149,7 @@ You can also include graphs.
 diamonds %&gt;% 
   ggplot2::ggplot(aes(x = carat, y = price, color = cut)) + 
   ggplot2::geom_point()
-```
-
-&lt;img src=&quot;2020-05-23-rstudio-rmarkdown_files/figure-html/unnamed-chunk-2-1.png&quot; width=&quot;672&quot; /&gt;
-</code></pre>
+```</code></pre>
 <p>Below is what you should see in your .html document:</p>
 <p><img src="../../post/2020-05-23-rstudio-rmarkdown_files/rmarkdown-output.png" style="width:80.0%" /></p>
 </div>

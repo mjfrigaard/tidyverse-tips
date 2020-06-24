@@ -31,20 +31,11 @@
     </item>
     
     <item>
-      <title>R Markdown</title>
-      <link>/tags/r-markdown/</link>
+      <title>RMarkdown</title>
+      <link>/tags/rmarkdown/</link>
       <pubDate>Sat, 23 May 2020 21:13:14 -0500</pubDate>
       
-      <guid>/tags/r-markdown/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reproducible Research</title>
-      <link>/tags/reproducible-research/</link>
-      <pubDate>Sat, 23 May 2020 21:13:14 -0500</pubDate>
-      
-      <guid>/tags/reproducible-research/</guid>
+      <guid>/tags/rmarkdown/</guid>
       <description></description>
     </item>
     
