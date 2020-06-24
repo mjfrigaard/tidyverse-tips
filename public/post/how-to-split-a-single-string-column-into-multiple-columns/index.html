@@ -119,7 +119,7 @@
 </div>
 <div id="create-some-messy-data" class="section level4">
 <h4>Create some messy data</h4>
-<p>Below is an example <code>tibble</code> with a jumbled <code>name</code> column (<code>JJJSBefore</code>) similar to the one above. I chose to use commas and spaces because they’re a little easier to read.</p>
+<p>Below is an example <code>tibble</code> with a jumbled <code>name</code> column (<code>JJJSBefore</code>) similar to the one above. I chose to use commas and spaces instead of underscores because I find them a little easier to read.</p>
 <pre class="r"><code>JJJSBefore &lt;- tibble::tribble(
      ~value,                       ~name,
         29L,                      &quot;John&quot;,
@@ -150,7 +150,7 @@
 {"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John"},{"1":"91","2":"John"},{"1":"91","2":"Jacob"},{"1":"39","2":"John"},{"1":"39","2":"Jacob"},{"1":"39","2":"Jingleheimer"},{"1":"28","2":"Jingleheimer"},{"1":"28","2":"Schmidt"},{"1":"12","2":"JJJ"},{"1":"12","2":"Schmidt"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>This gets the <code>JJJSBefore</code> data into a tidy format, but it would require some additional wrangling to get the data back into the two columns the question was looking for.</p>
+<p>This gets the data into a tidy format, but it would require some additional wrangling steps to get the data back into the two columns the question was looking for.</p>
 <p>Fortunately, this particular question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed. I liked the approach <a href="https://stackoverflow.com/users/1885713/yannis-p">Yannis-P</a> took because 1) it offers a <code>tidyverse</code> solution <em>and</em> 2) it’s written as a function.</p>
 <p>I’ve copied Yannis-P’s comment on the proposed solution below:</p>
 <blockquote>

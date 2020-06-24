@@ -61,7 +61,7 @@ library(tidyverse)
 
 #### Create some messy data
 
-Below is an example `tibble` with a jumbled `name` column (`JJJSBefore`) similar to the one above. I chose to use commas and spaces because they're a little easier to read. 
+Below is an example `tibble` with a jumbled `name` column (`JJJSBefore`) similar to the one above. I chose to use commas and spaces instead of underscores because I find them a little easier to read. 
 
 ```{r JJJSBefore}
 JJJSBefore <- tibble::tribble(
@@ -104,7 +104,7 @@ JJJSBefore %>%
         tidyr::unnest(name))
 ```
 
-This gets the `JJJSBefore` data into a tidy format, but it would require some additional wrangling to get the data back into the two columns the question was looking for. 
+This gets the data into a tidy format, but it would require some additional wrangling steps to get the data back into the two columns the question was looking for. 
 
 Fortunately, this particular question was posed 9 years and 6 months ago at the time of this writing, so there are quite a few solutions listed. I liked the approach [Yannis-P](https://stackoverflow.com/users/1885713/yannis-p) took because 1) it offers a `tidyverse` solution *and* 2) it's written as a function. 
 
