@@ -498,6 +498,8 @@ knitr::kable(
 )
 ```
 
+***
+
 ### Crosstabs with `tidytidbits`
 
 The last example I will mention is from the [`tidytidbits`](https://cran.r-project.org/web/packages/tidytidbits/tidytidbits.pdf) package. The `cross_tabulate()` produces a nicely printed `table` output.
@@ -562,7 +564,7 @@ mtcarsDT[, .N, .(cyl, vs)] %>% dcast(cyl ~ vs)
 ```
 
 
-## Other reources for crosstabs
+## Other resources for crosstabs
 
 Check out these other sources for crosstabs:
 
