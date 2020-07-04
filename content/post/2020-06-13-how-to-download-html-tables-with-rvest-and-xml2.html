@@ -83,17 +83,17 @@ USADA_extraction %&gt;% utils::str()</code></pre>
 <p>I can subset the <code>USADA_extraction</code> list with the <code>rvest::html_table()</code> function and store the table contents in the <code>UsadaRaw</code> object. I check my work using the <code>dplyr::glimpse(70)</code>.</p>
 <pre class="r"><code>UsadaRaw &lt;- rvest::html_table(USADA_extraction[[1]])
 UsadaRaw %&gt;% dplyr::glimpse(70)</code></pre>
-<pre><code>## Rows: 768
+<pre><code>## Rows: 770
 ## Columns: 5
-## $ Athlete              &lt;chr&gt; &quot;Arruda da Silva, Bruno&quot;, &quot;Ostovich-Be…
-## $ Sport                &lt;chr&gt; &quot;Mixed Martial Arts&quot;, &quot;Mixed Martial A…
-## $ `Substance/Reason`   &lt;chr&gt; &quot;Boldenone&quot;, &quot;Ostarine; GW1516&quot;, &quot;Letr…
-## $ `Sanction Terms`     &lt;chr&gt; &quot;Two-Year Suspension&quot;, &quot;One-Year Suspe…
-## $ `Sanction Announced` &lt;chr&gt; &quot;06/22/2020&quot;, &quot;06/18/2020&quot;, &quot;06/11/202…</code></pre>
+## $ Athlete              &lt;chr&gt; &quot;Prusmack, Jeff&quot;, &quot;Alonso, Leynier&quot;, &quot;…
+## $ Sport                &lt;chr&gt; &quot;Weightlifting&quot;, &quot;Cycling&quot;, &quot;Mixed Mar…
+## $ `Substance/Reason`   &lt;chr&gt; &quot;Non-Analytical: Possession and Use/At…
+## $ `Sanction Terms`     &lt;chr&gt; &quot;Four-Year Suspension; Loss of Results…
+## $ `Sanction Announced` &lt;chr&gt; &quot;07/02/2020&quot;, &quot;06/30/2020&quot;, &quot;06/22/202…</code></pre>
 <blockquote>
 <p>why <code>dplyr::glimpse(70)</code>? It prints less to the screen and keeps the col width to &lt;80, which is nice for working in plain text.</p>
 </blockquote>
-<p>This reveals a data frame with 768 observations. The contents from the HTML list (<code>USADA_extraction</code>) has been converted to a data frame (<code>UsadaRaw</code>). I’m going to store this data frame as a .csv in a <code>data/raw</code> folder (so I don’t have to scrape it every time I run this script).</p>
+<p>This reveals a data frame with 770 observations. The contents from the HTML list (<code>USADA_extraction</code>) has been converted to a data frame (<code>UsadaRaw</code>). I’m going to store this data frame as a .csv in a <code>data/raw</code> folder (so I don’t have to scrape it every time I run this script).</p>
 <pre class="r"><code># create raw data path
 fs::dir_create(&quot;data/raw/&quot;)
 # export the .csv file
@@ -112,14 +112,14 @@ write_csv(as.data.frame(UsadaRaw),
 Usada &lt;- purrr::map_df(.x = Usada, .f = stringr::str_to_lower)
 utils::head(Usada)</code></pre>
 <pre><code>## # A tibble: 6 x 5
-##   athlete    sport   substance_reason      sanction_terms       sanction_announ…
-##   &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;                 &lt;chr&gt;                &lt;chr&gt;           
-## 1 arruda da… mixed … boldenone             two-year suspension  06/22/2020      
-## 2 ostovich-… mixed … ostarine; gw1516      one-year suspension  06/18/2020      
-## 3 fuchs, vi… boxing  letrozole; gw1516     no fault or neglige… 06/11/2020      
-## 4 nickles, … softba… lgd-4033              no fault or neglige… 06/11/2020      
-## 5 glanville… weight… non-analytical: poss… 4-year suspension; … 06/09/2020      
-## 6 walsh, co… track … cannabinoids          6-month suspension … 06/01/2020</code></pre>
+##   athlete     sport    substance_reason      sanction_terms     sanction_announ…
+##   &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;                 &lt;chr&gt;              &lt;chr&gt;           
+## 1 prusmack, … weightl… non-analytical: poss… four-year suspens… 07/02/2020      
+## 2 alonso, le… cycling  phentermine           four-year suspens… 06/30/2020      
+## 3 arruda da … mixed m… boldenone             two-year suspensi… 06/22/2020      
+## 4 ostovich-b… mixed m… ostarine; gw1516      one-year suspensi… 06/18/2020      
+## 5 fuchs, vir… boxing   letrozole; gw1516     no fault or negli… 06/11/2020      
+## 6 nickles, m… softball lgd-4033              no fault or negli… 06/11/2020</code></pre>
 </div>
 </div>
 <div id="filter-out-the-no-fault-or-negligence-sanction-terms" class="section level2">
