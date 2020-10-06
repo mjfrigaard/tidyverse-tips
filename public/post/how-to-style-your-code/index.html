@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en"><head>
+    <title>How to style your code</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../../css/theme.css"/>
+    
+</head>
+<body>
+        <div id="content" class="mx-auto"><header class="container mt-sm-5 mt-4 mb-4 mt-xs-1">
+    <div class="row">
+        <div class="col-sm-4 col-12 text-sm-right text-center pt-sm-4">
+            <a href="../../" class="text-decoration-none">
+                <img id="home-image" class="rounded-circle"
+                    
+                        src="../../images/avatar.png"
+                    
+                />
+            </a>
+        </div>
+        <div class="col-sm-8 col-12 text-sm-left text-center">
+            <h2 class="m-0 mb-2 mt-4">
+                <a href="../../" class="text-decoration-none">
+                    
+                        Tidyverse Tips
+                    
+                </a>
+            </h2>
+            <p class="text-muted mb-1">
+                
+                    Martin&#39;s #rstats blog
+                
+            </p>
+            <ul id="nav-links" class="list-inline mb-2">
+                
+                
+                    <li class="list-inline-item">
+                        <a class="badge badge-white " href="../../about/" title="About">About</a>
+                    </li>
+                
+                    <li class="list-inline-item">
+                        <a class="badge badge-white " href="../../post/" title="Posts">Posts</a>
+                    </li>
+                
+                    <li class="list-inline-item">
+                        <a class="badge badge-white " href="../../categories/" title="Categories">Categories</a>
+                    </li>
+                
+            </ul>
+            <ul id="nav-social" class="list-inline">
+                
+                    <li class="list-inline-item mr-3">
+                        <a href="http://github.com/mjfrigaard" target="_blank">
+                            <i class="fab fa-github fa-1x text-muted"></i>
+                        </a>
+                    </li>
+                
+                    <li class="list-inline-item mr-3">
+                        <a href="https://www.linkedin.com/in/mjfrigaard/" target="_blank">
+                            <i class="fab fa-linkedin-in fa-1x text-muted"></i>
+                        </a>
+                    </li>
+                
+                    <li class="list-inline-item mr-3">
+                        <a href="https://twitter.com/mjfrigaard" target="_blank">
+                            <i class="fab fa-twitter fa-1x text-muted"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+    <hr />
+</header>
+<div class="container">
+    <div class="pl-sm-2">
+        <div class="mb-3">
+            <h3 class="mb-0">How to style your code</h3>
+            
+            <small class="text-muted">Published August 28, 2020</small>
+        </div>
+
+        <article>
+            
+<script src="../../rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<link href="../../rmarkdown-libs/pagedtable/css/pagedtable.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/pagedtable/js/pagedtable.js"></script>
+
+
+<div id="tldr" class="section level2">
+<h2>TL:DR</h2>
+<p>If you’re wondering how to style your code, check out the <a href="https://style.tidyverse.org/index.html"><code>tidyverse</code> style guide</a>. If you’re not interested in having your flavor/style of code, I suggest using the <a href="https://styler.r-lib.org/"><code>styler</code> package</a>. Another topic related to coding style is naming files, and I recommend checking out Jenny Bryan’s <a href="https://speakerdeck.com/jennybc/how-to-name-files">naming things talk</a>.</p>
+</div>
+<div id="code-styling" class="section level2">
+<h2>Code styling</h2>
+<p>To those of us writing code, our goal should be to write code that clearly and effectively communicates 1) what was done, and 2) what was created. There’s an underlying narrative arc to every data analysis, and distilling that into something others can follow is an integral part of being a competent data scientist. Even for small, seemingly unimportant projects, we are always writing code for at least two people: future us and the computer running the code.</p>
+<p>Programming style guides create consistency and minimizes the reader’s confusion. By specifying and adhering to a style guide, we can provide a foundation for anyone who reads our code to 1) understand what we did to solve a particular problem, 2) if and where we ran into trouble, and 3) how we communicated the results. Coding style should also promote correct syntax and structure, so it’s easier for the computer to execute.</p>
+<div id="what-code-style-should-i-follow" class="section level3">
+<h3><em>What code style should I follow?</em></h3>
+<p><a href="https://style.tidyverse.org/index.html">The tidyverse style guide</a> and <a href="https://r4ds.had.co.nz/">R For Data Science</a> are excellent resources for writing precise, consistent code. In this post, we’ll go over some additional packages that make coding styling easier and discuss customizing your coding style while maintaining brevity and clarity. Putting a style guide in place formalizes any ambiguity about <em>how</em> we’re going to write our code, but leaves flexibility in <em>what</em> code we’re going to write.</p>
+</div>
+</div>
+<div id="an-example-project" class="section level2">
+<h2>An example project</h2>
+<p>Let’s assume we have a project based on the excellent paper <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510">Good enough practices in scientific computing</a>. We will create four folders like the ones described in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510#sec009">this section</a>. See the image below as an example:</p>
+<div class="figure">
+<img src="../../post/2020-08-28-how-to-style-your-code_files/project-layout.png" style="width:80.0%" alt="" />
+<p class="caption">project layout</p>
+</div>
+<div id="define-the-problemobjective" class="section level3">
+<h3>Define the problem/objective</h3>
+<p>This project will use the video game sales datasets from Kaggle found <a href="https://www.kaggle.com/ashaheedq/video-games-sales-2019">here</a>. Our objective with this project is to <strong>visualize the relationship between game sales and their reviews in the top selling video games in from 2000-2019.</strong></p>
+</div>
+</div>
+<div id="packages" class="section level2">
+<h2>Packages</h2>
+<p>Below we add the packages we’ll be using in this project.</p>
+<pre class="r"><code>library(tidyverse)
+library(janitor)
+library(styler)
+library(inspectdf)
+library(hrbrthemes)</code></pre>
+</div>
+<div id="folders" class="section level2">
+<h2>Folders</h2>
+<p>The code chunk below create the necessary folders for this project, which we will call <code>goodenuff</code>. The <a href="https://style.tidyverse.org/syntax.html#object-names"><code>tidyverse</code> style guide recommends</a> naming vectors using <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a>, and using nouns instead of verbs to define variable names.</p>
+<div id="naming-vectors" class="section level3">
+<h3><em>Naming vectors</em></h3>
+<p>Below we create the <code>project_folders</code> vector with <code>c()</code> and <code>&lt;-</code>.</p>
+<pre class="r"><code># create vector of four folder folders
+project_folders &lt;- c(&quot;data/&quot;, &quot;doc/&quot;, &quot;results/&quot;, &quot;src/&quot;)</code></pre>
+<p>We set up this project using the <code>fs</code> and <code>purrr</code> packages. Read more about how to use these functions <a href="https://www.tidyverse.tips/post/file-management-with-fs/">here</a> and <a href="https://purrr.tidyverse.org/">here</a>.</p>
+<p>First we set up the folders by defining a vector of folder names and using <code>purrr::map()</code> to iterate through them with <code>fs::dir_create()</code>. The <code>.x</code> argument in <code>purrr::map()</code> is the <code>project_folders</code> vector, and the second argument <code>.f</code> is function we’d like to pass to every item in <code>project_folders</code>. We also wrap everything in <code>purrr::quietly()</code> to reduce the output.</p>
+<pre class="r"><code># create project_folders vector
+project_folders &lt;- c(&quot;data/&quot;, &quot;doc/&quot;, &quot;results/&quot;, &quot;src/&quot;)
+# map project_folders to dir_create
+quietly(map(.x = project_folders, .f = fs::dir_create))</code></pre>
+<p>We can see these folders have been created (note we’re using <code>.Rproj</code> files here!)</p>
+<pre class="r"><code># check
+fs::dir_tree(&quot;.&quot;)
+# ├── data
+# ├── doc
+# ├── goodenuff.Rproj
+# ├── results
+# └── src</code></pre>
+<p><strong>Quick Tip About R:</strong> When writing code in R, A general rule of thumb is, <a href="https://www.oreilly.com/library/view/r-in-a/9781449358204/">“<em>everything is an object.</em>”</a> However, it might surprise you how many things are considered <em>functions</em>. Take the following objects in R:</p>
+<ul>
+<li><p><code>+</code> perform basic arithmetic</p></li>
+<li><p><code>&lt;-</code> create new objects</p></li>
+<li><p><code>==</code> make comparisons</p></li>
+<li><p><code>c()</code> combine arguments to create a vector (R’s most common object)</p></li>
+<li><p><code>lm()</code> create linear models</p></li>
+</ul>
+<p>How can we check to see the <code>class</code> each of these objects?</p>
+</div>
+<div id="using-quotes-and-back-ticks" class="section level3">
+<h3><em>Using quotes and back-ticks</em></h3>
+<p>There are three kinds of quotes in the <a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html">R syntax</a>. The <a href="https://style.tidyverse.org/syntax.html#character-vectors">tidyverse style guide</a> recommends using double quotes (unless the text already contains double quotes).</p>
+<pre class="r"><code>&#39;Do &quot;this&quot;&#39;
+&#39;Not \&#39;this\&#39;&#39;</code></pre>
+<p>However, if we want to use <code>purrr</code> and <code>class()</code> to test and see if the objects above are functions or not, we need to enclose these objects in backticks ( ` ).</p>
+<pre class="r"><code># are all these functions?
+weird_stuff &lt;- list(`+`, # unary plus operator
+                    `&lt;-`, # assignment operator
+                    `==`, # binary operator
+                    `lm`, # create a linear model 
+                    `c`)  # concatenate elements into a vector
+map(weird_stuff, class)</code></pre>
+<pre class="r"><code># [[1]]
+# [1] &quot;function&quot;
+# 
+# [[2]]
+# [1] &quot;function&quot;
+# 
+# [[3]]
+# [1] &quot;function&quot;
+# 
+# [[4]]
+# [1] &quot;function&quot;
+# 
+# [[5]]
+# [1] &quot;function&quot;</code></pre>
+<p>Knowing what objects can be passed to the <code>.f</code> argument is helpful for understanding how we can use iteration to solve problems in R.</p>
+</div>
+</div>
+<div id="files" class="section level2">
+<h2>Files</h2>
+<p>Below we create script files for each step in a data analysis project (<code>import</code> -&gt; <code>tidy</code> -&gt; <code>transform</code> -&gt; <code>wrangle</code> -&gt; <code>model</code> -&gt; <code>communicate</code>), including a <code>runall.R</code> script that runs all six sequential files. All of these get stored in the <code>script_files</code> vector.</p>
+<pre class="r"><code># create vector of script files
+script_files &lt;- c(&quot;src/01-import.R&quot;, &quot;src/02-tidy.R&quot;, &quot;src/03-wrangle.R&quot;, 
+                  &quot;src/04-visualize.R&quot;, &quot;src/05-model.R&quot;, 
+                  &quot;src/06-communicate.R&quot;, &quot;src/runall.R&quot;)
+# map script files
+quietly(map(.x = script_files, .f = fs::file_create))
+# verify
+fs::dir_tree(&quot;src&quot;)</code></pre>
+<pre class="r"><code># src
+# ├── 01-import.R
+# ├── 02-tidy.R
+# ├── 03-wrangle.R
+# ├── 04-visualize.R
+# ├── 05-model.R
+# ├── 06-communicate.R
+# └── runall.R</code></pre>
+<p>We want to <a href="https://speakerdeck.com/jennybc/how-to-name-files?slide=19">organize the script files</a> in a way that clearly shows what we’re doing at each step (and in which order they should be run).</p>
+<div id="dealing-with-long-lines-of-code" class="section level3">
+<h3><em>Dealing with long lines of code</em></h3>
+<p>Next we create the project files (note the correct directory in each file name). We can see there are seven files listed in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510#pcbi.1005510.box007">this section</a> of the paper, and we can store these in the <code>project_files</code> vector.</p>
+<pre class="r"><code># create project files vector
+project_files &lt;- c(&quot;CITATION&quot;, &quot;README&quot;, &quot;LICENSE&quot;, &quot;requirements.txt&quot;, &quot;doc/notebook.md&quot;, &quot;doc/manuscript.md&quot;, &quot;doc/changelog.txt&quot;)</code></pre>
+<p>Now we’re facing a common problem when writing code: long lines. The style guide <a href="https://style.tidyverse.org/syntax.html#long-lines">recommends keeping line length to 80 characters</a> because it makes it easier to print on the screen. We can set a ruler as a guide too by following the steps below:</p>
+<div class="figure">
+<img src="../../post/2020-08-28-how-to-style-your-code_files/set-ruler.png" style="width:80.0%" alt="" />
+<p class="caption">set a ruler for a guide!</p>
+</div>
+<p>If we re-write this code ourselves, it might look like this:</p>
+<pre class="r"><code>project_files &lt;- c(&quot;CITATION&quot;, &quot;README&quot;, &quot;LICENSE&quot;, &quot;requirements.txt&quot;, 
+                   &quot;doc/notebook.md&quot;, &quot;doc/manuscript.md&quot;, &quot;doc/changelog.txt&quot;)</code></pre>
+<p>Now we can <code>map</code> this new vector to <code>fs::dir_create()</code> and check the new folder contents.</p>
+<pre class="r"><code>purrr::map(.x = project_files, .f = fs::file_create)
+# check 
+fs::dir_tree(&quot;.&quot;, recurse = TRUE)</code></pre>
+<p>And we end up with a project folder that looks like this:</p>
+<pre class="r"><code># ├── CITATION
+# ├── LICENSE
+# ├── README
+# ├── README.Rmd
+# ├── data
+# ├── doc
+# │   ├── changelog.txt
+# │   ├── manuscript.md
+# │   └── notebook.md
+# ├── goodenuff.Rproj
+# ├── requirements.txt
+# ├── results
+# └── src</code></pre>
+</div>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>These data come from <a href="https://www.kaggle.com/ashaheedq/video-games-sales-2019">Kaggle and contain video game sales in 2019</a>. We’re only interested in the <code>vgsales-12-4-2019.csv</code> data file, which we can download <a href="https://www.kaggle.com/ashaheedq/video-games-sales-2019?select=vgsales-12-4-2019.csv">here</a> and save in a sub-folder called, <code>data/raw/</code>.</p>
+<pre class="r"><code># create a raw data folder
+fs::dir_create(&quot;data/raw/&quot;)
+# create a list of zipped files
+zipped_files &lt;- list.files(&quot;data/raw/&quot;, full.names = TRUE) 
+# import the data into a data object
+VideoGames &lt;- map_df(.x = zipped_files, .f = read_csv)</code></pre>
+<pre class="r"><code># Multiple files in zip: reading &#39;vgsales-12-4-2019.csv&#39;
+# Parsed with column specification:
+# cols(
+#   .default = col_double(),
+#   Name = col_character(),
+#   basename = col_character(),
+#   Genre = col_character(),
+#   ESRB_Rating = col_character(),
+#   Platform = col_character(),
+#   Publisher = col_character(),
+#   Developer = col_character(),
+#   VGChartz_Score = col_logical(),
+#   Last_Update = col_character(),
+#   url = col_character(),
+#   img_url = col_character()
+# )
+# See spec(...) for full column specifications.</code></pre>
+<div id="naming-data-vs.-everything-else" class="section level3">
+<h3><em>Naming data vs. everything else</em></h3>
+<p>I differ slightly from the <a href="https://style.tidyverse.org/syntax.html#object-names">tidyverse style guide</a> when it comes to naming rectangular data objects (<code>tibble</code>s, <code>data.frame</code>s, <code>data.table</code>s, etc.) vs. non-rectangular objects (<code>vector</code>s, <code>list</code>s, <code>function</code>s, etc.).</p>
+<pre class="r"><code># how I name rectangular data:
+#   DataFrames
+#   Tibbles
+#   DataTables
+# how I name everything else:
+#   vectors
+#   lists
+#   my_function()</code></pre>
+<p>I chose this method of naming because 80% or more of the time I am working with rectangular data, so I like to differentiate these objects from others in my current environment.</p>
+</div>
+<div id="script-file-headers" class="section level3">
+<h3><em>Script file headers</em></h3>
+<p>R script file headers should give the reader 1) a description of the file and what the file does, 2) the last date it was updated, 3) the author and any contributors, and 4) the version number.</p>
+<pre class="r"><code>#=====================================================================#
+# File name: 01-import.R
+# This is code to create: Importing video game data 
+# Authored by and feedback to: @mjfrigaard
+# Last updated: 2020-09-01
+# MIT License
+# Version: 0.1
+#=====================================================================#</code></pre>
+<p>Read more about script file headers in <a href="https://www.routledge.com/Reproducible-Research-with-R-and-RStudio/Gandrud/p/book/9780367143985">Reproducible Research with R and RStudio, 3rd Edition</a>.</p>
+</div>
+<div id="writing-functions" class="section level3">
+<h3><em>Writing functions</em></h3>
+<p>We can also document the contents of our .R files with section headers, which we will create with a function titled, <code>add_script_section()</code>. This function has been adapted from <a href="https://r4ds.had.co.nz/functions.html#dot-dot-dot">R for Data Science</a>.</p>
+<p>There are lots of tips on writing functions in the <a href="https://style.tidyverse.org/functions.html">tidyverse style guide</a> and <a href="https://r4ds.had.co.nz/functions.html#functions-are-for-humans-and-computers">R for Data Science</a>, so we’ll just cover the basics here:</p>
+<ol style="list-style-type: decimal">
+<li>use verbs instead of nouns for function names<br />
+</li>
+<li>comments in your functions should <em>explain the “why” not the “what” or “how”</em><br />
+</li>
+<li>use <code>snake_case</code> or <code>camelCase</code> (and be consistent)<br />
+</li>
+<li>strive for brevity and clarity (if you have to chose one, settle for the former)</li>
+</ol>
+<pre class="r"><code>add_script_section &lt;- function(title = &quot;&quot;, padding = &quot;-&quot;) {
+  # script sections help organize your code files  
+  title &lt;- paste0(title)
+  width &lt;- 75 - nchar(title)
+  cat(&quot;# &quot;, title, &quot; &quot;, stringr::str_dup(padding, width), &quot;\n&quot;, sep = &quot;&quot;)
+}</code></pre>
+<p>When we use the <code>add_script_section()</code> function to create a section header, we see the following:</p>
+<pre class="r"><code>add_script_section(title = &quot;Packages&quot;)
+# Packages ------------------------------------------------------------</code></pre>
+<p>We can also use <code>=</code> for code sections. I like to create section headers in each <code>.R</code> file because it’s easy to identify them in the RStudio source pane.</p>
+<p>Other functions we might want to include in <code>01-import.R</code> include <code>janitor::clean_names()</code> or arguments passed to <code>readr::read_csv()</code> like <code>col_types</code> and <code>col_names</code>.</p>
+<pre class="r"><code># clean names 
+VideoGames &lt;- VideoGames %&gt;% janitor::clean_names(case = &quot;snake&quot;)
+# verify
+names(VideoGames)</code></pre>
+<pre class="r"><code>#  [1] &quot;rank&quot;            &quot;name&quot;            &quot;basename&quot;        &quot;genre&quot;          
+#  [5] &quot;esrb_rating&quot;     &quot;platform&quot;        &quot;publisher&quot;       &quot;developer&quot;      
+#  [9] &quot;vg_chartz_score&quot; &quot;critic_score&quot;    &quot;user_score&quot;      &quot;total_shipped&quot;  
+# [13] &quot;global_sales&quot;    &quot;na_sales&quot;        &quot;pal_sales&quot;       &quot;jp_sales&quot;       
+# [17] &quot;other_sales&quot;     &quot;year&quot;            &quot;last_update&quot;     &quot;url&quot;            
+# [21] &quot;status&quot;          &quot;vgchartzscore&quot;   &quot;img_url&quot;</code></pre>
+<p>When we’re done, our <code>01-import.R</code> file should look like this,</p>
+<pre class="r"><code>#=====================================================================#
+# File name: 01-import.R
+# This is code to create: Importing video game data 
+# Authored by and feedback to: @mjfrigaard
+# Last updated: 2020-09-01
+# MIT License
+# Version: 0.1
+#=====================================================================#
+
+# Packages ------------------------------------------------------------
+library(tidyverse)
+library(janitor)
+
+# Import CSV file ------------------------------------------------------------
+# source: https://www.kaggle.com/ashaheedq/video-games-sales-2019
+
+# create a raw data folder
+fs::dir_create(&quot;data/raw/&quot;)
+
+# create a list of zipped files
+zipped_files &lt;- list.files(&quot;data/raw/&quot;, full.names = TRUE) 
+
+# import the data into a data object
+VideoGames &lt;- map_df(.x = zipped_files, .f = read_csv)
+
+# clean names 
+VideoGames &lt;- VideoGames %&gt;% janitor::clean_names(case = &quot;snake&quot;)</code></pre>
+<p>We can call this .R script using <code>source("src/01-import.R")</code>.</p>
+<pre class="r"><code>source(&quot;src/01-import.R&quot;)</code></pre>
+<p>With the <code>VideoGames</code> data loaded into R, now we can take a look at it’s structure and see what variables we have.</p>
+<pre class="r"><code>VideoGames %&gt;% dplyr::glimpse()</code></pre>
+<pre class="r"><code># Rows: 55,792
+# Columns: 23
+# $ rank            &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, …
+# $ name            &lt;chr&gt; &quot;Wii Sports&quot;, &quot;Super Mario Bros.&quot;, &quot;Mario Kart Wii&quot;…
+# $ basename        &lt;chr&gt; &quot;wii-sports&quot;, &quot;super-mario-bros&quot;, &quot;mario-kart-wii&quot;,…
+# $ genre           &lt;chr&gt; &quot;Sports&quot;, &quot;Platform&quot;, &quot;Racing&quot;, &quot;Shooter&quot;, &quot;Sports&quot;…
+# $ esrb_rating     &lt;chr&gt; &quot;E&quot;, NA, &quot;E&quot;, NA, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, NA, NA, …
+# $ platform        &lt;chr&gt; &quot;Wii&quot;, &quot;NES&quot;, &quot;Wii&quot;, &quot;PC&quot;, &quot;Wii&quot;, &quot;GB&quot;, &quot;DS&quot;, &quot;GB&quot;,…
+# $ publisher       &lt;chr&gt; &quot;Nintendo&quot;, &quot;Nintendo&quot;, &quot;Nintendo&quot;, &quot;PUBG Corporati…
+# $ developer       &lt;chr&gt; &quot;Nintendo EAD&quot;, &quot;Nintendo EAD&quot;, &quot;Nintendo EAD&quot;, &quot;PU…
+# $ vg_chartz_score &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ critic_score    &lt;dbl&gt; 7.7, 10.0, 8.2, NA, 8.0, 9.4, 9.1, NA, 8.6, 10.0, N…
+# $ user_score      &lt;dbl&gt; NA, NA, 9.1, NA, 8.8, NA, 8.1, NA, 9.2, NA, NA, 4.5…
+# $ total_shipped   &lt;dbl&gt; 82.86, 40.24, 37.14, 36.60, 33.09, 31.38, 30.80, 30…
+# $ global_sales    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ na_sales        &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ pal_sales       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ jp_sales        &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ other_sales     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ year            &lt;dbl&gt; 2006, 1985, 2008, 2017, 2009, 1998, 2006, 1989, 200…
+# $ last_update     &lt;chr&gt; NA, NA, &quot;11th Apr 18&quot;, &quot;13th Nov 18&quot;, NA, NA, NA, N…
+# $ url             &lt;chr&gt; &quot;http://www.vgchartz.com/game/2667/wii-sports/?regi…
+# $ status          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+# $ vgchartzscore   &lt;dbl&gt; NA, NA, 8.7, NA, 8.8, NA, NA, NA, 9.1, NA, NA, 5.3,…
+# $ img_url         &lt;chr&gt; &quot;/games/boxart/full_2258645AmericaFrontccc.jpg&quot;, &quot;/…</code></pre>
+</div>
+</div>
+<div id="wrangle" class="section level2">
+<h2>Wrangle</h2>
+<p>In order to visualize the relationship between sales and reviewer scores, we need to <code>pivot_</code> the data in <code>VideoGames</code> to a <code>long</code> format using <code>tidyr</code>. We can see there are two <code>_score</code> variables and five <code>_sales</code> variables. Let’s tidy these into <code>score</code> and <code>score_value</code> and <code>sales</code> and <code>sales_value</code>.</p>
+<pre class="r"><code># tidy scores 
+TidyVGScores &lt;- VideoGames %&gt;% 
+  tidyr::pivot_longer(names_to = &quot;score_type&quot;, values_to = &quot;score_value&quot;, 
+                      cols = c(critic_score, user_score))
+# tidy sales 
+TidyVGSales &lt;- TidyVGScores %&gt;% 
+    tidyr::pivot_longer(names_to = &quot;sales_type&quot;, values_to = &quot;sales_value&quot;, 
+                      cols = c(global_sales, na_sales, pal_sales, jp_sales, 
+                               other_sales))
+# Remove the intermediate dataset so we don&#39;t use up too much memory
+rm(TidyVGScores)
+# view
+TidyVGSales %&gt;% glimpse()</code></pre>
+<pre class="r"><code># Rows: 557,920
+# Columns: 20
+# $ rank            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, …
+# $ name            &lt;chr&gt; &quot;Wii Sports&quot;, &quot;Wii Sports&quot;, &quot;Wii Sports&quot;, &quot;Wii Spor…
+# $ basename        &lt;chr&gt; &quot;wii-sports&quot;, &quot;wii-sports&quot;, &quot;wii-sports&quot;, &quot;wii-spor…
+# $ genre           &lt;chr&gt; &quot;Sports&quot;, &quot;Sports&quot;, &quot;Sports&quot;, &quot;Sports&quot;, &quot;Sports&quot;, &quot;…
+# $ esrb_rating     &lt;chr&gt; &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;E&quot;, N…
+# $ platform        &lt;chr&gt; &quot;Wii&quot;, &quot;Wii&quot;, &quot;Wii&quot;, &quot;Wii&quot;, &quot;Wii&quot;, &quot;Wii&quot;, &quot;Wii&quot;, &quot;W…
+# $ publisher       &lt;chr&gt; &quot;Nintendo&quot;, &quot;Nintendo&quot;, &quot;Nintendo&quot;, &quot;Nintendo&quot;, &quot;Ni…
+# $ developer       &lt;chr&gt; &quot;Nintendo EAD&quot;, &quot;Nintendo EAD&quot;, &quot;Nintendo EAD&quot;, &quot;Ni…
+# $ vg_chartz_score &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ total_shipped   &lt;dbl&gt; 82.86, 82.86, 82.86, 82.86, 82.86, 82.86, 82.86, 82…
+# $ year            &lt;dbl&gt; 2006, 2006, 2006, 2006, 2006, 2006, 2006, 2006, 200…
+# $ last_update     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ url             &lt;chr&gt; &quot;http://www.vgchartz.com/game/2667/wii-sports/?regi…
+# $ status          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+# $ vgchartzscore   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+# $ img_url         &lt;chr&gt; &quot;/games/boxart/full_2258645AmericaFrontccc.jpg&quot;, &quot;/…
+# $ score_type      &lt;chr&gt; &quot;critic_score&quot;, &quot;critic_score&quot;, &quot;critic_score&quot;, &quot;cr…
+# $ score_value     &lt;dbl&gt; 7.7, 7.7, 7.7, 7.7, 7.7, NA, NA, NA, NA, NA, 10.0, …
+# $ sales_type      &lt;chr&gt; &quot;global_sales&quot;, &quot;na_sales&quot;, &quot;pal_sales&quot;, &quot;jp_sales&quot;…
+# $ sales_value     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…</code></pre>
+<p>Just as a reminder, our objective is to <strong>visualize the relationship between game sales and their reviews in the top selling video games in from 2010-2019.</strong> We will <code>filter</code> the data to only the <code>year</code>s between <code>2010</code> and <code>2019</code> below.</p>
+<pre class="r"><code>TidyVidGam00_19 &lt;- TidyVGSales %&gt;% filter(year &gt;= 2010 &amp; year &lt;= 2019)</code></pre>
+<p>We should see only 10 <code>year</code>s listed, from <code>2010</code> to <code>2019</code>.</p>
+<pre class="r"><code>TidyVidGam00_19 %&gt;% dplyr::count(year)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"2010","2":"36610"},{"1":"2011","2":"34890"},{"1":"2012","2":"15600"},{"1":"2013","2":"17230"},{"1":"2014","2":"29050"},{"1":"2015","2":"16330"},{"1":"2016","2":"12380"},{"1":"2017","2":"14860"},{"1":"2018","2":"14820"},{"1":"2019","2":"7290"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="visualize" class="section level2">
+<h2>Visualize</h2>
+<p>We are going to set the theme for our plots with <a href="https://github.com/hrbrmstr/hrbrthemes"><code>hrbrthemes::theme_ipsum_tw()</code></a>.</p>
+<pre class="r"><code>ggplot2::theme_set(hrbrthemes::theme_ipsum_tw(
+  base_size = 8,
+  strip_text_size = 9,
+  axis_title_size = 10,
+  plot_title_size = 13,
+  subtitle_size = 11,
+  base_family = &quot;Ubuntu&quot;,
+  strip_text_family = &quot;TitilliumWeb-Regular&quot;,
+  axis_title_family = &quot;TitilliumWeb-Regular&quot;,
+  subtitle_family = &quot;TitilliumWeb-Regular&quot;,
+  plot_title_family = &quot;JosefinSans-Regular&quot;
+))</code></pre>
+<p>Let’s take a look at the two variables we want in our visualization: scores and sales. First we can check the missing values in the two variables with <code>inspect_na()</code> from the <code>inspectdf</code> package.</p>
+<pre class="r"><code>TidyVidGam00_19 %&gt;% 
+  select(ends_with(&quot;_value&quot;)) %&gt;% inspectdf::inspect_na() %&gt;% 
+  inspectdf::show_plot(text_labels = TRUE)</code></pre>
+<p><img src="../../post/2020-08-28-how-to-style-your-code_files/figure-html/inspect_na-1.png" width="672" /></p>
+<p>This tells us there are quite a few missing values, so We will drop these and see what the relationship looks between for <code>score_value</code> vs. <code>sales_value</code> for all ten years.</p>
+<pre class="r"><code>TidyVidGam00_19 %&gt;% 
+  # select variables of interest
+  dplyr::select(ends_with(&quot;_type&quot;), ends_with(&quot;_value&quot;)) %&gt;% 
+  # remove missing
+  tidyr::drop_na() %&gt;% 
+  # base aesthetics
+  ggplot2::ggplot(aes(x=score_value, y=sales_value)) + 
+  geom_point() + 
+  # labels for every plot so I know what I should see
+  ggplot2::labs(title=&quot;Review scores vs. sales for video games&quot;, subtitle=&quot;from 2010-2019&quot;,
+                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;Total score&quot;)</code></pre>
+<p><img src="../../post/2020-08-28-how-to-style-your-code_files/figure-html/total-scores-total-sales-1.png" width="672" /></p>
+<p>This looks like there might be a general trend, but we will need to use additional aesthetics to explore the nuances between <code>score_type</code>, <code>sales_type</code>, and <code>year</code>.</p>
+<pre class="r"><code>TidyVidGam00_19 %&gt;% 
+  # add filter for user reviews 
+  dplyr::filter(score_type == &quot;user_score&quot;) %&gt;%
+  # select variables of interest
+  select(year, ends_with(&quot;_type&quot;), ends_with(&quot;_value&quot;)) %&gt;% 
+  # remove missing
+  tidyr::drop_na() %&gt;% 
+  # base aesthetics
+  ggplot2::ggplot(aes(x=score_value, y=sales_value, group=year)) + 
+  geom_point() + 
+  # facet by year
+  facet_wrap(. ~ year, nrow=2) + 
+  # labels to keep track 
+  ggplot2::labs(title=&quot;User review scores vs. video game sales by year&quot;, subtitle=&quot;from 2010-2019&quot;, 
+                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;User score&quot;)</code></pre>
+<p><img src="../../post/2020-08-28-how-to-style-your-code_files/figure-html/facet-year-user-1.png" width="672" /></p>
+<p>This shows us there aren’t many data points for the user reviews (especially not in 2019). We will filter only the critic scores and see what trends we find.</p>
+<pre class="r"><code>TidyVidGam00_19 %&gt;% 
+  # add filter for critic reviews 
+  dplyr::filter(score_type == &quot;critic_score&quot;) %&gt;%
+  # select variables of interest
+  select(year, ends_with(&quot;_type&quot;), ends_with(&quot;_value&quot;)) %&gt;% 
+  # remove missing
+  tidyr::drop_na() %&gt;% 
+  # base aesthetics
+  ggplot2::ggplot(aes(x=score_value, y=sales_value, group=year)) + 
+  geom_point() + 
+  # facet by year
+  facet_wrap(. ~ year, nrow=2) + 
+  # labels to keep track of what I should see
+  ggplot2::labs(title=&quot;Critic review scores vs. video game sales by year&quot;, subtitle=&quot;from 2010-2019&quot;,
+                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;Critic score&quot;)</code></pre>
+<p><img src="../../post/2020-08-28-how-to-style-your-code_files/figure-html/facet-year-critic-1.png" width="672" /></p>
+<p>This shows more data points, but only one in 2019, so we will drop this year. I wonder how critic scores vary if we color them by <code>sales_type</code>?</p>
+<pre class="r"><code>TidyVidGam00_19 %&gt;% 
+  # add filter for year 
+  dplyr::filter(year != 2019 &amp; score_type == &quot;critic_score&quot;) %&gt;% 
+  # select variables of interest
+  select(ends_with(&quot;_type&quot;), ends_with(&quot;_value&quot;)) %&gt;% 
+  # remove missing
+  tidyr::drop_na() %&gt;% 
+  # base aesthetics
+  ggplot2::ggplot(aes(x=score_value, y=sales_value, group=sales_type)) + 
+  # factor sales type for cleaner plotting and lighten opacity
+  geom_point(aes(color=as.factor(sales_type)), alpha=1/3, show.legend=FALSE) + 
+  facet_wrap(. ~ sales_type) + 
+  # labels to keep track of what I should see
+  labs(title=&quot;Critic review scores vs. video game sales by sales type&quot;, subtitle=&quot;from 2010-2019&quot;, 
+       caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Sales&quot;, y=&quot;Critic score&quot;)</code></pre>
+<p><img src="../../post/2020-08-28-how-to-style-your-code_files/figure-html/facet-sales_type-critic-1.png" width="672" /></p>
+<p>Hmmmm. Here we can see higher critic scores if the sales are from <code>global_sales</code>, <code>na_sales</code>, or <code>pal_sales</code>. Do you think this trend changes over time?</p>
+<pre class="r"><code>TidyVidGam00_19 %&gt;% 
+  # add filter statement for sales types
+  dplyr::filter(year != 2019 &amp; score_type == &quot;critic_score&quot; &amp; sales_type %in% c(&quot;global_sales&quot;, &quot;na_sales&quot;, &quot;pal_sales&quot;)) %&gt;% 
+  # select variables of interest
+  select(year, ends_with(&quot;_type&quot;), ends_with(&quot;_value&quot;)) %&gt;% 
+  # remove missing
+  tidyr::drop_na() %&gt;% 
+  # add base aesthetics
+  ggplot2::ggplot(aes(x=score_value, y=sales_value, color=sales_type, group=year)) + 
+  # factor sales type for cleaner plotting
+  geom_point(aes(color=as.factor(sales_type)), 
+             # lighten opacity
+             alpha=1/3, show.legend=FALSE) + 
+  # add smoothing line to see if there is a linear relationship
+  geom_smooth(aes(group=sales_type), method=&quot;lm&quot;, se=FALSE) +
+  # facet by year
+  facet_wrap(. ~ year) + 
+  # adjust labels
+  labs(title=&quot;Critic review scores vs. video game sales by sales type&quot;, subtitle=&quot;Best fit linear relationship between 2010-2019&quot;,
+       caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Sales&quot;, y=&quot;Critic score&quot;)</code></pre>
+<pre><code>#&gt;  `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="../../post/2020-08-28-how-to-style-your-code_files/figure-html/facet-year-critic_score-sales_type-1.png" width="672" /></p>
+<p>We can see a possible linear relationship for <code>global_sales</code> in <code>2014</code> and maybe some interactions in other years. As you can see, my code is a mess! I have code extending way past the 80 column mark, and I have no spaces around all of my equal operators (<code>=</code>).</p>
+<p>RStudio is letting me know in the left-hand side of the screen next to the line numbers.</p>
+<p><img src="../../post/2020-08-28-how-to-style-your-code_files/code-help.png" style="width:100.0%;height:100.0%" /></p>
+<div id="style-your-code-with-styler" class="section level3">
+<h3><em>Style your code with <code>styler</code></em></h3>
+<p>Fortunately there is an Addin for situations like this: the <a href="https://styler.r-lib.org/"><code>styler</code> package</a> Addin. If you have the <code>styler</code> package loaded, you can click on the <strong>Addins</strong> dropdown at the top of the Source pane and search for “style”.</p>
+<p><img src="../../post/2020-08-28-how-to-style-your-code_files/styler-addin.png" style="width:100.0%;height:100.0%" /></p>
+<p>Select “Style active file” and watch the magic happen.</p>
+<p><img src="https://media.giphy.com/media/t4HRrI6O6b4H3wBGNR/giphy.gif" style="width:120.0%;height:120.0%" /></p>
+<p>It might take a little while, but you’ll see your code styled automatically by RStudio.</p>
+<p><img src="https://media.giphy.com/media/vb4LsK6bKoVp5NhFa9/giphy.gif" style="width:120.0%;height:120.0%" /></p>
+<p>You can also add some tweaks to the <code>styler</code> package. I like the addon by Garrick Aden-Buie available <a href="https://github.com/gadenbuie/grkstyle">here</a>. After you’ve loaded the package, you can just run the <code>grkstyle::use_grk_style()</code> function and select “Style active file” again.</p>
+<p>Here is an example of how it looks:</p>
+<p><img src="https://media.giphy.com/media/zUbvnacmxehPzI4Cgk/giphy.gif" style="width:120.0%;height:120.0%" /></p>
+<p>You can see the code formatting is slightly different than the standard <code>tidyverse_style</code> (which is the default setting in <code>styler</code>).</p>
+<p><img src="https://media.giphy.com/media/Z70OI8XcVbHyzwTH1y/giphy.gif" style="width:120.0%;height:120.0%" /></p>
+<p>I hope you found this post useful!</p>
+</div>
+</div>
+
+        </article>
+    </div>
+
+            </div>
+        </div><footer class="text-center pb-1">
+    <small class="text-muted">
+        
+            &copy; Copyright Year 2020, Martin Frigaard
+        
+        <br>
+        Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+        and <a href="https://github.com/austingebauer/devise" target="_blank">Devise</a>
+    </small>
+</footer>
+</body>
+</html>

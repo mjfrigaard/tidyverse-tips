@@ -7,10 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Copyright Year 2020, Martin Frigaard</copyright>
-    <lastBuildDate>Fri, 03 Jul 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Fri, 28 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to style your code</title>
+      <link>/post/how-to-style-your-code/</link>
+      <pubDate>Fri, 28 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/how-to-style-your-code/</guid>
+      <description>TL:DR If you’re wondering how to style your code, check out the tidyverse style guide. If you’re not interested in having your flavor/style of code, I suggest using the styler package. Another topic related to coding style is naming files, and I recommend checking out Jenny Bryan’s naming things talk.
+ Code styling To those of us writing code, our goal should be to write code that clearly and effectively communicates 1) what was done, and 2) what was created.</description>
+    </item>
     
     <item>
       <title>How to create crosstabulations</title>

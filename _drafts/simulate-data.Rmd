@@ -1,0 +1,62 @@
+
+
+## Simulate data
+
+We will start with the data from [R for Marketing Research and Analytics](http://r-marketing.r-forge.r-project.org/index.html). 
+
+This text has an amazing amount of useful information on simulating data. 
+
+```{r CustomerData}
+# assign clean names 
+CustomerData <- read_csv("http://goo.gl/PmPkaG") %>% 
+  janitor::clean_names(case = "snake")
+# data set represents observations of total sales by week for 2 products
+# at a chain of 10 stores
+k_stores <- 10
+k_weeks <- 52*3 # three years of data
+# build a matrix with the proper dimensions to hold the data
+CustMatrix <- base::matrix(NA, ncol = 10, nrow = k_stores*k_weeks)
+CustTibbleEmpty <- tibble::as_tibble(CustMatrix)
+# add the names 
+names(CustTibbleEmpty) <- c("store_num", "year", "week", "p1sales", 
+                            "p2sales", "p1price", "p2price", "p1prom",
+                            "p2prom", "country")
+# CustTibbleEmpty %>% glimpse(78)
+# create two vectors that will represent the store number and country for 
+# each observation:
+store_num <- 101:(100 + k_stores)
+store_cty <- c(rep("US" , 3), 
+               rep("DE" , 5), 
+               rep("GB" , 3), 
+               rep("BR" , 2), 
+               rep("JP" , 4), 
+               rep("AU" , 1), 
+               rep("CN" , 2))
+
+# take sample of this to get the dimensions right
+store_cty_samp <- sample(store_cty, 
+                         size = 10, 
+                         replace = FALSE)
+
+length(store_cty)
+length(store_num)
+# Now we replace the appropriate columns in the data frame with those values,
+# using rep() to expand the vectors to match the number of stores and weeks:
+CustTibbleEmpty$store_num <- rep(store_num, each = k_weeks)
+CustTibbleEmpty$country <- rep(store_cty_samp, each = k_weeks)
+# Next we do the same for the Week and Year columns:
+length(CustTibbleEmpty$week)
+length(rep(1:52, times = k_stores*3))
+CustTibbleEmpty$week <- rep(1:52, times = k_stores*3)
+length(CustTibbleEmpty$year)
+length(rep(rep(1:2, each = k_weeks/2), times = k_stores))
+CustTibbleEmpty$year <- rep(rep(1:2, each = k_weeks/2), times = k_stores)
+# CustTibbleEmpty %>% glimpse()
+# convert to factor 
+```
+
+```{r}
+store.df <- read.csv("http://goo.gl/QPDdMl")
+store.df
+```
+
