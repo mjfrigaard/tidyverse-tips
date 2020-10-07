@@ -357,23 +357,24 @@ TidyVGSales %&gt;% glimpse()</code></pre>
 </div>
 <div id="visualize" class="section level2">
 <h2>Visualize</h2>
-<p>We are going to set the theme for our plots with <a href="https://github.com/hrbrmstr/hrbrthemes"><code>hrbrthemes::theme_ipsum_tw()</code></a>.</p>
-<pre class="r"><code>ggplot2::theme_set(hrbrthemes::theme_ipsum_tw(
-  base_size = 8,
-  strip_text_size = 9,
-  axis_title_size = 10,
-  plot_title_size = 13,
-  subtitle_size = 11,
-  base_family = &quot;Ubuntu&quot;,
-  strip_text_family = &quot;TitilliumWeb-Regular&quot;,
-  axis_title_family = &quot;TitilliumWeb-Regular&quot;,
-  subtitle_family = &quot;TitilliumWeb-Regular&quot;,
-  plot_title_family = &quot;JosefinSans-Regular&quot;
-))</code></pre>
+<p>We are going to set the theme for our plots with <a href="https://github.com/Ryo-N7/tvthemes"><code>tvthemes::theme_rickAndMorty()</code></a>.</p>
+<pre class="r"><code>library(tvthemes)
+library(scales)
+library(glue)
+library(png)
+library(extrafont)
+loadfonts(quiet = TRUE)
+ggplot2::theme_set(tvthemes::theme_spongeBob(title.font = &quot;Roboto Condensed&quot;,
+                  text.font = &quot;Roboto Condensed&quot;,
+                  title.size = 13,
+                  subtitle.size = 11,
+                  text.size = 12,
+                  legend.position = &quot;none&quot;))</code></pre>
 <p>Let’s take a look at the two variables we want in our visualization: scores and sales. First we can check the missing values in the two variables with <code>inspect_na()</code> from the <code>inspectdf</code> package.</p>
 <pre class="r"><code>TidyVidGam00_19 %&gt;% 
   select(ends_with(&quot;_value&quot;)) %&gt;% inspectdf::inspect_na() %&gt;% 
-  inspectdf::show_plot(text_labels = TRUE)</code></pre>
+  inspectdf::show_plot(text_labels = TRUE) + 
+  tvthemes::scale_fill_bigHero6() </code></pre>
 <p><img src="/post/2020-08-28-how-to-style-your-code_files/figure-html/inspect_na-1.png" width="672" /></p>
 <p>This tells us there are quite a few missing values, so We will drop these and see what the relationship looks between for <code>score_value</code> vs. <code>sales_value</code> for all ten years.</p>
 <pre class="r"><code>TidyVidGam00_19 %&gt;% 
@@ -384,9 +385,10 @@ TidyVGSales %&gt;% glimpse()</code></pre>
   # base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value)) + 
   geom_point() + 
+  tvthemes::scale_fill_bigHero6() +
   # labels for every plot so I know what I should see
   ggplot2::labs(title=&quot;Review scores vs. sales for video games&quot;, subtitle=&quot;from 2010-2019&quot;,
-                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;Total score&quot;)</code></pre>
+                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;Total score&quot;) </code></pre>
 <p><img src="/post/2020-08-28-how-to-style-your-code_files/figure-html/total-scores-total-sales-1.png" width="672" /></p>
 <p>This looks like there might be a general trend, but we will need to use additional aesthetics to explore the nuances between <code>score_type</code>, <code>sales_type</code>, and <code>year</code>.</p>
 <pre class="r"><code>TidyVidGam00_19 %&gt;% 
@@ -399,11 +401,12 @@ TidyVGSales %&gt;% glimpse()</code></pre>
   # base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value, group=year)) + 
   geom_point() + 
+  tvthemes::scale_fill_bigHero6() +
   # facet by year
   facet_wrap(. ~ year, nrow=2) + 
   # labels to keep track 
   ggplot2::labs(title=&quot;User review scores vs. video game sales by year&quot;, subtitle=&quot;from 2010-2019&quot;, 
-                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;User score&quot;)</code></pre>
+                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;User score&quot;) </code></pre>
 <p><img src="/post/2020-08-28-how-to-style-your-code_files/figure-html/facet-year-user-1.png" width="672" /></p>
 <p>This shows us there aren’t many data points for the user reviews (especially not in 2019). We will filter only the critic scores and see what trends we find.</p>
 <pre class="r"><code>TidyVidGam00_19 %&gt;% 
@@ -416,13 +419,20 @@ TidyVGSales %&gt;% glimpse()</code></pre>
   # base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value, group=year)) + 
   geom_point() + 
+  tvthemes::scale_fill_bigHero6() +
   # facet by year
   facet_wrap(. ~ year, nrow=2) + 
   # labels to keep track of what I should see
   ggplot2::labs(title=&quot;Critic review scores vs. video game sales by year&quot;, subtitle=&quot;from 2010-2019&quot;,
-                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;Critic score&quot;)</code></pre>
+                caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Total sales&quot;, y=&quot;Critic score&quot;) </code></pre>
 <p><img src="/post/2020-08-28-how-to-style-your-code_files/figure-html/facet-year-critic-1.png" width="672" /></p>
-<p>This shows more data points, but only one in 2019, so we will drop this year. I wonder how critic scores vary if we color them by <code>sales_type</code>?</p>
+<p>This shows more data points, but only one in 2019, so we will drop this year.</p>
+<p>I wonder how critic scores vary if we color them by <code>sales_type</code>? Let’s adjust our theme and add color with faceting to view the differences.</p>
+<pre class="r"><code>ggplot2::theme_set(theme_minimal() +
+  theme(text = element_text(family = &quot;Ubuntu&quot;),
+        plot.title = element_text(size = 13),
+        plot.subtitle = element_text(size = 12),
+        plot.caption = element_text(size = 10)))</code></pre>
 <pre class="r"><code>TidyVidGam00_19 %&gt;% 
   # add filter for year 
   dplyr::filter(year != 2019 &amp; score_type == &quot;critic_score&quot;) %&gt;% 
@@ -433,11 +443,12 @@ TidyVGSales %&gt;% glimpse()</code></pre>
   # base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value, group=sales_type)) + 
   # factor sales type for cleaner plotting and lighten opacity
-  geom_point(aes(color=as.factor(sales_type)), alpha=1/3, show.legend=FALSE) + 
+  geom_point(aes(color=as.factor(sales_type)), alpha=1/3, show.legend=FALSE) +
+  tvthemes::scale_fill_bigHero6() +
   facet_wrap(. ~ sales_type) + 
   # labels to keep track of what I should see
   labs(title=&quot;Critic review scores vs. video game sales by sales type&quot;, subtitle=&quot;from 2010-2019&quot;, 
-       caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Sales&quot;, y=&quot;Critic score&quot;)</code></pre>
+       caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Sales&quot;, y=&quot;Critic score&quot;)  </code></pre>
 <p><img src="/post/2020-08-28-how-to-style-your-code_files/figure-html/facet-sales_type-critic-1.png" width="672" /></p>
 <p>Hmmmm. Here we can see higher critic scores if the sales are from <code>global_sales</code>, <code>na_sales</code>, or <code>pal_sales</code>. Do you think this trend changes over time?</p>
 <pre class="r"><code>TidyVidGam00_19 %&gt;% 
@@ -450,16 +461,17 @@ TidyVGSales %&gt;% glimpse()</code></pre>
   # add base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value, color=sales_type, group=year)) + 
   # factor sales type for cleaner plotting
-  geom_point(aes(color=as.factor(sales_type)), 
-             # lighten opacity
+  geom_point(aes(color=as.factor(sales_type)), size=0.5, 
+             # lighten opacity and descrease size
              alpha=1/3, show.legend=FALSE) + 
   # add smoothing line to see if there is a linear relationship
   geom_smooth(aes(group=sales_type), method=&quot;lm&quot;, se=FALSE) +
+  tvthemes::scale_fill_bigHero6() +
   # facet by year
   facet_wrap(. ~ year) + 
   # adjust labels
   labs(title=&quot;Critic review scores vs. video game sales by sales type&quot;, subtitle=&quot;Best fit linear relationship between 2010-2019&quot;,
-       caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Sales&quot;, y=&quot;Critic score&quot;)</code></pre>
+       caption=&quot;https://www.kaggle.com/ashaheedq/video-games-sales-2019&quot;, x=&quot;Sales&quot;, y=&quot;Critic score&quot;) </code></pre>
 <pre><code>#&gt;  `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/post/2020-08-28-how-to-style-your-code_files/figure-html/facet-year-critic_score-sales_type-1.png" width="672" /></p>
 <p>We can see a possible linear relationship for <code>global_sales</code> in <code>2014</code> and maybe some interactions in other years. As you can see, my code is a mess! I have code extending way past the 80 column mark, and I have no spaces around all of my equal operators (<code>=</code>).</p>

@@ -513,29 +513,30 @@ TidyVidGam00_19 %>% dplyr::count(year) %>% rmarkdown::paged_table()
 
 ## Visualize
 
-We are going to set the theme for our plots with [`hrbrthemes::theme_ipsum_tw()`](https://github.com/hrbrmstr/hrbrthemes).
+We are going to set the theme for our plots with [`tvthemes::theme_rickAndMorty()`](https://github.com/Ryo-N7/tvthemes).
 
-```{r theme_set, eval=TRUE}
-ggplot2::theme_set(hrbrthemes::theme_ipsum_tw(
-  base_size = 8,
-  strip_text_size = 9,
-  axis_title_size = 10,
-  plot_title_size = 13,
-  subtitle_size = 11,
-  base_family = "Ubuntu",
-  strip_text_family = "TitilliumWeb-Regular",
-  axis_title_family = "TitilliumWeb-Regular",
-  subtitle_family = "TitilliumWeb-Regular",
-  plot_title_family = "JosefinSans-Regular"
-))
+```{r theme_set, eval=TRUE, warning=FALSE, message=FALSE}
+library(tvthemes)
+library(scales)
+library(glue)
+library(png)
+library(extrafont)
+loadfonts(quiet = TRUE)
+ggplot2::theme_set(tvthemes::theme_spongeBob(title.font = "Roboto Condensed",
+                  text.font = "Roboto Condensed",
+                  title.size = 13,
+                  subtitle.size = 11,
+                  text.size = 12,
+                  legend.position = "none"))
 ```
 
 Let's take a look at the two variables we want in our visualization: scores and sales. First we can check the missing values in the two variables with `inspect_na()` from the `inspectdf` package.
 
-```{r inspect_na, eval=TRUE}
+```{r inspect_na, eval=TRUE, message=FALSE}
 TidyVidGam00_19 %>% 
   select(ends_with("_value")) %>% inspectdf::inspect_na() %>% 
-  inspectdf::show_plot(text_labels = TRUE)
+  inspectdf::show_plot(text_labels = TRUE) + 
+  tvthemes::scale_fill_bigHero6() 
 ```
 
 This tells us there are quite a few missing values, so We will drop these and see what the relationship looks between for `score_value` vs. `sales_value` for all ten years.
@@ -549,9 +550,10 @@ TidyVidGam00_19 %>%
   # base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value)) + 
   geom_point() + 
+  tvthemes::scale_fill_bigHero6() +
   # labels for every plot so I know what I should see
   ggplot2::labs(title="Review scores vs. sales for video games", subtitle="from 2010-2019",
-                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="Total score")
+                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="Total score") 
 ```
 
 This looks like there might be a general trend, but we will need to use additional aesthetics to explore the nuances between `score_type`, `sales_type`, and `year`.
@@ -567,11 +569,12 @@ TidyVidGam00_19 %>%
   # base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value, group=year)) + 
   geom_point() + 
+  tvthemes::scale_fill_bigHero6() +
   # facet by year
   facet_wrap(. ~ year, nrow=2) + 
   # labels to keep track 
   ggplot2::labs(title="User review scores vs. video game sales by year", subtitle="from 2010-2019", 
-                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="User score")
+                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="User score") 
 ```
 
 This shows us there aren't many data points for the user reviews (especially not in 2019). We will filter only the critic scores and see what trends we find.
@@ -587,14 +590,27 @@ TidyVidGam00_19 %>%
   # base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value, group=year)) + 
   geom_point() + 
+  tvthemes::scale_fill_bigHero6() +
   # facet by year
   facet_wrap(. ~ year, nrow=2) + 
   # labels to keep track of what I should see
   ggplot2::labs(title="Critic review scores vs. video game sales by year", subtitle="from 2010-2019",
-                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="Critic score")
+                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="Critic score") 
 ```
 
-This shows more data points, but only one in 2019, so we will drop this year. I wonder how critic scores vary if we color them by `sales_type`?
+This shows more data points, but only one in 2019, so we will drop this year. 
+
+
+I wonder how critic scores vary if we color them by `sales_type`? Let's adjust our theme and add color with faceting to view the differences.
+
+```{r adjust-theme, eval=TRUE}
+ggplot2::theme_set(theme_minimal() +
+  theme(text = element_text(family = "Ubuntu"),
+        plot.title = element_text(size = 13),
+        plot.subtitle = element_text(size = 12),
+        plot.caption = element_text(size = 10)))
+```
+
 
 ```{r facet-sales_type-critic, eval=TRUE}
 TidyVidGam00_19 %>% 
@@ -607,11 +623,12 @@ TidyVidGam00_19 %>%
   # base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value, group=sales_type)) + 
   # factor sales type for cleaner plotting and lighten opacity
-  geom_point(aes(color=as.factor(sales_type)), alpha=1/3, show.legend=FALSE) + 
+  geom_point(aes(color=as.factor(sales_type)), alpha=1/3, show.legend=FALSE) +
+  tvthemes::scale_fill_bigHero6() +
   facet_wrap(. ~ sales_type) + 
   # labels to keep track of what I should see
   labs(title="Critic review scores vs. video game sales by sales type", subtitle="from 2010-2019", 
-       caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Sales", y="Critic score")
+       caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Sales", y="Critic score")  
 ```
 
 Hmmmm. Here we can see higher critic scores if the sales are from `global_sales`, `na_sales`, or `pal_sales`. Do you think this trend changes over time?
@@ -627,16 +644,17 @@ TidyVidGam00_19 %>%
   # add base aesthetics
   ggplot2::ggplot(aes(x=score_value, y=sales_value, color=sales_type, group=year)) + 
   # factor sales type for cleaner plotting
-  geom_point(aes(color=as.factor(sales_type)), 
-             # lighten opacity
+  geom_point(aes(color=as.factor(sales_type)), size=0.5, 
+             # lighten opacity and descrease size
              alpha=1/3, show.legend=FALSE) + 
   # add smoothing line to see if there is a linear relationship
   geom_smooth(aes(group=sales_type), method="lm", se=FALSE) +
+  tvthemes::scale_fill_bigHero6() +
   # facet by year
   facet_wrap(. ~ year) + 
   # adjust labels
   labs(title="Critic review scores vs. video game sales by sales type", subtitle="Best fit linear relationship between 2010-2019",
-       caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Sales", y="Critic score")
+       caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Sales", y="Critic score") 
 ```
 
 We can see a possible linear relationship for `global_sales` in `2014` and maybe some interactions in other years. As you can see, my code is a mess! I have code extending way past the 80 column mark, and I have no spaces around all of my equal operators (`=`). 
