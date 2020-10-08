@@ -9,7 +9,7 @@
     <copyright>&amp;copy; Copyright Year 2020, Martin Frigaard</copyright>
     <lastBuildDate>Tue, 23 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/wrangle/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>How to split a single string column into multiple columns</title>
+      <title>How to write a custom function to split a single string column into multiple columns</title>
       <link>/post/how-to-split-a-single-string-column-into-multiple-columns/</link>
       <pubDate>Tue, 23 Jun 2020 00:00:00 +0000</pubDate>
       

@@ -9,7 +9,7 @@
     <copyright>&amp;copy; Copyright Year 2020, Martin Frigaard</copyright>
     <lastBuildDate>Fri, 28 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>How to style your code</title>
+      <title>How to style your code with styler</title>
       <link>/post/how-to-style-your-code/</link>
       <pubDate>Fri, 28 Aug 2020 00:00:00 +0000</pubDate>
       
@@ -19,7 +19,7 @@
     </item>
     
     <item>
-      <title>How to create crosstabulations</title>
+      <title>How to create crosstabulations with janitor, dplyr, and tidyr</title>
       <link>/post/how-to-create-crosstabulations/</link>
       <pubDate>Fri, 03 Jul 2020 00:00:00 +0000</pubDate>
       
@@ -32,7 +32,7 @@ The original tweets resulted in quite a few responses from the #rstats community
     </item>
     
     <item>
-      <title>How to split a single string column into multiple columns</title>
+      <title>How to write a custom function to split a single string column into multiple columns</title>
       <link>/post/how-to-split-a-single-string-column-into-multiple-columns/</link>
       <pubDate>Tue, 23 Jun 2020 00:00:00 +0000</pubDate>
       

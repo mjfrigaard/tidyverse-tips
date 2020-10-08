@@ -1,5 +1,5 @@
 ---
-title: How to create crosstabulations
+title: How to create crosstabulations with janitor, dplyr, and tidyr
 author: Martin Frigaard
 date: '2020-07-03'
 slug: how-to-create-crosstabulations

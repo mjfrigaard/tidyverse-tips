@@ -1,5 +1,5 @@
 ---
-title: How to style your code
+title: How to style your code with styler
 author: Martin Frigaard
 date: '2020-08-28'
 slug: how-to-style-your-code
