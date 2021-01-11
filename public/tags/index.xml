@@ -1,39 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on tidyverse tips</title>
+    <title>Tags | Academic</title>
     <link>/tags/</link>
-    <description>Recent content in Tags on tidyverse tips</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>&amp;copy; Copyright Year 2020, Martin Frigaard</copyright>
-    <lastBuildDate>Fri, 03 Jul 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>rstats</title>
-      <link>/tags/rstats/</link>
-      <pubDate>Fri, 03 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/rstats/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Workflow</title>
-      <link>/tags/workflow/</link>
-      <pubDate>Fri, 29 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/workflow/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>RMarkdown</title>
-      <link>/tags/rmarkdown/</link>
-      <pubDate>Sat, 23 May 2020 21:13:14 -0500</pubDate>
-      
-      <guid>/tags/rmarkdown/</guid>
-      <description></description>
-    </item>
+      <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <description>Tags</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Sun, 07 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/images/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Tags</title>
+      <link>/tags/</link>
+    </image>
     
   </channel>
 </rss>
