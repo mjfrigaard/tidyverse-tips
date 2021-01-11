@@ -36,15 +36,15 @@ knitr::opts_knit$set(
 
 ## TL:DR
 
-If you're wondering how to style your code, check out the [`tidyverse` style guide](https://style.tidyverse.org/index.html). If you're not interested in having your flavor/style of code, I suggest using the [`styler` package](https://styler.r-lib.org/). Another topic related to coding style is naming files, and I recommend checking out Jenny Bryan's [naming things talk](https://speakerdeck.com/jennybc/how-to-name-files).
+If you're wondering how to style your code, check out the [`tidyverse` style guide](https://style.tidyverse.org/index.html). The [`styler` package](https://styler.r-lib.org/) has a great Addin for quickly styling files and directories. This post also covers a topic related to coding style (naming files), and I recommend checking out Jenny Bryan's [naming things talk](https://speakerdeck.com/jennybc/how-to-name-files).
 
-## Code styling
+## Why you should care about code style
 
 To those of us writing code, our goal should be to write code that clearly and effectively communicates 1) what was done, and 2) what was created. There's an underlying narrative arc to every data analysis, and distilling that into something others can follow is an integral part of being a competent data scientist. Even for small, seemingly unimportant projects, we are always writing code for at least two people: future us and the computer running the code.
 
 Programming style guides create consistency and minimizes the reader's confusion. By specifying and adhering to a style guide, we can provide a foundation for anyone who reads our code to 1) understand what we did to solve a particular problem, 2) if and where we ran into trouble, and 3) how we communicated the results. Coding style should also promote correct syntax and structure, so it's easier for the computer to execute.
 
-### *What code style should I follow?*
+### What code style should I follow?
 
 [The tidyverse style guide](https://style.tidyverse.org/index.html) and [R For Data Science](https://r4ds.had.co.nz/) are excellent resources for writing precise, consistent code. In this post, we'll go over some additional packages that make coding styling easier and discuss customizing your coding style while maintaining brevity and clarity. Putting a style guide in place formalizes any ambiguity about *how* we're going to write our code, but leaves flexibility in *what* code we're going to write.
 
@@ -54,11 +54,9 @@ Let's assume we have a project based on the excellent paper [Good enough practic
 
 ![project layout](/post/2020-08-28-how-to-style-your-code_files/project-layout.png){width="80%"}
 
-### Define the problem/objective
+This project will use the video game sales datasets from Kaggle found [here](https://www.kaggle.com/ashaheedq/video-games-sales-2019). 
 
-This project will use the video game sales datasets from Kaggle found [here](https://www.kaggle.com/ashaheedq/video-games-sales-2019). Our objective with this project is to **visualize the relationship between game sales and their reviews in the top selling video games in from 2000-2019.**
-
-## Packages
+## The Packages
 
 Below we add the packages we'll be using in this project.
 
@@ -70,11 +68,11 @@ library(inspectdf)
 library(hrbrthemes)
 ```
 
-## Folders
+## The Folders
 
 The code chunk below create the necessary folders for this project, which we will call `goodenuff`. The [`tidyverse` style guide recommends](https://style.tidyverse.org/syntax.html#object-names) naming vectors using [snake case](https://en.wikipedia.org/wiki/Snake_case), and using nouns instead of verbs to define variable names.
 
-### *Naming vectors*
+### Naming vectors
 
 Below we create the `project_folders` vector with `c()` and `<-`.
 
@@ -106,61 +104,7 @@ fs::dir_tree(".")
 # └── src
 ```
 
-**Quick Tip About R:** When writing code in R, A general rule of thumb is, ["*everything is an object.*"](https://www.oreilly.com/library/view/r-in-a/9781449358204/) However, it might surprise you how many things are considered *functions*. Take the following objects in R:
-
--   `+` perform basic arithmetic
-
--   `<-` create new objects
-
--   `==` make comparisons
-
--   `c()` combine arguments to create a vector (R's most common object)
-
--   `lm()` create linear models
-
-How can we check to see the `class` each of these objects?
-
-### *Using quotes and back-ticks*
-
-There are three kinds of quotes in the [R syntax](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html). The [tidyverse style guide](https://style.tidyverse.org/syntax.html#character-vectors) recommends using double quotes (unless the text already contains double quotes).
-
-```{r quotes}
-'Do "this"'
-'Not \'this\''
-```
-
-However, if we want to use `purrr` and `class()` to test and see if the objects above are functions or not, we need to enclose these objects in backticks ( \` ).
-
-```{r test-function}
-# are all these functions?
-weird_stuff <- list(`+`, # unary plus operator
-                    `<-`, # assignment operator
-                    `==`, # binary operator
-                    `lm`, # create a linear model 
-                    `c`)  # concatenate elements into a vector
-map(weird_stuff, class)
-```
-
-```{r test-function-out}
-# [[1]]
-# [1] "function"
-# 
-# [[2]]
-# [1] "function"
-# 
-# [[3]]
-# [1] "function"
-# 
-# [[4]]
-# [1] "function"
-# 
-# [[5]]
-# [1] "function"
-```
-
-Knowing what objects can be passed to the `.f` argument is helpful for understanding how we can use iteration to solve problems in R.
-
-## Files
+## The Files
 
 Below we create script files for each step in a data analysis project (`import` -\> `tidy` -\> `transform` -\> `wrangle` -\> `model` -\> `communicate`), including a `runall.R` script that runs all six sequential files. All of these get stored in the `script_files` vector.
 
@@ -188,7 +132,7 @@ fs::dir_tree("src")
 
 We want to [organize the script files](https://speakerdeck.com/jennybc/how-to-name-files?slide=19) in a way that clearly shows what we're doing at each step (and in which order they should be run).
 
-### *Dealing with long lines of code*
+### Dealing with long lines of code
 
 Next we create the project files (note the correct directory in each file name). We can see there are seven files listed in [this section](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510#pcbi.1005510.box007) of the paper, and we can store these in the `project_files` vector.
 
@@ -234,7 +178,7 @@ And we end up with a project folder that looks like this:
 # └── src
 ```
 
-## Data
+## The Data
 
 These data come from [Kaggle and contain video game sales in 2019](https://www.kaggle.com/ashaheedq/video-games-sales-2019). We're only interested in the `vgsales-12-4-2019.csv` data file, which we can download [here](https://www.kaggle.com/ashaheedq/video-games-sales-2019?select=vgsales-12-4-2019.csv) and save in a sub-folder called, `data/raw/`.
 
@@ -267,7 +211,7 @@ VideoGames <- map_df(.x = zipped_files, .f = read_csv)
 # See spec(...) for full column specifications.
 ```
 
-### *Naming data vs. everything else*
+### Naming data vs. everything else
 
 I differ slightly from the [tidyverse style guide](https://style.tidyverse.org/syntax.html#object-names) when it comes to naming rectangular data objects (`tibble`s, `data.frame`s, `data.table`s, etc.) vs. non-rectangular objects (`vector`s, `list`s, `function`s, etc.).
 
@@ -284,7 +228,7 @@ I differ slightly from the [tidyverse style guide](https://style.tidyverse.org/s
 
 I chose this method of naming because 80% or more of the time I am working with rectangular data, so I like to differentiate these objects from others in my current environment.
 
-### *Script file headers*
+### Script file headers
 
 R script file headers should give the reader 1) a description of the file and what the file does, 2) the last date it was updated, 3) the author and any contributors, and 4) the version number.
 
@@ -301,7 +245,7 @@ R script file headers should give the reader 1) a description of the file and wh
 
 Read more about script file headers in [Reproducible Research with R and RStudio, 3rd Edition](https://www.routledge.com/Reproducible-Research-with-R-and-RStudio/Gandrud/p/book/9780367143985).
 
-### *Writing functions*
+### Writing functions
 
 We can also document the contents of our .R files with section headers, which we will create with a function titled, `add_script_section()`. This function has been adapted from [R for Data Science](https://r4ds.had.co.nz/functions.html#dot-dot-dot).
 
@@ -329,6 +273,8 @@ add_script_section(title = "Packages")
 ```
 
 We can also use `=` for code sections. I like to create section headers in each `.R` file because it's easy to identify them in the RStudio source pane.
+
+### Import data script
 
 Other functions we might want to include in `01-import.R` include `janitor::clean_names()` or arguments passed to `readr::read_csv()` like `col_types` and `col_names`.
 
@@ -416,256 +362,9 @@ VideoGames <- map_df(.x = zipped_files, .f = read_csv)
 VideoGames <- VideoGames %>% janitor::clean_names(case = "snake")
 ```
 
-With the `VideoGames` data loaded into R, now we can take a look at it's structure and see what variables we have.
+### Style your code with `styler`
 
-```{r VideoGames-glimpse}
-VideoGames %>% dplyr::glimpse()
-```
-
-```{r VideoGames-glimpse-out}
-# Rows: 55,792
-# Columns: 23
-# $ rank            <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, …
-# $ name            <chr> "Wii Sports", "Super Mario Bros.", "Mario Kart Wii"…
-# $ basename        <chr> "wii-sports", "super-mario-bros", "mario-kart-wii",…
-# $ genre           <chr> "Sports", "Platform", "Racing", "Shooter", "Sports"…
-# $ esrb_rating     <chr> "E", NA, "E", NA, "E", "E", "E", "E", "E", NA, NA, …
-# $ platform        <chr> "Wii", "NES", "Wii", "PC", "Wii", "GB", "DS", "GB",…
-# $ publisher       <chr> "Nintendo", "Nintendo", "Nintendo", "PUBG Corporati…
-# $ developer       <chr> "Nintendo EAD", "Nintendo EAD", "Nintendo EAD", "PU…
-# $ vg_chartz_score <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ critic_score    <dbl> 7.7, 10.0, 8.2, NA, 8.0, 9.4, 9.1, NA, 8.6, 10.0, N…
-# $ user_score      <dbl> NA, NA, 9.1, NA, 8.8, NA, 8.1, NA, 9.2, NA, NA, 4.5…
-# $ total_shipped   <dbl> 82.86, 40.24, 37.14, 36.60, 33.09, 31.38, 30.80, 30…
-# $ global_sales    <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ na_sales        <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ pal_sales       <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ jp_sales        <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ other_sales     <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ year            <dbl> 2006, 1985, 2008, 2017, 2009, 1998, 2006, 1989, 200…
-# $ last_update     <chr> NA, NA, "11th Apr 18", "13th Nov 18", NA, NA, NA, N…
-# $ url             <chr> "http://www.vgchartz.com/game/2667/wii-sports/?regi…
-# $ status          <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-# $ vgchartzscore   <dbl> NA, NA, 8.7, NA, 8.8, NA, NA, NA, 9.1, NA, NA, 5.3,…
-# $ img_url         <chr> "/games/boxart/full_2258645AmericaFrontccc.jpg", "/…
-```
-
-## Wrangle
-
-In order to visualize the relationship between sales and reviewer scores, we need to `pivot_` the data in `VideoGames` to a `long` format using `tidyr`. We can see there are two `_score` variables and five `_sales` variables. Let's tidy these into `score` and `score_value` and `sales` and `sales_value`.
-
-```{r TidyVGSales-score-pivot_longer, eval=TRUE, results='hide'}
-# tidy scores 
-TidyVGScores <- VideoGames %>% 
-  tidyr::pivot_longer(names_to = "score_type", values_to = "score_value", 
-                      cols = c(critic_score, user_score))
-# tidy sales 
-TidyVGSales <- TidyVGScores %>% 
-    tidyr::pivot_longer(names_to = "sales_type", values_to = "sales_value", 
-                      cols = c(global_sales, na_sales, pal_sales, jp_sales, 
-                               other_sales))
-# Remove the intermediate dataset so we don't use up too much memory
-rm(TidyVGScores)
-# view
-TidyVGSales %>% glimpse()
-```
-
-```{r view-TidyVGSales}
-# Rows: 557,920
-# Columns: 20
-# $ rank            <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, …
-# $ name            <chr> "Wii Sports", "Wii Sports", "Wii Sports", "Wii Spor…
-# $ basename        <chr> "wii-sports", "wii-sports", "wii-sports", "wii-spor…
-# $ genre           <chr> "Sports", "Sports", "Sports", "Sports", "Sports", "…
-# $ esrb_rating     <chr> "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", N…
-# $ platform        <chr> "Wii", "Wii", "Wii", "Wii", "Wii", "Wii", "Wii", "W…
-# $ publisher       <chr> "Nintendo", "Nintendo", "Nintendo", "Nintendo", "Ni…
-# $ developer       <chr> "Nintendo EAD", "Nintendo EAD", "Nintendo EAD", "Ni…
-# $ vg_chartz_score <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ total_shipped   <dbl> 82.86, 82.86, 82.86, 82.86, 82.86, 82.86, 82.86, 82…
-# $ year            <dbl> 2006, 2006, 2006, 2006, 2006, 2006, 2006, 2006, 200…
-# $ last_update     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ url             <chr> "http://www.vgchartz.com/game/2667/wii-sports/?regi…
-# $ status          <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-# $ vgchartzscore   <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-# $ img_url         <chr> "/games/boxart/full_2258645AmericaFrontccc.jpg", "/…
-# $ score_type      <chr> "critic_score", "critic_score", "critic_score", "cr…
-# $ score_value     <dbl> 7.7, 7.7, 7.7, 7.7, 7.7, NA, NA, NA, NA, NA, 10.0, …
-# $ sales_type      <chr> "global_sales", "na_sales", "pal_sales", "jp_sales"…
-# $ sales_value     <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-```
-
-Just as a reminder, our objective is to **visualize the relationship between game sales and their reviews in the top selling video games in from 2010-2019.** We will `filter` the data to only the `year`s between `2010` and `2019` below.
-
-```{r TidyVidGam00_19, eval=TRUE}
-TidyVidGam00_19 <- TidyVGSales %>% filter(year >= 2010 & year <= 2019)
-```
-
-We should see only 10 `year`s listed, from `2010` to `2019`.
-
-```{r count-year}
-TidyVidGam00_19 %>% dplyr::count(year)
-```
-
-```{r count-year-out, echo=FALSE, eval=TRUE}
-TidyVidGam00_19 %>% dplyr::count(year) %>% rmarkdown::paged_table()
-```
-
-## Visualize
-
-We are going to set the theme for our plots with [`tvthemes::theme_rickAndMorty()`](https://github.com/Ryo-N7/tvthemes).
-
-```{r theme_set, eval=TRUE, warning=FALSE, message=FALSE}
-library(tvthemes)
-library(scales)
-library(glue)
-library(png)
-library(extrafont)
-loadfonts(quiet = TRUE)
-ggplot2::theme_set(tvthemes::theme_spongeBob(title.font = "Roboto Condensed",
-                  text.font = "Roboto Condensed",
-                  title.size = 13,
-                  subtitle.size = 11,
-                  text.size = 12,
-                  legend.position = "none"))
-```
-
-Let's take a look at the two variables we want in our visualization: scores and sales. First we can check the missing values in the two variables with `inspect_na()` from the `inspectdf` package.
-
-```{r inspect_na, eval=TRUE, message=FALSE}
-TidyVidGam00_19 %>% 
-  select(ends_with("_value")) %>% inspectdf::inspect_na() %>% 
-  inspectdf::show_plot(text_labels = TRUE) + 
-  tvthemes::scale_fill_bigHero6() 
-```
-
-This tells us there are quite a few missing values, so We will drop these and see what the relationship looks between for `score_value` vs. `sales_value` for all ten years.
-
-```{r total-scores-total-sales, eval=TRUE}
-TidyVidGam00_19 %>% 
-  # select variables of interest
-  dplyr::select(ends_with("_type"), ends_with("_value")) %>% 
-  # remove missing
-  tidyr::drop_na() %>% 
-  # base aesthetics
-  ggplot2::ggplot(aes(x=score_value, y=sales_value)) + 
-  geom_point() + 
-  tvthemes::scale_fill_bigHero6() +
-  # labels for every plot so I know what I should see
-  ggplot2::labs(title="Review scores vs. sales for video games", subtitle="from 2010-2019",
-                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="Total score") 
-```
-
-This looks like there might be a general trend, but we will need to use additional aesthetics to explore the nuances between `score_type`, `sales_type`, and `year`.
-
-```{r facet-year-user, eval=TRUE}
-TidyVidGam00_19 %>% 
-  # add filter for user reviews 
-  dplyr::filter(score_type == "user_score") %>%
-  # select variables of interest
-  select(year, ends_with("_type"), ends_with("_value")) %>% 
-  # remove missing
-  tidyr::drop_na() %>% 
-  # base aesthetics
-  ggplot2::ggplot(aes(x=score_value, y=sales_value, group=year)) + 
-  geom_point() + 
-  tvthemes::scale_fill_bigHero6() +
-  # facet by year
-  facet_wrap(. ~ year, nrow=2) + 
-  # labels to keep track 
-  ggplot2::labs(title="User review scores vs. video game sales by year", subtitle="from 2010-2019", 
-                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="User score") 
-```
-
-This shows us there aren't many data points for the user reviews (especially not in 2019). We will filter only the critic scores and see what trends we find.
-
-```{r facet-year-critic, eval=TRUE}
-TidyVidGam00_19 %>% 
-  # add filter for critic reviews 
-  dplyr::filter(score_type == "critic_score") %>%
-  # select variables of interest
-  select(year, ends_with("_type"), ends_with("_value")) %>% 
-  # remove missing
-  tidyr::drop_na() %>% 
-  # base aesthetics
-  ggplot2::ggplot(aes(x=score_value, y=sales_value, group=year)) + 
-  geom_point() + 
-  tvthemes::scale_fill_bigHero6() +
-  # facet by year
-  facet_wrap(. ~ year, nrow=2) + 
-  # labels to keep track of what I should see
-  ggplot2::labs(title="Critic review scores vs. video game sales by year", subtitle="from 2010-2019",
-                caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Total sales", y="Critic score") 
-```
-
-This shows more data points, but only one in 2019, so we will drop this year. 
-
-
-I wonder how critic scores vary if we color them by `sales_type`? Let's adjust our theme and add color with faceting to view the differences.
-
-```{r adjust-theme, eval=TRUE}
-ggplot2::theme_set(theme_minimal() +
-  theme(text = element_text(family = "Ubuntu"),
-        plot.title = element_text(size = 13),
-        plot.subtitle = element_text(size = 12),
-        plot.caption = element_text(size = 10)))
-```
-
-
-```{r facet-sales_type-critic, eval=TRUE}
-TidyVidGam00_19 %>% 
-  # add filter for year 
-  dplyr::filter(year != 2019 & score_type == "critic_score") %>% 
-  # select variables of interest
-  select(ends_with("_type"), ends_with("_value")) %>% 
-  # remove missing
-  tidyr::drop_na() %>% 
-  # base aesthetics
-  ggplot2::ggplot(aes(x=score_value, y=sales_value, group=sales_type)) + 
-  # factor sales type for cleaner plotting and lighten opacity
-  geom_point(aes(color=as.factor(sales_type)), alpha=1/3, show.legend=FALSE) +
-  tvthemes::scale_fill_bigHero6() +
-  facet_wrap(. ~ sales_type) + 
-  # labels to keep track of what I should see
-  labs(title="Critic review scores vs. video game sales by sales type", subtitle="from 2010-2019", 
-       caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Sales", y="Critic score")  
-```
-
-Hmmmm. Here we can see higher critic scores if the sales are from `global_sales`, `na_sales`, or `pal_sales`. Do you think this trend changes over time?
-
-```{r facet-year-critic_score-sales_type, eval=TRUE}
-TidyVidGam00_19 %>% 
-  # add filter statement for sales types
-  dplyr::filter(year != 2019 & score_type == "critic_score" & sales_type %in% c("global_sales", "na_sales", "pal_sales")) %>% 
-  # select variables of interest
-  select(year, ends_with("_type"), ends_with("_value")) %>% 
-  # remove missing
-  tidyr::drop_na() %>% 
-  # add base aesthetics
-  ggplot2::ggplot(aes(x=score_value, y=sales_value, color=sales_type, group=year)) + 
-  # factor sales type for cleaner plotting
-  geom_point(aes(color=as.factor(sales_type)), size=0.5, 
-             # lighten opacity and descrease size
-             alpha=1/3, show.legend=FALSE) + 
-  # add smoothing line to see if there is a linear relationship
-  geom_smooth(aes(group=sales_type), method="lm", se=FALSE) +
-  tvthemes::scale_fill_bigHero6() +
-  # facet by year
-  facet_wrap(. ~ year) + 
-  # adjust labels
-  labs(title="Critic review scores vs. video game sales by sales type", subtitle="Best fit linear relationship between 2010-2019",
-       caption="https://www.kaggle.com/ashaheedq/video-games-sales-2019", x="Sales", y="Critic score") 
-```
-
-We can see a possible linear relationship for `global_sales` in `2014` and maybe some interactions in other years. As you can see, my code is a mess! I have code extending way past the 80 column mark, and I have no spaces around all of my equal operators (`=`). 
-
-RStudio is letting me know in the left-hand side of the screen next to the line numbers.
-
-![](/post/2020-08-28-how-to-style-your-code_files/code-help.png){width=100% height=100%}
-
-### *Style your code with `styler`*
-
-Fortunately there is an Addin for situations like this: the [`styler` package](https://styler.r-lib.org/) Addin. If you have the `styler` package loaded, you can click on the **Addins** dropdown at the top of the Source pane and search for "style". 
+The [`styler` package](https://styler.r-lib.org/) has a handy Addin. If you have the `styler` package loaded, you can click on the **Addins** dropdown at the top of the Source pane and search for "style". 
 
 ![](/post/2020-08-28-how-to-style-your-code_files/styler-addin.png){width=100% height=100%}
 
