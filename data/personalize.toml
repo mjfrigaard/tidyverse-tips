@@ -1,9 +1,9 @@
-Name = "Agent Smith"
+Name = "Martin J Frigaard"
 
 # Supports markdown
-About = "We're not here because we're free. We're here because we're __not__ free. There's no escaping reason. No denying purpose. Because as we both know without purpose, we would not exist.<br/> Read more [here](https://matrix.fandom.com/wiki/Agent_Smith)"
+About = "**Hi! I'm Martin Frigaard, a certified RStudio [tidyverse trainer](https://education.rstudio.com/trainers/).** Welcome to tidyverse.tips, a blog where I write about all things tidyverse."
 
-Email = "agent.smith@thematrix.com"
+Email = "mjfrigaard@gmail.com"
 
 # Add the filename with file extension.
 Resume = ""
@@ -15,16 +15,16 @@ GoatCounterCode = ""
 
 [[profiles]]
 name = "GitHub"
-url = "https://github.com/invinciblycool"
+url = "https://github.com/mjfrigaard"
 
 [[profiles]]
 name = "Twitter"
-url = "https://twitter.com/getFANDOM"
+url = "https://twitter.com/mjfrigaard"
 
 [[profiles]]
-name = "Goodreads"
-url = "https://www.goodreads.com/user/show/91520565-rahul-tiwari"
+name = "Google Scholar"
+url = "https://scholar.google.com/citations?authuser=1&user=bQEGBWoAAAAJ"
 
 [[profiles]]
 name = "LinkedIn"
-url = "https://www.linkedin.com/in/rahul-tiwari-43708b128/"
+url = "https://www.linkedin.com/in/mjfrigaard/"
