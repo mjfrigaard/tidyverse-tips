@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tidyverse tips</title>
-    <link>https://www.tidyverse.tips/</link>
-    <description>Recent content on tidyverse tips</description>
+    <title>Posts on tidyverse tips</title>
+    <link>https://www.tidyverse.tips/posts/</link>
+    <description>Recent content in Posts on tidyverse tips</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 12 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.tidyverse.tips/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.tidyverse.tips/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to create crosstabulations with janitor, dplyr, and tidyr</title>
       <link>https://www.tidyverse.tips/posts/2021-03-12-how-to-create-crosstabulations-with-janitor-dplyr-and-tidyr/</link>
