@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>My New Hugo Site</title>
+    <title>tidyverse tips</title>
     <link>https://www.tidyverse.tips/</link>
-    <description>Recent content on My New Hugo Site</description>
+    <description>Recent content on tidyverse tips</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.tidyverse.tips/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>How to use Rmarkdown with RStudio</title>
-      <link>https://www.tidyverse.tips/posts/2021-01-13-how-to-use-rmarkdown-with-rstudio/</link>
-      <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.tidyverse.tips/posts/2021-01-13-how-to-use-rmarkdown-with-rstudio/</guid>
-      <description>  Markdown  rmarkdown  knitr  pandoc  Other resources  </description>
-    </item>
-    
+    <language>en-us</language><atom:link href="https://www.tidyverse.tips/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
