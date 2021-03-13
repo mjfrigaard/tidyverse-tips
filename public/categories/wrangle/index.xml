@@ -13,7 +13,11 @@
       <pubDate>Fri, 12 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>https://www.tidyverse.tips/posts/2021-03-12-how-to-create-crosstabulations-with-janitor-dplyr-and-tidyr/</guid>
-      <description></description>
+      <description>General cross-tabulations? This post was inspired by two 2015 tweets from Jenny Bryan.
+Here is the first tweet,
+The original question had some follow-up clarification from Jenny Bryan, which is presented below:
+Cross-tabulations (or contingency tables) are very helpful for counting things, especially if you’re dealing with categorical variables that have multiple responses.
+The original tweets resulted in quite a few responses from the #rstats community for creating “general cross-tabulation[s],” all of which are summarized in this gist.</description>
     </item>
     
   </channel>

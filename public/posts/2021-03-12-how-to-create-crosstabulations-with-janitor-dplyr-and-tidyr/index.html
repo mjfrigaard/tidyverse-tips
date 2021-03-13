@@ -32,6 +32,481 @@
 <h1>How to create crosstabulations with janitor, dplyr, and tidyr</h1>
 <p class="post-meta"><time itemprop="datePublished">March 12, 2021</time>
 </p>
+<h3 id="general-cross-tabulations">General cross-tabulations?</h3>
+<p>This post was inspired by two 2015
+<a href="https://twitter.com/JennyBryan/status/599379158452416512">tweets</a> from
+<a href="https://twitter.com/JennyBryan">Jenny Bryan</a>.</p>
+<p>Here is the first tweet,</p>
+<p><!-- raw HTML omitted --></p>
+<p>The original question had some follow-up clarification from Jenny Bryan,
+which is presented below:</p>
+<p><!-- raw HTML omitted --></p>
+<p>Cross-tabulations (or <a href="https://en.wikipedia.org/wiki/Contingency_table">contingency
+tables</a>) are very
+helpful for counting things, especially if you’re dealing with
+categorical variables that have multiple responses.</p>
+<p>The original tweets resulted in quite a few responses from the #rstats
+community for creating “general cross-tabulation[s],” all of which are
+summarized in this
+<a href="https://gist.github.com/jennybc/04b71bfaaf0f88d9d2eb#file-2015-05-15_cross-tabulation-md">gist</a>.</p>
+<p>However, some great new packages have come out in the last five years!
+This post is an attempt to update and add to the gist with more options
+for creating crosstabs.</p>
+<h3 id="what-goes-in-a-crosstabulations">What goes in a crosstabulations?</h3>
+<p>Crosstabulations (or crosstabs) are summary tables displaying counts of
+categorical variables. Categorical variables typically have a defined
+set of known values, and the simplest of these being binary (<code>yes</code>/<code>no</code>,
+<code>true</code>/<code>false</code>, etc.).</p>
+<p>Therefore, the cross-tabulation of two binary variables is sometimes
+referred to as a <em>2 X 2 contingency table</em>.</p>
+<h3 id="the-2-x-2-table">The 2 x 2 table</h3>
+<p>We’ll start by looking at the vaccination for Polio created by Jonas
+Salk.</p>
+<pre><code>PolioVac2x2
+</code></pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>These data come from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1622939/pdf/amjphnation00353-0017.pdf">1955 paper by Francis et
+al</a>.
+You might be wondering why we’d create a table like this? Well,
+displaying cross-tabulations allows us to see the results summarized by
+the experimental conditions.</p>
+<p>In this table,</p>
+<ol>
+<li>
+<p>Two cells support the argument of an effective vaccine (the children
+getting the <code>Salk Vaccine</code> didn’t develop polio (<code>No Polio</code>), and
+the children who received the <code>Placebo Vaccine</code> developed <code>Polio</code>),</p>
+</li>
+<li>
+<p>Two cells support the argument of an ineffective vaccine (children
+getting the <code>Placebo Vaccine</code> didn’t develop polio (<code>No Polio</code>), and
+the children who received the <code>Salk Vaccine</code> developed <code>Polio</code>),</p>
+</li>
+</ol>
+<p>Cross-tabulations are also used to calculate a lot of dichotomous tests,
+too (like <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">sensitivity,
+specificity</a>,
+<a href="https://en.wikipedia.org/wiki/Likelihood_ratios_in_diagnostic_testing">likelihood
+ratios</a>,
+etc).</p>
+<h3 id="the-gss_cat-data">The <code>gss_cat</code> data</h3>
+<p>The <code>gss_cat</code> data come from the <a href="https://forcats.tidyverse.org/"><code>forcats</code>
+package</a>, and it has <em>sample of
+categorical variables from the General Social survey</em>.</p>
+<p>We’ll use the <code>inspectdf::inspect_cat()</code> plot to take a look at the
+levels in each factor variable.</p>
+<pre><code>library(inspectdf)
+gss_cat &lt;- forcats::gss_cat
+gss_cat %&gt;% 
+  inspectdf::inspect_cat() %&gt;% 
+  inspectdf::show_plot(text_labels = TRUE)
+</code></pre>
+<p><img src="how-to-create-crosstabulations_files/figure-markdown_strict/gss_cat-1.png" alt=""></p>
+<p>This graph shows us the <code>gss_cat</code> dataset has six factor variables on
+mostly irreligious (<code>Not applicable</code>), <code>Married</code>, <code>Independent</code>,
+<code>White</code>, <code>Protestant</code> people making <code>$25,000</code> or more.</p>
+<h3 id="create-a-binary-married-variable">Create a binary <code>married</code> variable</h3>
+<p>Someone told me to always name binary variables the name of the response
+it represents, that way I would never wonder what the <code>1</code>s and <code>0</code>s
+mean. For example, a variable named <code>married</code> would be <code>1</code> = “married”
+and <code>0</code> = “not married”.</p>
+<p>Coding responses this way is also handy if you’re summing binary
+categories. Below we will create a numeric binary variable called
+<code>married</code>, which will be coded as,</p>
+<p><code>&quot;Married&quot;</code> = <code>1</code></p>
+<p><code>&quot;Never married&quot;</code>/<code>&quot;Separated&quot;</code>/<code>&quot;Divorced&quot;</code>/<code>&quot;Widowed&quot;</code> = <code>0</code></p>
+<p><code>&quot;No answer&quot;</code> = <code>NA</code></p>
+<p>We’ll use <code>dplyr::mutate()</code> and <code>dplyr::case_when()</code>:</p>
+<pre><code>gss_cat &lt;- gss_cat %&gt;% 
+  dplyr::mutate(married = case_when(
+    
+    marital == &quot;Married&quot; ~ 1, 
+    
+    marital == &quot;Never married&quot; ~ 0, 
+    marital == &quot;Separated&quot; ~ 0, 
+    marital == &quot;Divorced&quot; ~ 0, 
+    marital == &quot;Widowed&quot; ~ 0, 
+    
+    marital == &quot;No answer&quot; ~ NA_real_,
+    TRUE ~ NA_real_))
+</code></pre>
+<h3 id="crosstabs-with-dplyr-and-tidyr">Crosstabs with <code>dplyr</code> and <code>tidyr</code></h3>
+<p>How would we know if we create the <code>marital</code> variable right?</p>
+<p>Well, we could create a cross-tab of <code>marital</code> and <code>married</code> using
+<code>dplyr::group_by()</code> and <code>dplyr::summarize()</code>.</p>
+<pre><code>gss_cat %&gt;%
+  dplyr::group_by(marital, married) %&gt;%
+  dplyr::summarize(married = sum(married == 1),
+                  `not married` = sum(married == 0))
+</code></pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>How can we check our work? Well, before we do that, we will cover the
+differences between <code>dplyr::group_by()</code> + <code>dplyr::summarize()</code>,
+<code>dplyr::count()</code>, and the lower level function <code>dplyr::tally()</code>.</p>
+<h4 id="group_by-summarize--count"><code>group_by</code>, <code>summarize</code> &amp; <code>count</code></h4>
+<p><code>dplyr::count()</code> is really the <code>dplyr::group_by()</code> and
+<code>dplyr::summarize()</code> functions combined. Per the description from the
+help file,</p>
+<p><em>equivalent to <code>df %&gt;% group_by(a, b) %&gt;% summarise(n = n())</code></em></p>
+<p>So, the call above used <code>dplyr::group_by()</code> and <code>dplyr::summarize()</code> to
+collapse the original <code>gss_cat</code> tibble into the available categories in
+<code>marital</code> and <code>married</code>.</p>
+<p>We then we fed the output of <code>dplyr::group_by(marital, married)</code> +
+<code>dplyr::summarize()</code> to the <code>sum()</code> function, but we had to specify the
+two conditions (<code>married == 1</code> and <code>not married == 0</code>) in order to get a
+2 x 2 table.</p>
+<p>If we compare <code>dplyr::group_by()</code> + <code>dplyr::summarize(n = n())</code> with the
+numbers from <code>dplyr::count()</code> below, we see they are identical.</p>
+<pre><code>gss_cat %&gt;%
+  dplyr::count(marital, married)
+</code></pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<pre><code>gss_cat %&gt;% 
+  dplyr::group_by(marital, married) %&gt;% 
+  dplyr::summarise(n = n())
+</code></pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>All the categories from <code>marital</code> and <code>married</code> are accounted for.</p>
+<h4 id="tally"><code>tally</code></h4>
+<p>The <code>dplyr::tally()</code> function doesn’t do any grouping before it counts
+up the categorical levels, so if we try to use it like <code>dplyr::count()</code>,
+we get an error.</p>
+<pre><code>gss_cat %&gt;% 
+  dplyr::tally(marital, married)
+#&gt;  Error: Problem with `summarise()` input `n`.
+#&gt;  x 'sum' not meaningful for factors
+#&gt;  ℹ Input `n` is `sum(marital, na.rm = TRUE)`.
+</code></pre>
+<p>If we can use <code>dplyr::group_by(marital, married)</code> and then feed it to
+<code>dplyr::tally()</code>, it works fine.</p>
+<pre><code>gss_cat %&gt;% 
+  dplyr::group_by(marital, married) %&gt;% 
+  dplyr::tally()
+</code></pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>But none of these functions give us an output that distributes the
+categorical responses across the columns (unless we provide all levels
+of one of the grouped variables).</p>
+<p>Which, as Jenny points out, would be a <em>horrifying</em> idea if we had a
+categorical variable that had multiple levels. Consider <code>rincome</code> (16
+levels) and <code>denom</code> (30 levels)!</p>
+<p>A crosstabulation gives us an idea of where the counts overlap for each
+response category, but so far we’ve only been able to see all possible
+combinations of <code>marital</code> and <code>married</code> with a single <code>n</code> column.</p>
+<h4 id="count--pivot"><code>count</code> &amp; <code>pivot</code></h4>
+<p>We can combine <code>dplyr</code> with <code>tidyr</code> to create quick cross-tabs for
+categorical variables. First we’ll use <code>dplyr::count()</code> to get the
+counts for each response, then we can change the structure of the output
+from the collapsed tibble with <code>tidyr::pivot_wider()</code>.</p>
+<p>For example, we can count <code>married</code> and <code>marital</code>, then pivot <code>married</code>
+responses across the columns.</p>
+<pre><code>gss_cat %&gt;%
+  dplyr::count(married, marital) %&gt;% 
+  tidyr::pivot_wider(names_from = married, 
+                     values_from = n)
+</code></pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Or we can pivot the <code>marital</code> categories across the columns.</p>
+<pre><code>gss_cat %&gt;%
+  dplyr::count(married, marital) %&gt;% 
+  tidyr::pivot_wider(names_from = marital, 
+                     values_from = n)
+</code></pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>In both cases, we can see the each categorical level of <code>married</code> and
+<code>marital</code> printed to the screen, with the <code>n</code> for each cell.</p>
+<h3 id="previous-examples">Previous examples</h3>
+<p><strong>Note</strong> 1) <code>tidyr::spread()</code> is roughly equivalent to
+<code>tidyr::pivot_wider()</code>, so these are updated versions of the previous
+answers below, 2) recall that <code>mtcars</code> is a <code>data.frame</code>, not a
+<code>tibble</code>, so the printing will look different.</p>
+<pre><code>base::class(mtcars)
+# [1] &quot;data.frame&quot;
+
+# group_by, summarize, and spread ---- ---- ----
+mtcars %&gt;%
+  dplyr::group_by(cyl, vs) %&gt;%
+  dplyr::summarize(count = n()) %&gt;%
+  tidyr::spread(vs, count)
+# `summarise()` regrouping output by 'cyl' (override with `.groups` argument)
+# # A tibble: 3 x 3
+# # Groups:   cyl [3]
+#     cyl   `0`   `1`
+#   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+# 1     4     1    10
+# 2     6     3     4
+# 3     8    14    NA
+</code></pre>
+<p>As you can see from the output above, when <code>dplyr::group_by()</code> and
+<code>dplyr::summarize()</code> are combined, a message tells us it would be
+<code>regrouping</code> the output <code>tibble</code> (we can fix this with
+<code>dplyr::ungroup()</code> or <code>.groups</code>).</p>
+<pre><code># group_by, tally, and spread ---- ---- ----
+mtcars %&gt;%
+  dplyr::group_by(cyl, vs) %&gt;%
+  dplyr::tally() %&gt;%
+  tidyr::spread(vs, n)
+# # A tibble: 3 x 3
+# # Groups:   cyl [3]
+#     cyl   `0`   `1`
+#   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+# 1     4     1    10
+# 2     6     3     4
+# 3     8    14    NA
+</code></pre>
+<p>In the second example, <code>dplyr::group_by(cyl, vs)</code> was combined with
+<code>dplyr::tally()</code>, and they return a grouped <code>tibble</code> <em>without</em> a message
+or warning (because it assumes we want the <code>tibble</code> to remain grouped).</p>
+<pre><code># count and spread ---- ---- ----
+mtcars %&gt;%
+  dplyr::count(cyl, vs) %&gt;%
+  tidyr::spread(vs, n) 
+#   cyl  0  1
+# 1   4  1 10
+# 2   6  3  4
+# 3   8 14 NA
+</code></pre>
+<p>The final example uses only <code>dplyr::count()</code> and <code>tidyr::spread()</code> and
+returns a regular <code>data.frame</code>.</p>
+<h3 id="crosstabyls-with-janitor">Cross<code>tabyls</code> with <code>janitor</code></h3>
+<p>The <a href="https://garthtarr.github.io/meatR/janitor.html"><code>janitor</code> package</a>
+has a ton of great tools for data wrangling (see
+<code>janitor::clean_names()</code>), and this package also creates crosstabs with
+it’s <code>tabyl()</code> function.</p>
+<p>We’ll create a <code>tabyl</code> of marital and race called <code>MarRacTabyl</code> below:</p>
+<pre><code>library(janitor)
+MarRacTabyl &lt;- gss_cat %&gt;% 
+  janitor::tabyl(marital, race)
+class(MarRacTabyl)
+#&gt;  [1] &quot;tabyl&quot;      &quot;data.frame&quot;
+</code></pre>
+<p><code>tabyl</code>s are their own class, which allows for beautifully formatted
+crosstabs that print nicely to the console or Rmarkdown file.</p>
+<pre><code>MarRacTabyl
+#&gt;         marital Other Black White Not applicable
+#&gt;       No answer     2     2    13              0
+#&gt;   Never married   633  1305  3478              0
+#&gt;       Separated   110   196   437              0
+#&gt;        Divorced   212   495  2676              0
+#&gt;         Widowed    70   262  1475              0
+#&gt;         Married   932   869  8316              0
+</code></pre>
+<p>The output of a <code>tabyl</code> is nearly identical to the output from
+<code>dplyr::count()</code> + <code>tidyr::pivot_wider()</code>, but <code>janitor</code> makes it easy
+to add totals, percentages, and formatting using the <code>adorn_()</code>
+functions:</p>
+<h4 id="add-a-total-column">Add a total column</h4>
+<pre><code># add total column ----  ----  ----  ---- 
+MarRacTabyl %&gt;% 
+  janitor::adorn_totals(where = &quot;col&quot;)
+
+       marital Other Black White Not applicable Total
+     No answer     2     2    13              0    17
+ Never married   633  1305  3478              0  5416
+     Separated   110   196   437              0   743
+      Divorced   212   495  2676              0  3383
+       Widowed    70   262  1475              0  1807
+       Married   932   869  8316              0 10117
+</code></pre>
+<h4 id="add-a-total-row">Add a total row</h4>
+<pre><code># add total row, drop missing ----  ----  ----  ---- 
+MarRacTabyl &lt;- gss_cat %&gt;% 
+  janitor::tabyl(marital, race, 
+                 show_missing_levels = FALSE)
+MarRacTabyl %&gt;% 
+  janitor::adorn_totals(where = &quot;row&quot;)
+
+       marital Other Black White
+     No answer     2     2    13
+ Never married   633  1305  3478
+     Separated   110   196   437
+      Divorced   212   495  2676
+       Widowed    70   262  1475
+       Married   932   869  8316
+         Total  1959  3129 16395
+</code></pre>
+<h4 id="add-percentages-and-round">Add percentages (and round)</h4>
+<pre><code># add percentages and format ----  ----  ----  ---- 
+MarRacTabyl %&gt;% 
+  janitor::adorn_percentages(&quot;row&quot;) %&gt;%
+  janitor::adorn_pct_formatting(digits = 2) 
+
+       marital  Other  Black  White
+     No answer 11.76% 11.76% 76.47%
+ Never married 11.69% 24.10% 64.22%
+     Separated 14.80% 26.38% 58.82%
+      Divorced  6.27% 14.63% 79.10%
+       Widowed  3.87% 14.50% 81.63%
+       Married  9.21%  8.59% 82.20%
+</code></pre>
+<h4 id="add-ns-and-percentages">Add ns and percentages</h4>
+<pre><code># add ns with percentages ----  ----  ----  ----
+MarRacTabyl %&gt;%
+  janitor::adorn_percentages(&quot;row&quot;) %&gt;%
+  janitor::adorn_pct_formatting(digits = 2) %&gt;%
+  janitor::adorn_ns()
+  
+       marital        Other         Black         White
+     No answer 11.76%   (2) 11.76%    (2) 76.47%   (13)
+ Never married 11.69% (633) 24.10% (1305) 64.22% (3478)
+     Separated 14.80% (110) 26.38%  (196) 58.82%  (437)
+      Divorced  6.27% (212) 14.63%  (495) 79.10% (2676)
+       Widowed  3.87%  (70) 14.50%  (262) 81.63% (1475)
+       Married  9.21% (932)  8.59%  (869) 82.20% (8316)
+</code></pre>
+<p>It’s important to note that the order of the adorn functions matters.
+For example, calling <code>janitor::adorn_totals(where = &quot;col&quot;)</code> at the end
+of this pipeline will throw an error,</p>
+<pre><code>MarRacTabyl %&gt;% 
+  janitor::adorn_percentages(&quot;row&quot;) %&gt;%
+  janitor::adorn_pct_formatting(digits = 2) %&gt;%
+  janitor::adorn_ns() %&gt;% 
+  janitor::adorn_totals(where = &quot;col&quot;) 
+#&gt; Error in janitor::adorn_totals(., where = &quot;col&quot;) : 
+#&gt;  at least one targeted column must be of class numeric.  Control target 
+#&gt;  variables with the ... argument. adorn_totals should be called before 
+#&gt;  other adorn_ functions.
+</code></pre>
+<p>But, if we add a total column <em>before</em> the percentages, everything works
+fine.</p>
+<pre><code>MarRacTabyl %&gt;% 
+  janitor::adorn_totals(where = &quot;col&quot;) %&gt;% 
+  janitor::adorn_percentages(&quot;row&quot;) %&gt;%
+  janitor::adorn_pct_formatting(digits = 2) %&gt;%
+  janitor::adorn_ns() 
+
+       marital        Other         Black         White Not applicable           Total
+     No answer 11.76%   (2) 11.76%    (2) 76.47%   (13)      0.00% (0) 100.00%    (17)
+ Never married 11.69% (633) 24.10% (1305) 64.22% (3478)      0.00% (0) 100.00%  (5416)
+     Separated 14.80% (110) 26.38%  (196) 58.82%  (437)      0.00% (0) 100.00%   (743)
+      Divorced  6.27% (212) 14.63%  (495) 79.10% (2676)      0.00% (0) 100.00%  (3383)
+       Widowed  3.87%  (70) 14.50%  (262) 81.63% (1475)      0.00% (0) 100.00%  (1807)
+       Married  9.21% (932)  8.59%  (869) 82.20% (8316)      0.00% (0) 100.00% (10117)
+</code></pre>
+<p>These also print well with <code>rmarkdown::paged_table()</code> and
+<code>knitr::kable()</code></p>
+<h4 id="tabyl--paged_table"><code>tabyl</code> + <code>paged_table()</code></h4>
+<pre><code>rmarkdown::paged_table(
+  MarRacTabyl %&gt;% 
+  janitor::adorn_totals(where = &quot;col&quot;) %&gt;% 
+  janitor::adorn_percentages(&quot;row&quot;) %&gt;%
+  janitor::adorn_pct_formatting(digits = 2) %&gt;%
+  janitor::adorn_ns()
+)
+</code></pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h4 id="tabyl--kable"><code>tabyl</code> + <code>kable()</code></h4>
+<pre><code>knitr::kable(
+  MarRacTabyl %&gt;% 
+  janitor::adorn_totals(where = &quot;col&quot;) %&gt;% 
+  janitor::adorn_percentages(&quot;row&quot;) %&gt;%
+  janitor::adorn_pct_formatting(digits = 2) %&gt;%
+  janitor::adorn_ns()
+)
+</code></pre>
+<!-- raw HTML omitted -->
+<hr>
+<h3 id="crosstabs-with-tidytidbits">Crosstabs with <code>tidytidbits</code></h3>
+<p>The last example I will mention is from the
+<a href="https://cran.r-project.org/web/packages/tidytidbits/tidytidbits.pdf"><code>tidytidbits</code></a>
+package. The <code>cross_tabulate()</code> produces a nicely printed <code>table</code>
+output.</p>
+<pre><code>library(tidytidbits)
+MarRacCross_Tab &lt;- gss_cat %&gt;% 
+  tidytidbits::cross_tabulate(marital, race)
+MarRacCross_Tab
+#&gt;                 race
+#&gt;  marital         Other Black White Not applicable
+#&gt;    No answer         2     2    13              0
+#&gt;    Never married   633  1305  3478              0
+#&gt;    Separated       110   196   437              0
+#&gt;    Divorced        212   495  2676              0
+#&gt;    Widowed          70   262  1475              0
+#&gt;    Married         932   869  8316              0
+
+utils::str(MarRacCross_Tab)
+#&gt;   'table' int [1:6, 1:4] 2 633 110 212 70 932 2 1305 196 495 ...
+#&gt;   - attr(*, &quot;dimnames&quot;)=List of 2
+#&gt;    ..$ marital: chr [1:6] &quot;No answer&quot; &quot;Never married&quot; &quot;Separated&quot; &quot;Divorced&quot; ...
+#&gt;    ..$ race   : chr [1:4] &quot;Other&quot; &quot;Black&quot; &quot;White&quot; &quot;Not applicable&quot;
+</code></pre>
+<p>But we lose a lot of functionality going from a <code>data.frame</code> or <code>tibble</code>
+to a <code>table</code>.</p>
+<p>The other options from the gist are provided below for posterity:</p>
+<pre><code>#  use melt and dcast on named columns (no pipe)  ---- ---- ---- ----
+library(reshape2)     ## dcast(), melt()
+library(data.table)
+# not this puts a 0, not an NA
+reshape2::dcast(reshape2::melt(mtcars[, c(&quot;cyl&quot;, &quot;vs&quot;)], id = &quot;cyl&quot;), cyl ~ value)
+  #   cyl  0  1
+  # 1   4  1 10
+  # 2   6  3  4
+  # 3   8 14  0
+
+# combine dplyr and reshape2 with pipes  ---- ---- ---- ----
+# @daroczig 
+mtcars %&gt;%
+  dplyr::group_by(cyl, vs) %&gt;%
+  dplyr::summarize(n()) %&gt;%
+  reshape2::dcast(cyl ~ vs)
+  # `summarise()` regrouping output by 'cyl' (override with `.groups` argument)
+  # Using n() as value column: use value.var to override.
+  #   cyl  0  1
+  # 1   4  1 10
+  # 2   6  3  4
+  # 3   8 14 NA
+
+# obligatory data.table option 1 (no pipe)  ---- ---- ---- ----
+# @daroczig 
+mtcarsDT &lt;- mtcars %&gt;% data.table()
+dcast(mtcarsDT[, .N, by = list(cyl, vs)], cyl ~ vs)
+  # Using 'N' as value column. Use 'value.var' to override
+  #    cyl  0  1
+  # 1:   4  1 10
+  # 2:   6  3  4
+  # 3:   8 14 NA
+
+# obligatory data.table option 2 (pipe)  ---- ---- ---- ----
+# @MattDowle
+mtcarsDT[, .N, .(cyl, vs)] %&gt;% dcast(cyl ~ vs)
+# Using 'N' as value column. Use 'value.var' to override
+  #    cyl  0  1
+  # 1:   4  1 10
+  # 2:   6  3  4
+  # 3:   8 14 NA
+</code></pre>
+<h2 id="other-resources-for-crosstabs">Other resources for crosstabs</h2>
+<p>Check out these other sources for crosstabs:</p>
+<ol>
+<li>
+<p><a href="http://analyticswithr.com/contingencytables.html">Contingency Tables - Analytics with
+R</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/54377189/tidyverse-cross-tables-of-one-variable-with-all-other-variables-in-data-frame">SO: Cross tables of one variable with all other variables in
+data.frame</a></p>
+</li>
+<li>
+<p><a href="https://cran.r-project.org/web/packages/janitor/vignettes/tabyls.html">Tabyl
+vignette</a>.</p>
+</li>
+<li>
+<p><a href="https://tidyr.tidyverse.org/articles/pivot.html">Pivoting</a></p>
+</li>
+<li>
+<p><a href="https://dplyr.tidyverse.org/reference/group_by.html">Group by</a> and
+<a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a>
+from <code>dplyr</code></p>
+</li>
+</ol>
 
 
 <footer>
