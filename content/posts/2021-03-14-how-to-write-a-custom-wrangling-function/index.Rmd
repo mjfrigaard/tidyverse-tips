@@ -163,9 +163,9 @@ base::which(cols == "")
 
 `base::which()` returns a numerical vector that correspond to the empty columns in the `cols` matrix.
 
-<!-- ![](images/matrix-indeces.png){width=80%} -->
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/public/posts/2021-03-14-how-to-write-a-custom-wrangling-function/images/matrix-indeces.png){width=80%}
 
-![](~/Dropbox/@projects/02-low-priority/@blogs/tidyverse-dot-tips/tidyverse-tips/public/posts/2021-03-14-how-to-write-a-custom-wrangling-function/images/matrix-indeces.png){width=80%}
+<!-- ![](~/Dropbox/@projects/02-low-priority/@blogs/tidyverse-dot-tips/tidyverse-tips/public/posts/2021-03-14-how-to-write-a-custom-wrangling-function/images/matrix-indeces.png){width=80%} -->
 
 The `split_into_multiple()` function subsets the `cols` matrix with the output from `base::which(cols == "")` and assigns `NA`s to the locations identified above. 
 

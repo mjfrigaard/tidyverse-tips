@@ -123,8 +123,8 @@ cols
 <pre class="r"><code>base::which(cols == &quot;&quot;)
 ## [1]  6 11 12 14 15</code></pre>
 <p><code>base::which()</code> returns a numerical vector that correspond to the empty columns in the <code>cols</code> matrix.</p>
-<!-- ![](images/matrix-indeces.png){width=80%} -->
-<p><img src="/Users/mjfrigaard/Dropbox/@projects/02-low-priority/@blogs/tidyverse-dot-tips/tidyverse-tips/public/posts/2021-03-14-how-to-write-a-custom-wrangling-function/images/matrix-indeces.png" style="width:80.0%" /></p>
+<p><img src="https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/public/posts/2021-03-14-how-to-write-a-custom-wrangling-function/images/matrix-indeces.png" style="width:80.0%" /></p>
+<!-- ![](~/Dropbox/@projects/02-low-priority/@blogs/tidyverse-dot-tips/tidyverse-tips/public/posts/2021-03-14-how-to-write-a-custom-wrangling-function/images/matrix-indeces.png){width=80%} -->
 <p>The <code>split_into_multiple()</code> function subsets the <code>cols</code> matrix with the output from <code>base::which(cols == "")</code> and assigns <code>NA</code>s to the locations identified above.</p>
 <pre class="r"><code>cols[base::which(cols == &quot;&quot;)] &lt;- NA
 cols
