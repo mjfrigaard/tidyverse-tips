@@ -1,15 +1,41 @@
----
-title: How to write a custom wrangling function
-author: R package build
-date: '2021-03-14'
-slug: []
-categories: []
-tags: []
----
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    
+    <title>Tidyverse Tips</title>
+    <link rel="icon" type="image/png" href="/assets/img/favicon.ico" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <script src="/js/dark.js" defer=""></script>
 
-<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
+</head>
+
+<html>
+<!DOCTYPE html>
+<html>
+
+<body>
+  <header class="site-header">
+
+    <div class="wrapper">
+      <a class="muted small" href="https://www.tidyverse.tips/">Tidyverse Tips</a>
+    </div>
+  </header>
+</body>
+
+</html>
+<h1>How to write a custom wrangling function</h1>
+<p class="post-meta"><time itemprop="datePublished">March 14, 2021</time>
+</p>
+
+<script src="https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/index_files/header-attrs/header-attrs.js"></script>
+<link href="https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
+<script src="https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/index_files/pagedtable/js/pagedtable.js"></script>
 
 
 <p>This post comes from a <a href="https://stackoverflow.com/questions/4350440/split-data-frame-string-column-into-multiple-columns">Stackoverflow question</a> that I’ve revisited numerous times over the years.</p>
@@ -123,8 +149,7 @@ cols
 <pre class="r"><code>base::which(cols == &quot;&quot;)
 ## [1]  6 11 12 14 15</code></pre>
 <p><code>base::which()</code> returns a numerical vector that correspond to the empty columns in the <code>cols</code> matrix.</p>
-<!-- ![](images/matrix-indeces.png){width=80%} -->
-<p><img src="/Users/mjfrigaard/Dropbox/@projects/02-low-priority/@blogs/tidyverse-dot-tips/tidyverse-tips/public/posts/2021-03-14-how-to-write-a-custom-wrangling-function/images/matrix-indeces.png" style="width:80.0%" /></p>
+<p><img src="/post/2020-06-23-how-to-split-a-single-string-column-into-multiple-columns_files/matrix-indeces.png" style="width:80.0%" /></p>
 <p>The <code>split_into_multiple()</code> function subsets the <code>cols</code> matrix with the output from <code>base::which(cols == "")</code> and assigns <code>NA</code>s to the locations identified above.</p>
 <pre class="r"><code>cols[base::which(cols == &quot;&quot;)] &lt;- NA
 cols
@@ -392,3 +417,14 @@ JJJSBefore %&gt;%
 </div>
 </div>
 </div>
+
+
+<footer>
+    <div>
+        <h3><a href="https://www.tidyverse.tips/posts">Back to all posts</a></h3>
+    </div>
+    <hr>
+    <p>Go <a href="https://www.tidyverse.tips//index.xml">here</a> for an RSS feed.</p>
+</footer>
+
+</html>

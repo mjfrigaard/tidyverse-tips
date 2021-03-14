@@ -5,6 +5,20 @@
     <link>https://www.tidyverse.tips/</link>
     <description>Recent content on tidyverse tips</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://www.tidyverse.tips/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sun, 14 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.tidyverse.tips/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to write a custom wrangling function</title>
+      <link>https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/</link>
+      <pubDate>Sun, 14 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/</guid>
+      <description>This post comes from a Stackoverflow question that I’ve revisited numerous times over the years.
+The original question:
+ Stackoverflow: Split data frame string column into multiple columns
+  I’d like to take data of the form
+ before = data.frame(attr = c(1, 30, 4, 6), type = c(&amp;#39;foo_and_bar&amp;#39;, &amp;#39;foo_and_bar_2&amp;#39;)) attr type 1 1 foo_and_bar 2 30 foo_and_bar_2 3 4 foo_and_bar 4 6 foo_and_bar_2  and use split() on the column “type” from above to get something like this:</description>
+    </item>
+    
   </channel>
 </rss>

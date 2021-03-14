@@ -163,7 +163,9 @@ base::which(cols == "")
 
 `base::which()` returns a numerical vector that correspond to the empty columns in the `cols` matrix.
 
-![](/post/2020-06-23-how-to-split-a-single-string-column-into-multiple-columns_files/matrix-indeces.png){width=80%}
+<!-- ![](images/matrix-indeces.png){width=80%} -->
+
+![](~/Dropbox/@projects/02-low-priority/@blogs/tidyverse-dot-tips/tidyverse-tips/public/posts/2021-03-14-how-to-write-a-custom-wrangling-function/images/matrix-indeces.png){width=80%}
 
 The `split_into_multiple()` function subsets the `cols` matrix with the output from `base::which(cols == "")` and assigns `NA`s to the locations identified above. 
 
