@@ -4,41 +4,14 @@
   
   <url>
     <loc>https://www.tidyverse.tips/categories/</loc>
-    <lastmod>2021-03-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://www.tidyverse.tips/posts/2021-03-12-how-to-create-crosstabulations-with-janitor-dplyr-and-tidyr/</loc>
-    <lastmod>2021-03-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://www.tidyverse.tips/posts/2021-03-12-how-to-write-a-custom-wrangling-unction/</loc>
-    <lastmod>2021-03-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://www.tidyverse.tips/posts/</loc>
-    <lastmod>2021-03-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://www.tidyverse.tips/categories/programming/</loc>
-    <lastmod>2021-03-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://www.tidyverse.tips/</loc>
-    <lastmod>2021-03-12T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://www.tidyverse.tips/categories/wrangle/</loc>
-    <lastmod>2021-03-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://www.tidyverse.tips/tags/</loc>
+  </url>
+  
+  <url>
+    <loc>https://www.tidyverse.tips/</loc>
   </url>
   
 </urlset>
