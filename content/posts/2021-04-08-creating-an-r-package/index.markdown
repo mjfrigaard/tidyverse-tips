@@ -8,6 +8,9 @@ categories:
 tags: [devtools]
 ---
 
+
+
+
 This post is going to cover how to convert the `split_into_multiple()` function we wrote in the [last post](https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/) into a small R package. Read more about writing R packages in the [R packages book](https://r-pkgs.org/index.html)
 
 ## Install and load the necessary packages
