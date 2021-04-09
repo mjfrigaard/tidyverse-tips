@@ -8,13 +8,20 @@ categories:
 tags: [devtools]
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE
+)
+```
+
+
 This post is going to cover how to convert the `split_into_multiple()` function we wrote in the [last post](https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/) into a small R package. Read more about writing R packages in the [R packages book](https://r-pkgs.org/index.html)
 
 ## Install and load the necessary packages
 
 Run the code below to install and load the necessary packages 
 
-```{r load-packages, eval=FALSE}
+```{r load-packages}
 # install
 install.packages(c("devtools", "roxygen2", "testthat", "knitr",
                    "tidyverse", "fs", "withr"))
@@ -33,17 +40,21 @@ library(withr)
 
 We'll use the IDE to create our new package by clicking on *Project* > *New Project* > *R package*, and then fill in the necessary information. We are going to call this package `diyrrr` (for do-it-yourself R).
 
-<img src="images/diyrrr-pkg-01.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-01.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-01.jpg)
 
 After clicking on *Create Project*, a new R session will open with the following contents: 
 
-<img src="images/diyrrr-pkg-02.jpg" alt="" width="70%" height="70%"/>
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-02.jpg)
+
+<!-- <img src="images/diyrrr-pkg-02.jpg" alt="" width="70%" height="70%"/> -->
 
 ### Package contents 
 
 Below is a folder tree of our new package files. 
 
-```{r tree, eval=FALSE}
+```{r tree}
 diyrrr/
     ├── DESCRIPTION
     ├── NAMESPACE
@@ -60,7 +71,7 @@ The DESCRIPTION and NAMESPACE are plain text files. The `R/` folder has a single
 
 We checked the *Create a git repository* option when we created this package (odds are will want to collaborate and get feedback), but we want to make sure this folder is set up properly (and that the appropriate files/extensions are added to the `.gitignore`). We can do this by running the `usethis::use_git()` function (no additional arguments)
 
-```{r use_git, eval=FALSE}
+```{r use_git}
 > usethis::use_git()
 ✓ Setting active project to '/Documents/diyrrr'
 ✓ Adding '.Rdata', '.httr-oauth', '.DS_Store' to '.gitignore'
@@ -81,7 +92,7 @@ Is it ok to commit them?
 
 We `Absolutely` want to do this, so we'll type `1` and hit enter: 
 
-```{r use_git-select-3, eval=FALSE}
+```{r use_git-select-3}
 Selection: 1
 ✓ Adding files
 ✓ Making a commit with message 'Initial commit'
@@ -110,7 +121,7 @@ It's similar to tidyr::separate(), but with an known number of `cols`, so we wil
 
 To create this function, we use `usethis::use_r("separate_uk_cols")`
 
-```{r use-r-separate_uk_cols, eval=FALSE}
+```{r use-r-separate_uk_cols}
 usethis::use_r("separate_uk_cols")
 ✓ Setting active project to '@r-packages/diyrrr'
 ● Modify 'R/separate_uk_cols.R'
@@ -119,7 +130,7 @@ usethis::use_r("separate_uk_cols")
 
 This creates and opens a `R/separate_uk_cols.R` file, and we will put the code below into our new script:
 
-```{r separate_uk_cols, eval=FALSE}
+```{r separate_uk_cols}
 separate_uk_cols <- function(data, col, pattern = "[^[:alnum:]]+", into_prefix) {
   in_pattern <- pattern
   in_data <- as_tibble(data)
@@ -139,7 +150,7 @@ separate_uk_cols <- function(data, col, pattern = "[^[:alnum:]]+", into_prefix) 
 
 We removed the comments (below), but we will use these for documentation later :) 
 
-```{r comments, eval=FALSE}
+```{r comments}
 # use regex for pattern, or whatever is provided
 # convert data to tibble
 # convert col to character vector
@@ -155,7 +166,7 @@ We removed the comments (below), but we will use these for documentation later :
 
 As we can see, this function uses the `tibble`, `stringr` and `dplyr` packages, so we need to add these to the `DESCRIPTION` file using the `usethis::use_package()` function:
 
-```{r use_package, eval=FALSE}
+```{r use_package}
 > usethis::use_package(package = "tibble")
 ✓ Adding 'tibble' to Imports field in DESCRIPTION
 ● Refer to functions with `tibble::fun()`
@@ -190,7 +201,7 @@ Imports:
 
 The output tells us we need to add the `package::function()` syntax for the three imported functions (`tibble`, `dplyr`, `stringr`):
 
-```{r add-pkg-fun, eval=FALSE}
+```{r add-pkg-fun}
 separate_uk_cols <- function(data, col, pattern = "[^[:alnum:]]+", into_prefix) {
   in_pattern <- pattern
   in_data <- tibble::as_tibble(data)
@@ -212,11 +223,13 @@ separate_uk_cols <- function(data, col, pattern = "[^[:alnum:]]+", into_prefix) 
 
 With our cursor placed inside the `separate_uk_cols()` function, we can navigate to the toolbar and under the *'Code'* option, we will select the *'Insert Roxygen skeleton'* option.
 
-<img src="images/diyrrr-pkg-03.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-03.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-03.jpg)
 
 This inserts the following code at the top of the `R/separate_uk_cols.R` file:
 
-```{r roxygen2, eval=FALSE}
+```{r roxygen2}
 #' Title
 #'
 #' @param data
@@ -232,13 +245,13 @@ This inserts the following code at the top of the `R/separate_uk_cols.R` file:
 
 The `Title` can be changed to `separate_uk_cols`.
 
-```{r Title, eval=FALSE}
+```{r Title}
 #' separate_uk_cols
 ```
 
 The `@param` tags need a `name` and a `description`, we we include below:
 
-```{r params, eval=FALSE}
+```{r params}
 #' @param data data.frame or tibble
 #' @param col column to be separated
 #' @param pattern regular expression pattern
@@ -247,13 +260,13 @@ The `@param` tags need a `name` and a `description`, we we include below:
 
 The `@export` tag is set to `separate_uk_cols`
 
-```{r export, eval=FALSE}
+```{r export}
 #' @export separate_uk_cols
 ```
 
 We will remove the `@return` and `@example` tags from the `separate_uk_cols.R` file and use the `devtools::document()` function (wrapper for  `roxygen2::roxygenize()`) to include the documentation for  `separate_uk_cols()`.
 
-```{r document, eval=FALSE}
+```{r document}
 > devtools::document()
 ℹ Updating diyrrr documentation
 First time using roxygen2. Upgrading automatically...
@@ -272,7 +285,7 @@ exportPattern("^[[:alpha:]]+")
 
 Because there is only a single line in our `NAMESPACE`, we will remove this file and re-run `devtools::document()` so it will generate (and overwrite) it's contents. 
 
-```{r rerun-document, eval=FALSE}
+```{r rerun-document}
 > unlink(x = "NAMESPACE")
 > devtools::document()
 ℹ Updating diyrrr documentation
@@ -320,7 +333,7 @@ export(separate_uk_cols)
 
 Finally, we will run `devtools::check()` (*`check` automatically builds and checks a source package, using all known best practices.*)
 
-```{r check, eval=FALSE}
+```{r check}
 > devtools::check()
 ℹ Updating diyrrr documentation
 ℹ Loading diyrrr
@@ -447,14 +460,14 @@ Duration: 13.9s
 
 We can see the package has `1 error` and `1 warning`. The error is being generated by our boilerplate `hello.R` and `hello.Rd` files (which we can remove):
 
-```{r remove-hello, eval=FALSE}
+```{r remove-hello}
 unlink("R/hello.R")
 unlink("man/hello.Rd")
 ```
 
 We can address the warning (`Non-standard license specification`) with the `usethis::use_mit_license()` function:
 
-```{r use_mit_license, eval=FALSE}
+```{r use_mit_license}
 usethis::use_mit_license()
 ✓ Setting License field in DESCRIPTION to 'MIT + file LICENSE'
 ✓ Writing 'LICENSE'
@@ -464,7 +477,7 @@ usethis::use_mit_license()
 
 Now when we re-run `devtools::check()` it passes with flying colors!
 
-```{r checks-passed, eval=FALSE}
+```{r checks-passed}
 0 errors ✓ | 0 warnings ✓ | 0 notes ✓
 ```
 
@@ -474,7 +487,7 @@ We created a test dataset in the previous post to test the `separate_uk_cols()` 
 
 We can include the commands used to create the `j3s` data in the `data-raw/` folder using the `usethis::use_data_raw()` function:
 
-```{r use_data_raw, eval=FALSE}
+```{r use_data_raw}
 usethis::use_data_raw(name = "j3s")
 ✓ Creating 'data-raw/'
 ✓ Adding '^data-raw$' to '.Rbuildignore'
@@ -486,7 +499,7 @@ usethis::use_data_raw(name = "j3s")
 
 We will add the code to `data-raw/j3s.R` (I've left the boilerplate portions in this file):
 
-```{r j3s.R, eval=FALSE}
+```{r j3s.R}
 ## code to prepare `j3s` dataset goes here
 
 j3s <- tibble::tribble(
@@ -502,7 +515,7 @@ usethis::use_data(j3s, overwrite = TRUE)
 
 After saving and running this code, we can see that the `usethis::use_data(j3s, overwrite = TRUE)` function adds the `j3s.rda` to the `data/` folder only once.
 
-```{r use_data, eval=FALSE}
+```{r use_data}
 usethis::use_data(j3s, j3s)
 Warning: Saving duplicates only once: 'j3s'
 ✓ Saving 'j3s' to 'data/j3s.rda'
@@ -534,23 +547,39 @@ Let's build and install this package so see if it works!
 
 We need to configure our build tools a bit before building the `diyrrr` package. Navigate to the **Build** pane and click on *More* > *Configure Build Tools...*
 
-<img src="images/diyrrr-pkg-04.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-04.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-04.jpg)
+
+
 
 Under *Project Options* click on *Generate documentation with Roxygen*, 
 
-<img src="images/diyrrr-pkg-05.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-05.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-05.jpg)
+
+
 
 then click the following options: 
 
-<img src="images/diyrrr-pkg-06.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-06.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-06.jpg)
+
+
 
 Click *Ok* and *Ok*, the click on *Install and Restart* in the **Build** pane. You should see the following: 
 
-<img src="images/diyrrr-pkg-07.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-07.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-07.jpg)
 
 And the `diyrrr` package should be loaded in the **Console** pane. 
 
-<img src="images/diyrrr-pkg-08.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-08.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-08.jpg)
 
 We can see the package has been loaded and the data and functions are available!
 

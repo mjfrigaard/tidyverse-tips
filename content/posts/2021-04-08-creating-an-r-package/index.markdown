@@ -37,11 +37,15 @@ library(withr)
 
 We'll use the IDE to create our new package by clicking on *Project* > *New Project* > *R package*, and then fill in the necessary information. We are going to call this package `diyrrr` (for do-it-yourself R).
 
-<img src="images/diyrrr-pkg-01.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-01.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-01.jpg)
 
 After clicking on *Create Project*, a new R session will open with the following contents: 
 
-<img src="images/diyrrr-pkg-02.jpg" alt="" width="70%" height="70%"/>
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-02.jpg)
+
+<!-- <img src="images/diyrrr-pkg-02.jpg" alt="" width="70%" height="70%"/> -->
 
 ### Package contents 
 
@@ -224,7 +228,9 @@ separate_uk_cols <- function(data, col, pattern = "[^[:alnum:]]+", into_prefix) 
 
 With our cursor placed inside the `separate_uk_cols()` function, we can navigate to the toolbar and under the *'Code'* option, we will select the *'Insert Roxygen skeleton'* option.
 
-<img src="images/diyrrr-pkg-03.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-03.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-03.jpg)
 
 This inserts the following code at the top of the `R/separate_uk_cols.R` file:
 
@@ -559,23 +565,39 @@ Let's build and install this package so see if it works!
 
 We need to configure our build tools a bit before building the `diyrrr` package. Navigate to the **Build** pane and click on *More* > *Configure Build Tools...*
 
-<img src="images/diyrrr-pkg-04.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-04.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-04.jpg)
+
+
 
 Under *Project Options* click on *Generate documentation with Roxygen*, 
 
-<img src="images/diyrrr-pkg-05.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-05.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-05.jpg)
+
+
 
 then click the following options: 
 
-<img src="images/diyrrr-pkg-06.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-06.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-06.jpg)
+
+
 
 Click *Ok* and *Ok*, the click on *Install and Restart* in the **Build** pane. You should see the following: 
 
-<img src="images/diyrrr-pkg-07.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-07.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-07.jpg)
 
 And the `diyrrr` package should be loaded in the **Console** pane. 
 
-<img src="images/diyrrr-pkg-08.jpg" alt="" width="80%" height="80%"/>
+<!-- <img src="images/diyrrr-pkg-08.jpg" alt="" width="80%" height="80%"/> -->
+
+![](https://raw.githubusercontent.com/mjfrigaard/tidyverse-tips/master/content/posts/2021-04-08-creating-an-r-package/images/diyrrr-pkg-08.jpg)
 
 We can see the package has been loaded and the data and functions are available!
 
