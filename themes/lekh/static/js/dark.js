@@ -431,7 +431,7 @@ function setMode(modeOption) {
     // Inject the appropriate styles.
     let modeStyles = document.querySelector("#mode-styles");
     if (modeOption == 'auto') {
-        modeStyles.innerHTML = `@media (prefers-color-scheme:dark) {${GW.modeStyles}}`;
+        modeStyles.innerHTML = `@media (prefers-color-scheme:light) {${GW.modeStyles}}`;
     } else if (modeOption == 'dark') {
         modeStyles.innerHTML = GW.modeStyles;
     } else {
