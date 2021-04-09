@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on tidyverse tips</title>
-    <link>https://www.tidyverse.tips/posts/</link>
-    <description>Recent content in Posts on tidyverse tips</description>
+    <title>devtools on tidyverse tips</title>
+    <link>https://www.tidyverse.tips/tags/devtools/</link>
+    <description>Recent content in devtools on tidyverse tips</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.tidyverse.tips/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.tidyverse.tips/tags/devtools/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Creating an R package</title>
       <link>https://www.tidyverse.tips/posts/2021-04-08-creating-an-r-package/</link>
@@ -16,19 +16,6 @@
       <description>This post is going to cover how to convert the split_into_multiple() function we wrote in the last post into a small R package. Read more about writing R packages in the R packages book
 Install and load the necessary packages Run the code below to install and load the necessary packages
 # install install.packages(c(&amp;#34;devtools&amp;#34;, &amp;#34;roxygen2&amp;#34;, &amp;#34;testthat&amp;#34;, &amp;#34;knitr&amp;#34;, &amp;#34;tidyverse&amp;#34;, &amp;#34;fs&amp;#34;, &amp;#34;withr&amp;#34;)) # load  library(devtools) library(roxygen2) library(testthat) library(knitr) library(tidyverse) library(fs) library(withr) Creating the package We&amp;rsquo;ll use the IDE to create our new package by clicking on Project &amp;gt; New Project &amp;gt; R package, and then fill in the necessary information.</description>
-    </item>
-    
-    <item>
-      <title>How to write a custom wrangling function</title>
-      <link>https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/</link>
-      <pubDate>Sun, 14 Mar 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.tidyverse.tips/posts/2021-03-14-how-to-write-a-custom-wrangling-function/</guid>
-      <description>This post comes from a Stackoverflow question that I’ve revisited numerous times over the years.
-The original question:
- Stackoverflow: Split data frame string column into multiple columns
-  I’d like to take data of the form
- before = data.frame(attr = c(1, 30, 4, 6), type = c(&amp;#39;foo_and_bar&amp;#39;, &amp;#39;foo_and_bar_2&amp;#39;)) attr type 1 1 foo_and_bar 2 30 foo_and_bar_2 3 4 foo_and_bar 4 6 foo_and_bar_2  and use split() on the column “type” from above to get something like this:</description>
     </item>
     
   </channel>
