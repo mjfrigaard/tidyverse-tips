@@ -6,7 +6,6 @@ slug: []
 categories:
   - programming
 tags: []
-draft: yes
 ---
 <link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
 <script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>

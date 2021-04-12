@@ -18,5 +18,18 @@ Install and load the necessary packages Run the code below to install and load t
 # install install.packages(c(&amp;#34;devtools&amp;#34;, &amp;#34;roxygen2&amp;#34;, &amp;#34;testthat&amp;#34;, &amp;#34;knitr&amp;#34;, &amp;#34;tidyverse&amp;#34;, &amp;#34;fs&amp;#34;, &amp;#34;withr&amp;#34;)) # load  library(devtools) library(roxygen2) library(testthat) library(knitr) library(tidyverse) library(fs) library(withr) Creating the package We&amp;rsquo;ll use the IDE to create our new package by clicking on Project &amp;gt; New Project &amp;gt; R package, and then fill in the necessary information.</description>
     </item>
     
+    <item>
+      <title>How to write custom functions</title>
+      <link>https://www.tidyverse.tips/posts/2021-03-14-how-to-write-custom-functions/</link>
+      <pubDate>Sun, 14 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.tidyverse.tips/posts/2021-03-14-how-to-write-custom-functions/</guid>
+      <description>This post comes from a Stackoverflow question that I&amp;rsquo;ve revisited numerous times over the years.
+The original question:
+ Stackoverflow: Split data frame string column into multiple columns
+  I&amp;rsquo;d like to take data of the form
+ before = data.frame(attr = c(1, 30, 4, 6), type = c(&amp;#39;foo_and_bar&amp;#39;, &amp;#39;foo_and_bar_2&amp;#39;)) attr type 1 1 foo_and_bar 2 30 foo_and_bar_2 3 4 foo_and_bar 4 6 foo_and_bar_2  and use split() on the column &amp;ldquo;type&amp;rdquo; from above to get something like this:</description>
+    </item>
+    
   </channel>
 </rss>
