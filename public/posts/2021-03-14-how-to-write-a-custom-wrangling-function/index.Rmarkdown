@@ -26,7 +26,7 @@ The original question:
 
 > *I'd like to take data of the form*
 
-```r
+```{r , eval=FALSE}
 before = data.frame(attr = c(1, 30, 4, 6), 
                     type = c('foo_and_bar', 
                              'foo_and_bar_2'))
@@ -40,7 +40,7 @@ before = data.frame(attr = c(1, 30, 4, 6),
 
 > *and use `split()` on the column "`type`" from above to get something like this:*
 
-```r
+```{r , eval=FALSE}
   attr type_1 type_2
 1    1    foo    bar
 2   30    foo  bar_2
