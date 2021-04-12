@@ -7,30 +7,6 @@ categories:
   - programming
 tags: []
 ---
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
-<link href="{{< blogdown/postref >}}index_files/pagedtable/css/pagedtable.css" rel="stylesheet" />
-<script src="{{< blogdown/postref >}}index_files/pagedtable/js/pagedtable.js"></script>
 
 
 
@@ -108,11 +84,17 @@ JJJSBefore <- tibble::tribble(
         12L,              "JJJ, Schmidt")
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John"},{"1":"91","2":"John, Jacob"},{"1":"39","2":"John, Jacob, Jingleheimer"},{"1":"28","2":"Jingleheimer, Schmidt"},{"1":"12","2":"JJJ, Schmidt"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+
+```
+## # A tibble: 5 x 2
+##   value name                     
+##   <int> <chr>                    
+## 1    29 John                     
+## 2    91 John, Jacob              
+## 3    39 John, Jacob, Jingleheimer
+## 4    28 Jingleheimer, Schmidt    
+## 5    12 JJJ, Schmidt
+```
 
 <br></br>
 
@@ -133,11 +115,21 @@ JJJSBefore %>%
         tidyr::unnest(name) 
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John"},{"1":"91","2":"John"},{"1":"91","2":"Jacob"},{"1":"39","2":"John"},{"1":"39","2":"Jacob"},{"1":"39","2":"Jingleheimer"},{"1":"28","2":"Jingleheimer"},{"1":"28","2":"Schmidt"},{"1":"12","2":"JJJ"},{"1":"12","2":"Schmidt"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```
+## # A tibble: 10 x 2
+##    value name        
+##    <int> <chr>       
+##  1    29 John        
+##  2    91 John        
+##  3    91 Jacob       
+##  4    39 John        
+##  5    39 Jacob       
+##  6    39 Jingleheimer
+##  7    28 Jingleheimer
+##  8    28 Schmidt     
+##  9    12 JJJ         
+## 10    12 Schmidt
+```
 
 This gets the data into a tidy format, but it would require some additional wrangling steps to get the data back into the two columns the question was looking for. 
 
@@ -149,7 +141,7 @@ I've copied Yannis-P's comment on the proposed solution below:
 
 <br></br>
 
-### Original `split_into_multiple()`
+### Original split_into_multiple() function
 
 Here is the function:
 
@@ -247,7 +239,7 @@ cols <- tibble::as.tibble(cols)
 cols
 ```
 
-### `as.tibble()` warning
+### as.tibble() warning
 
 `as.tibble()` throws the following warning, 
 
@@ -266,8 +258,6 @@ cols <- tibble::as_tibble(cols, .name_repair = "universal")
 cols
 ```
 
-### `as_tibble()` warning
-
 Now `tibble::as_tibble()` is throwing this warning, 
 
 ```
@@ -280,6 +270,10 @@ This warning is displayed once every 8 hours.
 If I supply the `.name_repair = "universal"` argument, I get the following column names:
 
 
+```r
+cols <- tibble::as_tibble(cols, .name_repair = "universal")
+```
+
 ```
 ## New names:
 ## * `` -> ...1
@@ -287,11 +281,13 @@ If I supply the `.name_repair = "universal"` argument, I get the following colum
 ## * `` -> ...3
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["...1"],"name":[1],"type":["chr"],"align":["left"]},{"label":["...2"],"name":[2],"type":["chr"],"align":["left"]},{"label":["...3"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"John","2":"NA","3":"NA"},{"1":"John","2":"Jacob","3":"NA"},{"1":"John","2":"Jacob","3":"Jingleheimer"},{"1":"Jingleheimer","2":"Schmidt","3":"NA"},{"1":"JJJ","2":"Schmidt","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```r
+names(cols)
+```
+
+```
+## [1] "...1" "...2" "...3"
+```
 
 <br></br>
 
@@ -299,11 +295,17 @@ This will likely be an issue down the road, so I'll address it when I make some 
 
 Now we have a `tibble`, but we're missing the original `value` column from `JJJSBefore` (see below). 
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John"},{"1":"91","2":"John, Jacob"},{"1":"39","2":"John, Jacob, Jingleheimer"},{"1":"28","2":"Jingleheimer, Schmidt"},{"1":"12","2":"JJJ, Schmidt"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+
+```
+## # A tibble: 5 x 2
+##   value name                     
+##   <int> <chr>                    
+## 1    29 John                     
+## 2    91 John, Jacob              
+## 3    39 John, Jacob, Jingleheimer
+## 4    28 Jingleheimer, Schmidt    
+## 5    12 JJJ, Schmidt
+```
 
 <br></br>
 
@@ -353,9 +355,7 @@ Put all together, the function works like so,
 split_into_multiple(column = JJJSBefore$name, 
                     pattern = ", ", 
                     into_prefix = "name") -> JJJAfter
-JJJAfter
 ```
-
 
 ```
 ## Warning: `as.tibble()` was deprecated in tibble 2.0.0.
@@ -368,17 +368,26 @@ JJJAfter
 ## Using compatibility `.name_repair`.
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["name_1"],"name":[1],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"John","2":"NA","3":"NA"},{"1":"John","2":"Jacob","3":"NA"},{"1":"John","2":"Jacob","3":"Jingleheimer"},{"1":"Jingleheimer","2":"Schmidt","3":"NA"},{"1":"JJJ","2":"Schmidt","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```r
+JJJAfter
+```
+
+```
+## # A tibble: 5 x 3
+##   name_1       name_2  name_3      
+##   <chr>        <chr>   <chr>       
+## 1 John         <NA>    <NA>        
+## 2 John         Jacob   <NA>        
+## 3 John         Jacob   Jingleheimer
+## 4 Jingleheimer Schmidt <NA>        
+## 5 JJJ          Schmidt <NA>
+```
 
 <br></br>
 
 ***
 
-### Address `tibble` warnings 
+### Address tibble warnings 
 
 The `as_tibble()`/`as.tibble()` warnings can be addressed by assigning column names with `base::colnames()` to the matrix ***before*** converting this into a tibble. 
 
@@ -400,11 +409,16 @@ cols <- as_tibble(cols)
 cols
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["name_1"],"name":[1],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"John","2":"NA","3":"NA"},{"1":"John","2":"Jacob","3":"NA"},{"1":"John","2":"Jacob","3":"Jingleheimer"},{"1":"Jingleheimer","2":"Schmidt","3":"NA"},{"1":"JJJ","2":"Schmidt","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```
+## # A tibble: 5 x 3
+##   name_1       name_2  name_3      
+##   <chr>        <chr>   <chr>       
+## 1 John         <NA>    <NA>        
+## 2 John         Jacob   <NA>        
+## 3 John         Jacob   Jingleheimer
+## 4 Jingleheimer Schmidt <NA>        
+## 5 JJJ          Schmidt <NA>
+```
 
 <br></br>
 
@@ -419,7 +433,7 @@ I'll also add a few arguments:
 
 <br></br>
 
-## New `split_into_multiple()` 
+## New split_into_multiple() function 
 
 My adjusted `split_into_multiple()` function is below. 
 
@@ -464,11 +478,16 @@ JJJSBefore %>%
 JJJAfter
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John","3":"John","4":"NA","5":"NA"},{"1":"91","2":"John, Jacob","3":"John","4":"Jacob","5":"NA"},{"1":"39","2":"John, Jacob, Jingleheimer","3":"John","4":"Jacob","5":"Jingleheimer"},{"1":"28","2":"Jingleheimer, Schmidt","3":"Jingleheimer","4":"Schmidt","5":"NA"},{"1":"12","2":"JJJ, Schmidt","3":"JJJ","4":"Schmidt","5":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```
+## # A tibble: 5 x 5
+##   value name                      name_1       name_2  name_3      
+##   <int> <chr>                     <chr>        <chr>   <chr>       
+## 1    29 John                      John         <NA>    <NA>        
+## 2    91 John, Jacob               John         Jacob   <NA>        
+## 3    39 John, Jacob, Jingleheimer John         Jacob   Jingleheimer
+## 4    28 Jingleheimer, Schmidt     Jingleheimer Schmidt <NA>        
+## 5    12 JJJ, Schmidt              JJJ          Schmidt <NA>
+```
 
 **GREAT!** It works! But I should test `split_into_multiple()` on a few more examples.
 
@@ -485,11 +504,13 @@ I'll test to see if `split_into_multiple()` works on the `Before` data in the or
 Before
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["attr"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo_and_bar"},{"1":"30","2":"foo_and_bar_2"},{"1":"4","2":"foo_and_bar_2_and_bar_3"},{"1":"6","2":"foo_and_bar"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```
+##   attr                    type
+## 1    1             foo_and_bar
+## 2   30           foo_and_bar_2
+## 3    4 foo_and_bar_2_and_bar_3
+## 4    6             foo_and_bar
+```
 
 <br></br>
 
@@ -502,11 +523,15 @@ Before %>%
                       into_prefix = "type")
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["attr"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["type_1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["type_2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["type_3"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo_and_bar","3":"foo","4":"bar","5":"NA"},{"1":"30","2":"foo_and_bar_2","3":"foo","4":"bar_2","5":"NA"},{"1":"4","2":"foo_and_bar_2_and_bar_3","3":"foo","4":"bar_2","5":"bar_3"},{"1":"6","2":"foo_and_bar","3":"foo","4":"bar","5":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```
+## # A tibble: 4 x 5
+##    attr type                    type_1 type_2 type_3
+##   <dbl> <chr>                   <chr>  <chr>  <chr> 
+## 1     1 foo_and_bar             foo    bar    <NA>  
+## 2    30 foo_and_bar_2           foo    bar_2  <NA>  
+## 3     4 foo_and_bar_2_and_bar_3 foo    bar_2  bar_3 
+## 4     6 foo_and_bar             foo    bar    <NA>
+```
 
 So far, so good!
 
@@ -526,13 +551,17 @@ WorseThanBefore <- tibble::tribble(
 WorseThanBefore
 ```
 
-<br></br>
+```
+## # A tibble: 4 x 2
+##    attr type                   
+##   <int> <chr>                  
+## 1     1 foo, bar               
+## 2    30 foo-bar/2              
+## 3     4 foo...bar...2...bar...3
+## 4     6 foo | bar
+```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["attr"],"name":[1],"type":["int"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo, bar"},{"1":"30","2":"foo-bar/2"},{"1":"4","2":"foo...bar...2...bar...3"},{"1":"6","2":"foo | bar"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+
 
 <br></br>
 
@@ -546,11 +575,16 @@ WorseThanBefore %>%
                       into_prefix = "type")
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["attr"],"name":[1],"type":["int"],"align":["right"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["type_1"],"name":[3],"type":["chr"],"align":["left"]},{"label":["type_2"],"name":[4],"type":["chr"],"align":["left"]},{"label":["type_3"],"name":[5],"type":["chr"],"align":["left"]},{"label":["type_4"],"name":[6],"type":["chr"],"align":["left"]},{"label":["type_5"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"foo, bar","3":"foo","4":"bar","5":"NA","6":"NA","7":"NA"},{"1":"30","2":"foo-bar/2","3":"foo","4":"bar","5":"2","6":"NA","7":"NA"},{"1":"4","2":"foo...bar...2...bar...3","3":"foo","4":"bar","5":"2","6":"bar","7":"3"},{"1":"6","2":"foo | bar","3":"foo","4":"bar","5":"NA","6":"NA","7":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```
+## # A tibble: 4 x 7
+##    attr type                    type_1 type_2 type_3 type_4 type_5
+##   <int> <chr>                   <chr>  <chr>  <chr>  <chr>  <chr> 
+## 1     1 foo, bar                foo    bar    <NA>   <NA>   <NA>  
+## 2    30 foo-bar/2               foo    bar    2      <NA>   <NA>  
+## 3     4 foo...bar...2...bar...3 foo    bar    2      bar    3     
+## 4     6 foo | bar               foo    bar    <NA>   <NA>   <NA>
+```
+
 
 <br></br>
 
@@ -565,11 +599,16 @@ JJJSBefore %>%
   dplyr::select(value, dplyr::contains("name_"))
 ```
 
-<div data-pagedtable="false">
-  <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["value"],"name":[1],"type":["int"],"align":["right"]},{"label":["name_1"],"name":[2],"type":["chr"],"align":["left"]},{"label":["name_2"],"name":[3],"type":["chr"],"align":["left"]},{"label":["name_3"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"29","2":"John","3":"NA","4":"NA"},{"1":"91","2":"John","3":"Jacob","4":"NA"},{"1":"39","2":"John","3":"Jacob","4":"Jingleheimer"},{"1":"28","2":"Jingleheimer","3":"Schmidt","4":"NA"},{"1":"12","2":"JJJ","3":"Schmidt","4":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+```
+## # A tibble: 5 x 4
+##   value name_1       name_2  name_3      
+##   <int> <chr>        <chr>   <chr>       
+## 1    29 John         <NA>    <NA>        
+## 2    91 John         Jacob   <NA>        
+## 3    39 John         Jacob   Jingleheimer
+## 4    28 Jingleheimer Schmidt <NA>        
+## 5    12 JJJ          Schmidt <NA>
+```
 
 <br></br>
 
@@ -578,7 +617,7 @@ JJJSBefore %>%
 This `split_into_multiple()` function has been really helpful for me in the last few projects I've been working on. I hope you can use it too!
 
 
-#### Noteworthy non-`tidyverse` alternatives
+#### Noteworthy non-tidyverse alternatives
 
 I also liked the `cSplit()` function from the [`splitstackshape` package](https://github.com/mrdwab/splitstackshape) because it can take multiple columns and can be tidied up all in one go!
 
@@ -648,18 +687,6 @@ JJJSBefore %>%
 
 Huge thanks to [Hadley](https://stackoverflow.com/users/16632/hadley) and [Yannis P.](https://stackoverflow.com/users/1885713/yannis-p) and everyone else on Stackoverflow!
 
-
-```r
-tidyverse_logo()
-```
-
-```
-## ⬢ __  _    __   .    ⬡           ⬢  . 
-##  / /_(_)__/ /_ ___  _____ _______ ___ 
-## / __/ / _  / // / |/ / -_) __(_-</ -_)
-## \__/_/\_,_/\_, /|___/\__/_/ /___/\__/ 
-##      ⬢  . /___/      ⬡      .       ⬢
-```
 
 
 
