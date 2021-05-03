@@ -5,8 +5,8 @@ date: '2021-05-03'
 slug: []
 categories:
   - blogdown
-tags: []
-draft: yes
+  - programming
+tags: [blogdown]
 ---
 
 
