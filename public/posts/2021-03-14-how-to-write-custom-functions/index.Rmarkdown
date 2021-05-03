@@ -12,7 +12,6 @@ tags: []
 knitr::opts_chunk$set(
   eval = TRUE
 )
-options(dplyr.tibble.print = 10)
 ```
 
 
@@ -68,8 +67,8 @@ JJJSBefore <- tibble::tribble(
         12L,              "JJJ, Schmidt")
 ```
 
-```{r, echo=FALSE}
-rmarkdown::paged_table(JJJSBefore)
+```{r, eval = TRUE, echo=FALSE}
+JJJSBefore
 ```
 
 <br></br>
@@ -80,7 +79,7 @@ rmarkdown::paged_table(JJJSBefore)
 
 One possible solution is to combine `dplyr::mutate()`, `stringr::str_split()`, and `tidyr::unnest()`.  
 
-```{r mutate-str_split-unnest, eval=FALSE}
+```{r mutate-str_split-unnest, eval=TRUE}
 JJJSBefore %>%
         dplyr::mutate(name = 
     # 1) split this on the ", " pattern
@@ -88,15 +87,6 @@ JJJSBefore %>%
                                 pattern = ", ")) %>% 
     # 2) convert output from str_split across rows
         tidyr::unnest(name) 
-```
-
-```{r , echo=FALSE}
-rmarkdown::paged_table(
-JJJSBefore %>%
-        dplyr::mutate(name = 
-             stringr::str_split(string = name, 
-                                pattern = ", ")) %>% 
-        tidyr::unnest(name))
 ```
 
 This gets the data into a tidy format, but it would require some additional wrangling steps to get the data back into the two columns the question was looking for. 
@@ -109,7 +99,7 @@ I've copied Yannis-P's comment on the proposed solution below:
 
 <br></br>
 
-### Original `split_into_multiple()`
+### Original split_into_multiple() function
 
 Here is the function:
 
@@ -179,7 +169,7 @@ cols <- tibble::as.tibble(cols)
 cols
 ```
 
-### `as.tibble()` warning
+### as.tibble() warning
 
 `as.tibble()` throws the following warning, 
 
@@ -197,8 +187,6 @@ cols <- tibble::as_tibble(cols, .name_repair = "universal")
 cols
 ```
 
-### `as_tibble()` warning
-
 Now `tibble::as_tibble()` is throwing this warning, 
 
 ```
@@ -210,9 +198,9 @@ This warning is displayed once every 8 hours.
 
 If I supply the `.name_repair = "universal"` argument, I get the following column names:
 
-```{r , echo=FALSE}
+```{r}
 cols <- tibble::as_tibble(cols, .name_repair = "universal")
-rmarkdown::paged_table(cols)
+names(cols)
 ```
 
 <br></br>
@@ -222,7 +210,7 @@ This will likely be an issue down the road, so I'll address it when I make some 
 Now we have a `tibble`, but we're missing the original `value` column from `JJJSBefore` (see below). 
 
 ```{r , echo=FALSE}
-rmarkdown::paged_table(JJJSBefore)
+JJJSBefore
 ```
 
 <br></br>
@@ -253,29 +241,22 @@ base::paste(into_prefix, 1:m, sep = "_")
 
 Put all together, the function works like so,
 
-```{r full-split_into_multiple-example, eval=FALSE}
+```{r full-split_into_multiple-example, eval=TRUE}
 split_into_multiple(column = JJJSBefore$name, 
                     pattern = ", ", 
                     into_prefix = "name") -> JJJAfter
 JJJAfter
 ```
 
-```{r , echo=FALSE}
-split_into_multiple(column = JJJSBefore$name, 
-                    pattern = ", ", 
-                    into_prefix = "name") -> JJJAfter
-rmarkdown::paged_table(JJJAfter)
-```
-
 <br></br>
 
 ***
 
-### Address `tibble` warnings 
+### Address tibble warnings 
 
 The `as_tibble()`/`as.tibble()` warnings can be addressed by assigning column names with `base::colnames()` to the matrix ***before*** converting this into a tibble. 
 
-```{r assign-colnames, eval=FALSE}
+```{r assign-colnames, eval=TRUE}
 # create cols matrix
 cols <- str_split_fixed(JJJSBefore$name, 
                         pattern = ", ", 
@@ -292,24 +273,6 @@ cols <- as_tibble(cols)
 cols
 ```
 
-```{r , echo=FALSE}
-# create cols matrix
-cols <- str_split_fixed(JJJSBefore$name, 
-                        pattern = ", ", 
-                        n = Inf)
-# replace "" with NAs
-cols[which(cols == "")] <- NA
-# get cols
-m <- dim(cols)[2]
-# assign names
-into_prefix <- "name"
-colnames(cols) <- paste(into_prefix, 1:m, sep = "_")
-# create tibble
-cols <- as_tibble(cols)
-rmarkdown::paged_table(
-cols)
-```
-
 <br></br>
 
 ### Add arguments 
@@ -323,7 +286,7 @@ I'll also add a few arguments:
 
 <br></br>
 
-## New `split_into_multiple()` 
+## New split_into_multiple() function 
 
 My adjusted `split_into_multiple()` function is below. 
 
@@ -358,20 +321,12 @@ split_into_multiple <- function(data, col, pattern = "[^[:alnum:]]+", into_prefi
 
 Now I'll test `split_into_multiple()` with `JJJSBefore` and see what I get:
 
-```{r test-split_into_multiple, eval=FALSE}
+```{r test-split_into_multiple, eval=TRUE}
 JJJSBefore %>% 
   split_into_multiple(data = ., 
                       col = "name", 
                       into_prefix = "name") -> JJJAfter
 JJJAfter
-```
-
-```{r , echo=FALSE}
-rmarkdown::paged_table(
-JJJSBefore %>% 
-  split_into_multiple(data = ., 
-                      col = "name", 
-                      into_prefix = "name"))
 ```
 
 **GREAT!** It works! But I should test `split_into_multiple()` on a few more examples.
@@ -390,32 +345,18 @@ Before <- base::data.frame(attr = c(1, 30, 4, 6),
 
 <br></br>
 
-```{r Before, eval=FALSE}
+```{r Before, eval=TRUE}
 Before
-```
-
-```{r , echo=FALSE}
-rmarkdown::paged_table(Before)
 ```
 
 <br></br>
 
-```{r , eval=FALSE}
+```{r , eval=TRUE}
 Before %>% 
   split_into_multiple(data = ., 
                       col = "type", 
                       pattern = "_and_", 
                       into_prefix = "type")
-```
-
-```{r , echo=FALSE}
-rmarkdown::paged_table(
-Before %>% 
-  split_into_multiple(data = ., 
-                      col = "type", 
-                      pattern = "_and_", 
-                      into_prefix = "type")
-)
 ```
 
 So far, so good!
@@ -425,7 +366,7 @@ So far, so good!
 
 What if there is a `data.frame`/`tibble` with a bunch of different characters we need to split on? I can test these data in the `WorseThanBefore` data below. 
 
-```{r , eval=FALSE}
+```{r WorseThanBefore, eval=TRUE}
 WorseThanBefore <- tibble::tribble(
      ~attr,                     ~type,
         1L,                "foo, bar",
@@ -435,58 +376,30 @@ WorseThanBefore <- tibble::tribble(
 WorseThanBefore
 ```
 
-<br></br>
 
-```{r WorseThanBefore, echo=FALSE}
-WorseThanBefore <- tibble::tribble(
-     ~attr,                     ~type,
-        1L,                "foo, bar",
-       30L,               "foo-bar/2",
-        4L, "foo...bar...2...bar...3",
-        6L,               "foo | bar")
-rmarkdown::paged_table(
-WorseThanBefore)
-```
 
 <br></br>
 
 We'll use `split_into_multiple()` on `WorseThanBefore`, but omit the argument for `pattern`.
 
-```{r WorseThanBefore-split_into_multiple-no-pattern, eval=FALSE}
+```{r WorseThanBefore-split_into_multiple-no-pattern, eval=TRUE}
 WorseThanBefore %>% 
     split_into_multiple(data = ., 
                       col = "type", 
                       into_prefix = "type")
 ```
 
-```{r , echo=FALSE}
-rmarkdown::paged_table(
-WorseThanBefore %>% 
-    split_into_multiple(data = ., 
-                      col = "type", 
-                      into_prefix = "type")
-)
-```
 
 <br></br>
 
 `split_into_multiple()` removed any sequence of non-alphanumeric values, but it still retains the original column, which I can remove using `dplyr::select()` helpers (like above).
 
-```{r test-split_into_multiple-with-select-helpers, eval=FALSE}
+```{r test-split_into_multiple-with-select-helpers, eval=TRUE}
 JJJSBefore %>% 
   split_into_multiple(data = ., 
                       col = "name", 
                       into_prefix = "name") %>% 
   dplyr::select(value, dplyr::contains("name_"))
-```
-
-```{r , echo=FALSE}
-rmarkdown::paged_table(
-  JJJSBefore %>% 
-  split_into_multiple(data = ., col = "name", 
-                      into_prefix = "name") %>% 
-  dplyr::select(value, dplyr::contains("name_"))
-)
 ```
 
 <br></br>
@@ -496,7 +409,7 @@ rmarkdown::paged_table(
 This `split_into_multiple()` function has been really helpful for me in the last few projects I've been working on. I hope you can use it too!
 
 
-#### Noteworthy non-`tidyverse` alternatives
+#### Noteworthy non-tidyverse alternatives
 
 I also liked the `cSplit()` function from the [`splitstackshape` package](https://github.com/mrdwab/splitstackshape) because it can take multiple columns and can be tidied up all in one go!
 
@@ -529,9 +442,6 @@ JJJSBefore %>%
 
 Huge thanks to [Hadley](https://stackoverflow.com/users/16632/hadley) and [Yannis P.](https://stackoverflow.com/users/1885713/yannis-p) and everyone else on Stackoverflow!
 
-```{r tidyverse_logo}
-tidyverse_logo()
-```
 
 
 
