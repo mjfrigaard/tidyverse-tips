@@ -32,9 +32,6 @@ All of these steps were done using R, RStudio, GitHub, and Netlify.
 You can optionally purchase a domain through a service like [Google Domains](https://domains.google/). Feel free to read more about domain registration [here in the `blogdown` book](https://bookdown.org/yihui/blogdown/domain-name.html).  
 
 
-
-
-
 ***
 
 ## 2) Installing the `blogdown` package 

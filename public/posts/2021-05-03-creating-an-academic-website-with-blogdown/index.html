@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    
+    <title>Tidyverse Tips</title>
+    <link rel="icon" type="image/png" href="/assets/img/favicon.ico" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <script src="/js/dark.js" defer=""></script>
+
+</head>
+
+<html>
+<!DOCTYPE html>
+<html>
+
+<body>
+  <header class="site-header">
+
+    <div class="wrapper">
+      <a class="muted small" href="https://www.tidyverse.tips/">Tidyverse Tips</a>
+    </div>
+  </header>
+</body>
+
+</html>
+<h1>Creating an academic website with blogdown</h1>
+<p class="post-meta"><time itemprop="datePublished">May 3, 2021</time>
+</p>
+<h1 id="overview">Overview</h1>
+<p>I recently created a website in <a href="https://rstudio.com/">RStudio</a> with <a href="https://bookdown.org/yihui/blogdown/">blogdown</a> using the <a href="https://themes.gohugo.io/academic/">Hugo academic theme</a> and <a href="https://www.netlify.com/">Netlify</a>.</p>
+<p>Dan Quintana created a <a href="https://www.dsquintana.blog/">great post on this last year with VS Code</a>, so I thought I&rsquo;d create on for 2021 in RStudio. If you&rsquo;re looking for instructions on how to setup a basic blogdown site (not academic), you can check out the post I wrote on <a href="https://www.storybench.org/how-to-build-a-website-with-blogdown-in-r/">Storybench.</a></p>
+<p>Read more about the academic theme in the <a href="https://wowchemy.com/docs/getting-started/install/">documentation</a>.</p>
+<h2 id="1-getting-started">1) Getting started</h2>
+<p>All of these steps were done using R, RStudio, GitHub, and Netlify.</p>
+<ul>
+<li>Technology requirements:
+<ul>
+<li><input disabled="" type="checkbox"> Download and install <a href="https://rstudio.com/">RStudio</a></li>
+<li><input disabled="" type="checkbox"> Download and install <a href="https://cran.r-project.org/">R</a></li>
+<li><input disabled="" type="checkbox"> Create a <a href="https://www.netlify.com/">Netlify</a> account</li>
+<li><input disabled="" type="checkbox"> Create a <a href="https://github.com">GitHub</a> account.</li>
+</ul>
+</li>
+</ul>
+<p>You can optionally purchase a domain through a service like <a href="https://domains.google/">Google Domains</a>. Feel free to read more about domain registration <a href="https://bookdown.org/yihui/blogdown/domain-name.html">here in the <code>blogdown</code> book</a>.</p>
+<hr>
+<h2 id="2-installing-the-blogdown-package">2) Installing the <code>blogdown</code> package</h2>
+<p>Run the following code to install <code>blogdown</code> (also make sure you have Hugo installed).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">install.packages</span>(<span style="color:#e6db74">&#34;</span><span style="color:#960050;background-color:#1e0010">blogdown”)</span>
+<span style="color:#a6e22e">library</span>(blogdown) 
+blogdown<span style="color:#f92672">::</span><span style="color:#a6e22e">install_hugo</span>(force <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+</code></pre></div><p>After running <code>blogdown::install_hugo(force = TRUE)</code>, you might need to update the version of Hugo in your <code>.Rprofile</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">The latest Hugo version is v0.82.0
+<span style="color:#f92672">------------------------------------------------------------------------</span>
+You have set the option <span style="color:#e6db74">&#39;blogdown.hugo.version&#39;</span> to <span style="color:#e6db74">&#39;0.80.0&#39;</span> (perhaps in 
+.Rprofile), but you are installing the Hugo version <span style="color:#e6db74">&#39;0.82.0&#39;</span> now. You may
+want to update the option <span style="color:#e6db74">&#39;blogdown.hugo.version&#39;</span> accordingly.
+<span style="color:#f92672">-----------------------------------------------------------------------</span>
+trying URL <span style="color:#e6db74">&#39;https://github.com/gohugoio/hugo/releases/download/v0.82.0/
+</span><span style="color:#e6db74">hugo_extended_0.82.0_macOS-64bit.tar.gz&#39;</span>
+Content type <span style="color:#e6db74">&#39;application/octet-stream&#39;</span> length <span style="color:#ae81ff">15013690</span> <span style="color:#a6e22e">bytes </span>(<span style="color:#ae81ff">14.3</span> MB)
+<span style="color:#f92672">==================================================</span>
+downloaded <span style="color:#ae81ff">14.3</span> MB
+
+Hugo has been installed to <span style="color:#e6db74">&#34;/Users/mjfrigaard/Library/Application
+</span><span style="color:#e6db74">Support/Hugo/0.82.0&#34;</span>.
+</code></pre></div><p>The .Rprofile file should automatically open, and we can change this on the following line,</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e"># fix Hugo version</span>
+<span style="color:#a6e22e">options</span>(blogdown.hugo.version <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;0.82.0&#34;</span>)
+</code></pre></div><hr>
+<h2 id="3-creating-a-new-website-with-blogdown-in-rstudio">3) Creating a new website with <code>blogdown</code> in RStudio</h2>
+<p>Enter the following lines of code in the <strong>Console</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">blogdown<span style="color:#f92672">::</span><span style="color:#a6e22e">new_site</span>(dir <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;~/Documents/example-academic&#34;</span>, 
+                   install_hugo <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>, 
+                   theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;wowchemy/starter-academic&#34;</span>)
+</code></pre></div><p>You will see the following output:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">― Creating your new site
+<span style="color:#f92672">|</span> Installing the theme wowchemy<span style="color:#f92672">/</span>starter<span style="color:#f92672">-</span>academic from github.com
+trying URL <span style="color:#e6db74">&#39;https://github.com/wowchemy/starter-academic/archive/master.tar.gz&#39;</span>
+downloaded <span style="color:#ae81ff">7.3</span> MB
+
+trying URL <span style="color:#e6db74">&#39;https://github.com/wowchemy/wowchemy-hugo-modules/archive/17505c4581cd.tar.gz&#39;</span>
+downloaded <span style="color:#ae81ff">520</span> KB
+
+<span style="color:#f92672">|</span> Adding the sample post to <span style="color:#f92672">~/</span>example<span style="color:#f92672">-</span>academic<span style="color:#f92672">/</span>content<span style="color:#f92672">/</span>post<span style="color:#f92672">/</span><span style="color:#ae81ff">2020-12-01</span><span style="color:#f92672">-</span>r<span style="color:#f92672">-</span>rmarkdown<span style="color:#f92672">/</span>index.en.Rmd
+<span style="color:#f92672">|</span> Converting all metadata to the YAML format
+<span style="color:#f92672">|</span> Adding netlify.toml in case you want to deploy the site to Netlify
+● [TODO] The file <span style="color:#e6db74">&#39;netlify.toml&#39;</span> exists, and I will not overwrite it. 
+  If you want to overwrite it, you may call blogdown<span style="color:#f92672">::</span><span style="color:#a6e22e">config_netlify</span>() 
+  by yourself.
+<span style="color:#f92672">|</span> Adding .Rprofile to set <span style="color:#a6e22e">options</span>() for blogdown
+― The new site is ready
+○ To start a local preview<span style="color:#f92672">:</span> use blogdown<span style="color:#f92672">::</span><span style="color:#a6e22e">serve_site</span>(), or the RStudio
+  add<span style="color:#f92672">-</span>in <span style="color:#e6db74">&#34;Serve Site&#34;</span>
+○ To stop a local preview<span style="color:#f92672">:</span> use blogdown<span style="color:#f92672">::</span><span style="color:#a6e22e">stop_server</span>(), or restart 
+  your R session
+► Want to serve and preview the site now<span style="color:#f92672">?</span> (y<span style="color:#f92672">/</span>n)
+</code></pre></div><p>We are impatient and want to see this thing, so we enter <code>y</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">► Want to serve and preview the site now<span style="color:#f92672">?</span> (y<span style="color:#f92672">/</span>n) y
+</code></pre></div><p>And voila! Our new site!</p>
+<p><img src="https://i.imgur.com/RTBoQuR.png" alt=""></p>
+<p><em>if your RStudio IDE doesn&rsquo;t look as cool as mine, consider installing the <a href="https://www.garrickadenbuie.com/project/rsthemes/">rsthemes</a> package from the embassador of all things cool, <a href="https://www.garrickadenbuie.com/">Garrick Aden‑Buie</a></em></p>
+<hr>
+<h2 id="4-building-vs-serving-the-new-site">4) Building vs. serving the new site</h2>
+<p>There are two commands to use when building a new website:  <a href="https://pkgs.rstudio.com/blogdown/reference/build_site.html"><code>blogdown::build_site()</code></a> and <a href="https://pkgs.rstudio.com/blogdown/reference/serve_site.html"><code>blogdown::serve_site()</code></a></p>
+<h3 id="41-blogdownbuild_site">4.1) <code>blogdown::build_site()</code></h3>
+<p>The first, <code>blogdown::build_site()</code>, will rebuild your website locally. See the example below:</p>
+<p><img src="https://i.imgur.com/85dkP6v.png" alt=""></p>
+<h3 id="42-blogdownserve_site">4.2) <code>blogdown::serve_site()</code></h3>
+<p>The second command, <code>blogdown::serve_site()</code> will allow us to preview a local version of our website.</p>
+<p><img src="https://i.imgur.com/qQRZ0eg.png" alt=""></p>
+<p>When we makes changes, we will use the combination of <code>blogdown::build_site()</code> and <code>blogdown::serve_site()</code> to deploy our site to Netlify. You can read more about this workflow in the <a href="https://bookdown.org/yihui/blogdown/workflow.html">blogdown book</a>, but the gist of it is that all the website&rsquo;s files are created in the <code>public/</code> folder when we build and serve our site, and then when we push the changes to GitHub, Netlify deploys our new site:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git add -A 
+git commit -m <span style="color:#e6db74">&#34;updates&#34;</span>
+git push
+</code></pre></div><p>There is a more in-depth summary of this process on the <a href="https://bookdown.org/yihui/blogdown/deployment.html#deployment">deployment chapter of the blogdown book</a>, too.</p>
+<hr>
+<h1 id="making-changes">Making changes</h1>
+<p>The next sections will cover how to make changes to the content of your academic site. As you can see from the preview, the demo site comes with a ton of example content, so most of the changes can be done to these existing files. Other changes will involve creating new files, or removing the example files and folders.</p>
+<h2 id="5-changing-the-title-of-your-website">5) Changing the title of your website</h2>
+<p>The name of this website is <code>martinfrigaard.io</code>, which I will change the first three lines in the <code>config.yaml</code> file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">theme</span>: <span style="color:#ae81ff">starter-academic</span>
+<span style="color:#f92672">title</span>: <span style="color:#ae81ff">Martin Frigaard dot io</span>
+<span style="color:#f92672">baseurl</span>: <span style="color:#e6db74">&#39;https://www.martinfrigaard.io/&#39;</span>
+</code></pre></div><p>I can check this with another call to <code>blogdown::serve_site()</code>.</p>
+<p><img src="https://i.imgur.com/V78y3Ze.png" alt=""></p>
+<p>Great! So far, so good!</p>
+<hr>
+<h2 id="6-changing-the-colors">6) Changing the colors</h2>
+<p>The <code>config/_default/params.toml</code> file contains the colors settings for your blog.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e">############################</span>
+<span style="color:#75715e">## Theme</span>
+<span style="color:#75715e">############################</span>
+<span style="color:#75715e"># Choose a theme.</span>
+<span style="color:#75715e">#   Latest themes (may require updating): </span>
+<span style="color:#75715e">#     https://sourcethemes.com/academic/themes/</span>
+<span style="color:#75715e">#   Browse built-in themes in `themes/academic/data/themes/`</span>
+<span style="color:#75715e">#   Browse user installed themes in `data/themes/`</span>
+<span style="color:#a6e22e">theme</span> = <span style="color:#e6db74">&#34;mr robot&#34;</span>
+</code></pre></div><h4 id="error-alert">Error alert!</h4>
+<p>After setting the <code>theme</code> to <code>mr robot</code>, I rebuild and serve the site, and I get the following warning:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#a6e22e">Start</span> <span style="color:#a6e22e">building</span> <span style="color:#a6e22e">sites</span> <span style="color:#960050;background-color:#1e0010">…</span> 
+<span style="color:#a6e22e">WARN</span> <span style="color:#ae81ff">2021</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#ae81ff">03</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#ae81ff">20</span> <span style="color:#ae81ff">11</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">43</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">48</span> <span style="color:#a6e22e">Alert</span> <span style="color:#a6e22e">shortcode</span> <span style="color:#a6e22e">will</span> <span style="color:#a6e22e">be</span> <span style="color:#a6e22e">deprecated</span> <span style="color:#a6e22e">in</span> <span style="color:#a6e22e">future</span>. 
+<span style="color:#a6e22e">Use</span> <span style="color:#a6e22e">Callout</span> <span style="color:#a6e22e">instead</span>. <span style="color:#a6e22e">Rename</span> <span style="color:#960050;background-color:#1e0010">`</span><span style="color:#a6e22e">alert</span><span style="color:#960050;background-color:#1e0010">`</span> <span style="color:#a6e22e">to</span> <span style="color:#960050;background-color:#1e0010">`</span><span style="color:#a6e22e">callout</span><span style="color:#960050;background-color:#1e0010">`</span> <span style="color:#a6e22e">in</span> 
+<span style="color:#e6db74">&#34;post/writing-technical-content/index.md&#34;</span>
+<span style="color:#a6e22e">WARN</span> <span style="color:#ae81ff">2021</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#ae81ff">03</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#ae81ff">20</span> <span style="color:#ae81ff">11</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">43</span><span style="color:#960050;background-color:#1e0010">:</span><span style="color:#ae81ff">48</span> <span style="color:#a6e22e">Alert</span> <span style="color:#a6e22e">shortcode</span> <span style="color:#a6e22e">will</span> <span style="color:#a6e22e">be</span> <span style="color:#a6e22e">deprecated</span> <span style="color:#a6e22e">in</span> <span style="color:#a6e22e">future</span>. 
+<span style="color:#a6e22e">Use</span> <span style="color:#a6e22e">Callout</span> <span style="color:#a6e22e">instead</span>. <span style="color:#a6e22e">Rename</span> <span style="color:#960050;background-color:#1e0010">`</span><span style="color:#a6e22e">alert</span><span style="color:#960050;background-color:#1e0010">`</span> <span style="color:#a6e22e">to</span> <span style="color:#960050;background-color:#1e0010">`</span><span style="color:#a6e22e">callout</span><span style="color:#960050;background-color:#1e0010">`</span> <span style="color:#a6e22e">in</span> <span style="color:#e6db74">&#34;home/demo.md&#34;</span>
+</code></pre></div><p><img src="https://i.imgur.com/czDSC2q.jpg" alt=""></p>
+<p>After changing all the <code>alert</code>s to <code>callout</code>s in the <code>index.md</code> and <code>demo.md</code> files, we no longer see the warning.</p>
+<h2 id="7-changing-the-hero-widget">7) Changing the <code>hero</code> widget</h2>
+<p>Next we will change the <code>hero</code> widget. We can do this by going into <code>content/home/hero.md</code> and changing <code>active = true</code> to <code>active = false</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># Hero widget.
+widget = &#34;hero&#34;  # See https://sourcethemes.com/academic/docs/page-builder/
+headless = true  # This file represents a page section.
+active = false  # Activate this widget? true/false
+weight = 10  # Order that this section will appear.
+</code></pre></div><p><img src="https://i.imgur.com/IvfKP3Y.jpg" alt=""></p>
+<h2 id="8-updating-profile-photo">8) Updating Profile Photo</h2>
+<p>I am going to change the profile photo using a local image file (a headshot my mother approves of :))</p>
+<p>I&rsquo;ll move it in <code>content/authors/admin</code> as <code>avatar.jpg</code>. After rebuilding, I see the following:</p>
+<p><img src="https://i.imgur.com/4tSueK9.png" alt=""></p>
+<p><em>But wait, that&rsquo;s not my name!!!</em></p>
+<h2 id="9-editing-biography">9) Editing Biography</h2>
+<p>I navigate to the <code>content/authors/admin/_index.md</code> file and edit the relevant content.</p>
+<p>After rebuilding and serving, the site looks like this:</p>
+<p><img src="https://i.imgur.com/ecfgdfg.png" alt=""></p>
+<h2 id="10-editing-contact-details">10) Editing Contact Details</h2>
+<p>To edit the contact details, I used the same <code>config/\\_default/params.toml</code> file I did previously, but this time I changed the <code>Contact details</code> section:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e"># Enter contact details (optional). To hide a field, clear it to &#34;&#34;.</span>
+<span style="color:#a6e22e">email</span> = <span style="color:#e6db74">&#34;mjfrigaard@pm.me&#34;</span>
+<span style="color:#a6e22e">phone</span> = <span style="color:#e6db74">&#34;503 333 0531&#34;</span>
+
+<span style="color:#75715e"># Address</span>
+<span style="color:#75715e"># For country_code, use the 2-letter ISO code </span>
+<span style="color:#75715e"># (see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 )</span>
+<span style="color:#a6e22e">address</span> = {<span style="color:#a6e22e">street</span> = <span style="color:#e6db74">&#34;2034 S Paseo Loma Circle&#34;</span>, <span style="color:#a6e22e">city</span> = <span style="color:#e6db74">&#34;Mesa&#34;</span>, <span style="color:#a6e22e">region</span> = <span style="color:#e6db74">&#34;AZ&#34;</span>,..}
+
+<span style="color:#75715e"># Geographic coordinates</span>
+<span style="color:#75715e"># To get your coordinates, right-click on Google Maps and choose &#34;What&#39;s here?&#34;.</span>
+<span style="color:#75715e"># The coords will show up at the bottom.</span>
+<span style="color:#a6e22e">coordinates</span> = {<span style="color:#a6e22e">latitude</span> = <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#a6e22e">longitude</span> = <span style="color:#e6db74">&#34;&#34;</span>}
+
+<span style="color:#75715e"># Directions for visitors to locate you.</span>
+<span style="color:#a6e22e">directions</span> = <span style="color:#e6db74">&#34;&#34;</span>
+
+<span style="color:#75715e"># Office hours</span>
+<span style="color:#75715e"># A list of your office hours. To remove, set to an empty list `[]`.</span>
+<span style="color:#a6e22e">office_hours</span> = []
+
+<span style="color:#75715e"># Enter an optional link for booking appointments (e.g. calendly.com).</span>
+<span style="color:#a6e22e">appointment_url</span> = <span style="color:#e6db74">&#34;https://calendly.com/mfrigaard&#34;</span>
+
+<span style="color:#75715e"># Contact links</span>
+<span style="color:#75715e">#   Set to `[]` to disable, or comment out unwanted lines with a hash `#`.</span>
+<span style="color:#a6e22e">contact_links</span> = [
+  {<span style="color:#a6e22e">icon</span> = <span style="color:#e6db74">&#34;twitter&#34;</span>, <span style="color:#a6e22e">icon_pack</span> = <span style="color:#e6db74">&#34;fab&#34;</span>, <span style="color:#a6e22e">name</span> = <span style="color:#e6db74">&#34;DM Me&#34;</span>, <span style="color:#a6e22e">link</span> = <span style="color:#e6db74">&#34;https://twitter.com/mjfrigaard&#34;</span>},
+  ]
+</code></pre></div><p>When I rebuild and serve the site, I see the following:</p>
+<p><img src="https://i.imgur.com/dCH1Hc4.png" alt=""></p>
+<h2 id="11-removing-demo">11) Removing Demo</h2>
+<p>I want to remove the demo from the landing page. I can do this by going to <code>content/home/demo.md</code> and changing <code>active: true</code> to <code>active: false</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># Activate this widget? true/false
+active: false
+</code></pre></div><p>Build, serve, and I see:</p>
+<p><img src="https://i.imgur.com/NyRHgFG.png" alt=""></p>
+<p>I can see there is a <code>Demo</code> option listed on the header, which we can remove with by editing the <code>config/_default/menus.toml</code> file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[[<span style="color:#a6e22e">main</span>]] 
+  <span style="color:#a6e22e">name</span> = <span style="color:#e6db74">&#34;Demo&#34;</span>
+  <span style="color:#a6e22e">url</span> = <span style="color:#e6db74">&#34;#hero&#34;</span>
+  <span style="color:#a6e22e">weight</span> = <span style="color:#ae81ff">10</span>
+</code></pre></div><p>I commented this out and added a note</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e"># [[main]] -&gt; demo.md was set to `active: false`</span>
+<span style="color:#75715e">#  name = &#34;Demo&#34;</span>
+<span style="color:#75715e">#  url = &#34;#hero&#34;</span>
+<span style="color:#75715e">#  weight = 10</span>
+</code></pre></div><p>Build, serve, and I see:</p>
+<p><img src="https://i.imgur.com/wgwXnNi.png" alt=""></p>
+<p>The <code>Demo</code> item has been removed from the header!</p>
+<h2 id="12-editing-experience">12) Editing Experience</h2>
+<p>The experience section is located in <code>content/home/experience.md</code>. The details on how to add/change this content is provided below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># Experiences.
+#   Add/remove as many `experience` items below as you like.
+#   Required fields are `title`, `company`, and `date_start`.
+#   Leave `date_end` empty if it&#39;s your current employer.
+#   Begin multi-line descriptions with YAML&#39;s `|2-` multi-line prefix.
+</code></pre></div><p>Each experience is listed under <code>experience:</code> and has the following information:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">experience:
+  <span style="color:#66d9ef">-</span> title: Senior Clinical Programmer
+    company: BioMarin
+    company_url: https://www.biomarin.com/
+    location: California
+    date_start: &#39;2020-10-01&#39;
+    date_end: &#39;&#39;
+    description: |2-
+        Responsibilities include:
+        <span style="color:#66d9ef">*</span> Centralized statistical monitoring (CSM)
+        <span style="color:#66d9ef">*</span> Shiny app development 
+        <span style="color:#66d9ef">*</span> Natural language processing
+</code></pre></div><p>When I rebuild and serve the site, I see the following:</p>
+<p><img src="https://i.imgur.com/qM1ifOk.png" alt=""></p>
+<h4 id="121-adding-your-cv-as-a-pdf">12.1) Adding your CV as a pdf</h4>
+<p>This is as simple as putting a .pdf of my CV in the <code>static/media/</code> folder</p>
+<h1 id="more-details">More details</h1>
+<p>Because the academic theme is constantly changing, I&rsquo;ve tried to capture as much as possible in <a href="https://hackmd.io/@mfrigaard/HJrcTTbV_">this HackMD file</a>, and I will continue updating this as I make changes to my site. Feel free to leave a comment or question!</p>
+
+
+<footer>
+    <div>
+        <h3><a href="https://www.tidyverse.tips/posts">Back to all posts</a></h3>
+    </div>
+    <hr>
+    <p>Go <a href="https://www.tidyverse.tips//index.xml">here</a> for an RSS feed.</p>
+</footer>
+
+</html>

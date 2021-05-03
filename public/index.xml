@@ -6,7 +6,18 @@
     <description>Recent content on tidyverse tips</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.tidyverse.tips/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.tidyverse.tips/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Creating an academic website with blogdown</title>
+      <link>https://www.tidyverse.tips/posts/2021-05-03-creating-an-academic-website-with-blogdown/</link>
+      <pubDate>Mon, 03 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.tidyverse.tips/posts/2021-05-03-creating-an-academic-website-with-blogdown/</guid>
+      <description>Overview I recently created a website in RStudio with blogdown using the Hugo academic theme and Netlify.
+Dan Quintana created a great post on this last year with VS Code, so I thought I&amp;rsquo;d create on for 2021 in RStudio. If you&amp;rsquo;re looking for instructions on how to setup a basic blogdown site (not academic), you can check out the post I wrote on Storybench.
+Read more about the academic theme in the documentation.</description>
+    </item>
+    
     <item>
       <title>Creating an R package</title>
       <link>https://www.tidyverse.tips/posts/2021-04-08-creating-an-r-package/</link>
